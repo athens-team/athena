@@ -1,3 +1,18 @@
+/*
+ * Copyright 2012 Athens Team
+ *
+ * This file to you under the Apache License, version 2.0
+ * (the "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at:
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package net.rothlee.athens.handler;
 
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
@@ -7,6 +22,7 @@ import java.io.IOException;
 import net.rothlee.athens.message.AthensHttpRequest;
 import net.rothlee.athens.message.AthensHttpResponse;
 
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
@@ -32,7 +48,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author jhlee@vcnc.co.kr
+ * @author roth2520@gmail.com
  */
 public class AthensHttpHandler extends SimpleChannelHandler {
 
@@ -233,21 +249,27 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 	private void writeResponse(ChannelHandlerContext ctx, MessageEvent e, AthensHttpResponse response) {
 		final Channel channel = e.getChannel();
 		final ChannelFuture future = e.getFuture();
+		final ChannelBuffer resultBytes = response.getResultBuffer();
 		
-		byte[] resultBytes = response.getResultBytes();
-		if (response.hasResultBytes()) {
-			response.setHeader(CONTENT_TYPE, "text/plain; charset=UTF-8");
-			response.setHeader(HttpHeaders.Names.SERVER, "athens");
+		response.setHeader(HttpHeaders.Names.SERVER, "athens");
+		
+		/* content type */
+		if (response.hasContentType()) {
+			response.setHeader(CONTENT_TYPE, response.getContentTypeWithEncoding());
 		}
-
+		
+		/* result string & keep alive */
 		boolean keepAlive = currentRequest.isKeepAlive();
 		if (response.isKeepAlive()) {
 			response.setHeader("Keep-Alive", "timeout=60, max=120");
 			response.setHeader(HttpHeaders.Names.TRANSFER_ENCODING, HttpHeaders.Values.CHUNKED);
 		} else {
-			response.setContent(ChannelBuffers.copiedBuffer(resultBytes));
+			response.setContent(resultBytes);
+			response.setHeader(HttpHeaders.Names.CONTENT_LENGTH,
+					String.valueOf(resultBytes.readableBytes()));
 		}
 
+		/* keep-alive */
 		Channels.write(ctx, e.getFuture(), response);
 		if (!keepAlive) {
 			future.addListener(ChannelFutureListener.CLOSE);

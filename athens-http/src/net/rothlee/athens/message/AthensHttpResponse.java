@@ -17,8 +17,12 @@ package net.rothlee.athens.message;
 
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
+import java.nio.charset.Charset;
+
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
+import org.jboss.netty.util.CharsetUtil;
 
 /**
  * @author roth2520@gmail.com
@@ -26,35 +30,59 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 public class AthensHttpResponse extends HttpResponseWrapper {
 
 	private final AthensHttpRequest request;
-	private byte[] resultBytes;
-
-	public AthensHttpResponse(AthensHttpRequest request, HttpResponseStatus httpResponseStatus) {
-		this(request, httpResponseStatus, null);
-	}
+	private ChannelBuffer resultBuffer;
+	private AthensContentType contentType;
+	private Charset charset;
 	
-	public AthensHttpResponse(AthensHttpRequest request, HttpResponseStatus status, byte[] resultBytes) {
+	public AthensHttpResponse(AthensHttpRequest request, HttpResponseStatus status) {
 		super(new DefaultHttpResponse(HTTP_1_1, status));
 		this.request = request;
-		this.resultBytes = (resultBytes!=null)?resultBytes:new byte[0];
+		this.charset = CharsetUtil.UTF_8;
 	}
 
 	public AthensHttpRequest getRequest() {
 		return request;
 	}
 
+	public Charset getCharset() {
+		return charset;
+	}
+
+	public void setCharset(Charset charset) {
+		this.charset = charset;
+	}
+
+	public boolean hasContentType() {
+		return contentType!=null;
+	}
+	
+	public void setContentType(AthensContentType contentType) {
+		this.contentType = contentType;
+	}
+	
+	public AthensContentType getContentType() {
+		return contentType;
+	}
+
+	public String getContentTypeWithEncoding() {
+		String result = null;
+		if(charset!=null) {
+			result = contentType.getNotationWithEncoding(charset);	
+		} else {
+			result = contentType.getNotation();
+		}
+		return result;
+	}
+	
 	public boolean hasResultBytes() {
-		return resultBytes != null && resultBytes.length > 0;
+		return resultBuffer != null && resultBuffer.readableBytes() > 0;
+	}
+
+	public ChannelBuffer getResultBuffer() {
+		return resultBuffer;
 	}
 	
-	public byte[] getResultBytes() {
-		return resultBytes;
-	}
-	
-	public void setResultBytes(byte[] bytes) {
-		resultBytes = bytes;
-	}
-	
-	public void setResultString(String result) {
-		resultBytes = result.getBytes();
+	public void setResultBuffer(ChannelBuffer result) {
+		resultBuffer = result;
 	}
 }
