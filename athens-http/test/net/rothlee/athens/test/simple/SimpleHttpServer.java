@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package net.rothlee.athens.test;
+package net.rothlee.athens.test.simple;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;

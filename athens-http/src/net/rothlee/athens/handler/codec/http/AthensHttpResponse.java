@@ -13,11 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package net.rothlee.athens.message;
+package net.rothlee.athens.handler.codec.http;
 
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 import java.nio.charset.Charset;
+
+
+import net.rothlee.athens.HttpResponseWrapper;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
@@ -31,8 +34,12 @@ public class AthensHttpResponse extends HttpResponseWrapper {
 
 	private final AthensHttpRequest request;
 	private ChannelBuffer resultBuffer;
-	private AthensContentType contentType;
+	private HttpContentType contentType;
 	private Charset charset;
+	
+	public AthensHttpResponse(AthensHttpRequest request) {
+		this(request, HttpResponseStatus.OK);
+	}
 	
 	public AthensHttpResponse(AthensHttpRequest request, HttpResponseStatus status) {
 		super(new DefaultHttpResponse(HTTP_1_1, status));
@@ -56,11 +63,11 @@ public class AthensHttpResponse extends HttpResponseWrapper {
 		return contentType!=null;
 	}
 	
-	public void setContentType(AthensContentType contentType) {
+	public void setContentType(HttpContentType contentType) {
 		this.contentType = contentType;
 	}
 	
-	public AthensContentType getContentType() {
+	public HttpContentType getContentType() {
 		return contentType;
 	}
 

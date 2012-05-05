@@ -13,14 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package net.rothlee.athens.handler;
+package net.rothlee.athens.handler.codec.http;
 
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 
 import java.io.IOException;
 
-import net.rothlee.athens.message.AthensHttpRequest;
-import net.rothlee.athens.message.AthensHttpResponse;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
@@ -63,7 +61,7 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 
 	private AthensHttpState currentState;
 	private AthensHttpRequest currentRequest;
-	private AthensHttpRequestBuilder currentBuilder;
+	private HttpRequestBuilder currentBuilder;
 
 	public AthensHttpHandler() {
 		this.currentState = READING;
@@ -124,7 +122,7 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 			final HttpRequest request = (HttpRequest) e.getMessage();
 			try {
 				currentRequest = new AthensHttpRequest(request);
-				currentBuilder = new AthensHttpRequestBuilder(currentRequest);
+				currentBuilder = new HttpRequestBuilder(currentRequest);
 				currentBuilder.beginDecode(factory);
 	
 			} catch (ErrorDataDecoderException ex) {

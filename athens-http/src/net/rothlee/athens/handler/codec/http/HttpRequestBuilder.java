@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package net.rothlee.athens.handler;
+package net.rothlee.athens.handler.codec.http;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.rothlee.athens.message.AthensHttpRequest;
 
 import org.jboss.netty.handler.codec.http.Attribute;
 import org.jboss.netty.handler.codec.http.HttpChunk;
@@ -38,7 +37,7 @@ import org.jboss.netty.handler.codec.http.QueryStringDecoder;
 /**
  * @author roth2520@gmail.com
  */
-public class AthensHttpRequestBuilder {
+public class HttpRequestBuilder {
 
 	private final AthensHttpRequest request;
 	private final String path;
@@ -46,7 +45,7 @@ public class AthensHttpRequestBuilder {
 	private QueryStringDecoder queryDecoder;
 	private HttpPostRequestDecoder postDataDecoder;
 	
-	public AthensHttpRequestBuilder(AthensHttpRequest request) {
+	public HttpRequestBuilder(AthensHttpRequest request) {
 		this.queryDecoder = new QueryStringDecoder(request.getUri());
 
 		this.request = request;

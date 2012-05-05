@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package net.rothlee.athens.message;
+package net.rothlee.athens;
 
 import java.util.List;
 import java.util.Map.Entry;

@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package net.rothlee.athens.test;
+package net.rothlee.athens.test.simple;
 
-import net.rothlee.athens.message.AthensContentType;
-import net.rothlee.athens.message.AthensHttpRequest;
-import net.rothlee.athens.message.AthensHttpResponse;
+import net.rothlee.athens.handler.codec.http.HttpContentType;
+import net.rothlee.athens.message.AthensRequest;
+import net.rothlee.athens.message.DefaultAthensResponse;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
@@ -37,14 +37,15 @@ public class SimpleHttpHandler extends SimpleChannelHandler {
 			throws Exception {
 
 		Object message = e.getMessage();
-		if (message instanceof AthensHttpRequest) {
-			AthensHttpRequest request = (AthensHttpRequest) message;
-			AthensHttpResponse response = new AthensHttpResponse(request,
-					HttpResponseStatus.OK);
+		if (message instanceof AthensRequest) {
+			AthensRequest request = (AthensRequest) message;
+			DefaultAthensResponse response = new DefaultAthensResponse(request);
 			
-			response.setResultBuffer(ChannelBuffers.copiedBuffer(getMenuString()));
-			response.setContentType(AthensContentType.TEXT_HTML);
+			response.setStatus(HttpResponseStatus.OK);
+			response.setContents(ChannelBuffers.copiedBuffer(getMenuString()));
+			response.setContentType(HttpContentType.TEXT_HTML);
 			response.setCharset(CharsetUtil.UTF_8);
+			
 			Channels.write(ctx.getChannel(), response);
 			return;
 		}

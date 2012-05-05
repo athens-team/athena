@@ -13,31 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package net.rothlee.athens.message;
+package net.rothlee.athens.message.attach;
 
-import org.jboss.netty.handler.codec.http.HttpResponse;
-import org.jboss.netty.handler.codec.http.HttpResponseStatus;
+import net.rothlee.athens.utils.collections.MapWrapper;
 
 /**
  * @author roth2520@gmail.com
  */
-public class HttpResponseWrapper extends HttpMessageWrapper implements HttpResponse {
+public final class AthensTags extends MapWrapper<String, Object> {
 
-	private final HttpResponse delegate;
-	
-	public HttpResponseWrapper(HttpResponse delegate) {
-		super(delegate);
-		this.delegate = delegate;
-	}
-
-	@Override
-	public HttpResponseStatus getStatus() {
-		return delegate.getStatus();
-	}
-
-	@Override
-	public void setStatus(HttpResponseStatus arg0) {
-		delegate.setStatus(arg0);
+	public static AthensTags create() {
+		AthensTags result = new AthensTags();
+		return result;
 	}
 	
+	private AthensTags() { super(); }
 }

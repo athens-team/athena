@@ -13,13 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package net.rothlee.athens.message;
+package net.rothlee.athens.handler.codec.http;
 
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.COOKIE;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+
+import net.rothlee.athens.HttpRequestWrapper;
 
 import org.jboss.netty.handler.codec.http.Attribute;
 import org.jboss.netty.handler.codec.http.FileUpload;
