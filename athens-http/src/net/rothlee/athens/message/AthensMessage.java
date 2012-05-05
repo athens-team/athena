@@ -16,6 +16,7 @@
 package net.rothlee.athens.message;
 
 import net.rothlee.athens.AthensLifeCycle;
+import net.rothlee.athens.message.attach.AthensCookies;
 import net.rothlee.athens.message.attach.AthensHeaders;
 import net.rothlee.athens.message.attach.AthensTags;
 
@@ -24,6 +25,6 @@ import net.rothlee.athens.message.attach.AthensTags;
  */
 public interface AthensMessage extends AthensLifeCycle {
 	AthensHeaders getHeaders();
-	
+	AthensCookies getCookies();
 	AthensTags getTags();
 }

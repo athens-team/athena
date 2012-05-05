@@ -32,6 +32,7 @@ import org.jboss.netty.handler.codec.http.MemoryAttribute;
 import org.jboss.netty.handler.codec.http.MixedAttribute;
 
 public class AthensHttpDataFactory implements HttpDataFactory {
+	
 	 /**
      * Proposed default MINSIZE as 16 KB.
      */

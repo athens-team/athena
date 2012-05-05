@@ -17,9 +17,9 @@ package net.rothlee.athens.message.attach;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import net.rothlee.athens.utils.collections.MapWrapper;
+
+import com.google.common.collect.Lists;
 
 /**
  * @author roth2520@gmail.com
@@ -41,5 +41,7 @@ public class AthensHeaders extends MapWrapper<String, String> {
 	
 	private AthensHeaders() { super(); }
 
+	public void setCookie(String cookie) {
+	}
 
 }

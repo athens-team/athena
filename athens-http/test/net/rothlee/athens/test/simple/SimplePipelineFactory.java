@@ -54,6 +54,8 @@ public class SimplePipelineFactory implements ChannelPipelineFactory {
 		SimpleServices services = new SimpleServices();
 		services.putByAnnotation(new MenuService());
 		services.putByAnnotation(new IndexService());
+		services.putByAnnotation(new PrintCookieService());
+		services.putByAnnotation(new SetCookieService());
 		
 		return Channels.pipeline(new HttpRequestDecoder(),
 				new HttpResponseEncoder(),

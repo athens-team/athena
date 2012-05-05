@@ -18,6 +18,7 @@ package net.rothlee.athens.message;
 import java.nio.charset.Charset;
 
 import net.rothlee.athens.handler.codec.http.HttpContentType;
+import net.rothlee.athens.message.attach.AthensCookies;
 import net.rothlee.athens.message.attach.AthensHeaders;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -43,6 +44,7 @@ public class DefaultAthensResponse extends DefaultAthensMessage implements
 		setTags(request.getTags());
 		setLifeCycle(request);
 		setHeaders(AthensHeaders.create());
+		setCookies(AthensCookies.create());
 	}
 
 	public AthensRequest getRequest() {

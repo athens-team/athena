@@ -22,6 +22,7 @@ import net.rothlee.athens.AthensLifeCycles;
 import net.rothlee.athens.message.AthensResponse;
 import net.rothlee.athens.message.DefaultAthensRequest;
 import net.rothlee.athens.message.attach.AthensAttaches;
+import net.rothlee.athens.message.attach.AthensCookies;
 import net.rothlee.athens.message.attach.AthensHeaders;
 import net.rothlee.athens.message.attach.AthensParams;
 import net.rothlee.athens.message.attach.AthensTags;
@@ -30,6 +31,8 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
+import org.jboss.netty.handler.codec.http.Cookie;
+import org.jboss.netty.handler.codec.http.CookieEncoder;
 import org.jboss.netty.handler.codec.http.HttpHeaders;
 import org.jboss.netty.handler.codec.http.HttpVersion;
 
@@ -38,7 +41,7 @@ import org.jboss.netty.handler.codec.http.HttpVersion;
  */
 public class AthensHttpProcessor extends SimpleChannelHandler {
 
-	private final AthensLifeCycles lifeCycleStorage = new AthensLifeCycles();
+	private final AthensLifeCycles lifeCycles = new AthensLifeCycles();
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
@@ -59,9 +62,10 @@ public class AthensHttpProcessor extends SimpleChannelHandler {
 			request.setParams(AthensParams.create(httpRequest.getParams()));
 			request.setAttaches(AthensAttaches.create(httpRequest
 					.getFileUploads()));
+			request.setCookies(AthensCookies.create(httpRequest.getCookies()));
 
 			/* internals */
-			AthensLifeCycle lifeCycle = lifeCycleStorage.createLifeCycle();
+			AthensLifeCycle lifeCycle = lifeCycles.createLifeCycle();
 			request.setLifeCycle(lifeCycle);
 			request.setAddressProvider(new HttpAddressProvider(e.getChannel(),
 					httpRequest));
@@ -83,24 +87,35 @@ public class AthensHttpProcessor extends SimpleChannelHandler {
 	@Override
 	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
-		
+
 		if (e.getMessage() instanceof AthensResponse) {
 			final AthensResponse response = (AthensResponse) e.getMessage();
 
 			final AthensHttpResponse httpResponse = (AthensHttpResponse) response
 					.getTags().get(HttpNames.HTTP_RESPONSE);
 
+			/* set properties */
 			httpResponse.setContentType(response.getContentType());
 			httpResponse.setCharset(response.getCharset());
 			httpResponse.setStatus(response.getStatus());
 			httpResponse.setProtocolVersion(HttpVersion.HTTP_1_1);
 			httpResponse.setResultBuffer(response.getContents());
+			
+			/* set cookies */
+			CookieEncoder encoder = new CookieEncoder(true);
+			for(Cookie cookie : response.getCookies()) {
+				encoder.addCookie(cookie);
+			}
+			httpResponse.addHeader(HttpHeaders.Names.SET_COOKIE,
+					encoder.encode());
+			
+			/* set headers */
 			for (Entry<String, String> entry : response.getHeaders().entrySet()) {
 				HttpHeaders.setHeader(httpResponse, entry.getKey(),
 						entry.getValue());
 			}
-			
-			lifeCycleStorage.complete(response);
+
+			lifeCycles.complete(response);
 
 			Channels.write(ctx, e.getFuture(), httpResponse,
 					e.getRemoteAddress());

@@ -17,6 +17,7 @@ package net.rothlee.athens.message;
 
 import net.rothlee.athens.AthensLifeCycle;
 import net.rothlee.athens.AthensLifeCycleLIstener;
+import net.rothlee.athens.message.attach.AthensCookies;
 import net.rothlee.athens.message.attach.AthensHeaders;
 import net.rothlee.athens.message.attach.AthensTags;
 
@@ -26,6 +27,7 @@ import net.rothlee.athens.message.attach.AthensTags;
 public class DefaultAthensMessage implements AthensMessage {
 
 	protected AthensTags tags;
+	protected AthensCookies cookies;
 	protected AthensHeaders headers;
 	protected AthensLifeCycle lifeCycle;
 	
@@ -44,6 +46,11 @@ public class DefaultAthensMessage implements AthensMessage {
 	}
 
 	@Override
+	public AthensCookies getCookies() {
+		return cookies;
+	}
+	
+	@Override
 	public AthensTags getTags() {
 		return tags;
 	}
@@ -54,6 +61,10 @@ public class DefaultAthensMessage implements AthensMessage {
 
 	public void setHeaders(AthensHeaders headers) {
 		this.headers = headers;
+	}
+	
+	public void setCookies(AthensCookies cookies) {
+		this.cookies = cookies;
 	}
 
 	public void setLifeCycle(AthensLifeCycle lifeCycle) {

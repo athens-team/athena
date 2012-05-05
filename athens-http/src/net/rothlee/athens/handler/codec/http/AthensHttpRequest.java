@@ -15,16 +15,16 @@
  */
 package net.rothlee.athens.handler.codec.http;
 
-import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.COOKIE;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Set;
 
 import net.rothlee.athens.HttpRequestWrapper;
 
 import org.jboss.netty.handler.codec.http.Attribute;
+import org.jboss.netty.handler.codec.http.Cookie;
+import org.jboss.netty.handler.codec.http.CookieDecoder;
 import org.jboss.netty.handler.codec.http.FileUpload;
 import org.jboss.netty.handler.codec.http.HttpHeaders;
 import org.jboss.netty.handler.codec.http.HttpRequest;
@@ -34,6 +34,7 @@ import org.jboss.netty.handler.codec.http.InterfaceHttpData.HttpDataType;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * @author roth2520@gmail.com
@@ -126,15 +127,21 @@ public class AthensHttpRequest extends HttpRequestWrapper {
 		return Collections.unmodifiableList(result);
 	}
 	
-	public String getCookieString() {
-		return getHeader(COOKIE);
-	}
-	
 	public boolean isKeepAlive() {
 		return HttpHeaders.isKeepAlive(getRequest());
 	}
 
 	public String getUserAgent() {
 		return getHeader(HttpHeaders.Names.USER_AGENT);
+	}
+
+	public Set<Cookie> getCookies() {
+		Set<Cookie> result = Sets.newHashSet();
+		List<String> cookieHeaders = getHeaders(HttpHeaders.Names.COOKIE);
+		CookieDecoder decoder = new CookieDecoder();
+		for(String cookieHeader : cookieHeaders) {
+			result.addAll(decoder.decode(cookieHeader));
+		}
+		return result;
 	}
 }
