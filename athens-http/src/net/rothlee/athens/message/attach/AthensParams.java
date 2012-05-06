@@ -39,4 +39,29 @@ public class AthensParams extends MapWrapper<String, String> {
 	}
 	
 	private AthensParams() { super(); }
+	
+	@SuppressWarnings("unchecked")
+	public <T> T getParam(String key, Class<T> clazz) {
+		T result = null;
+		if(clazz.equals(String.class)) {
+			result = (T) get(key);
+		} else if(clazz.equals(Double.class)) {
+			result = (T) Double.valueOf(get(key));
+		} else if(clazz.equals(Float.class)) {
+			result = (T) Float.valueOf(get(key));
+		} else if(clazz.equals(Long.class)) {
+			result = (T) Long.valueOf(get(key));
+		} else if(clazz.equals(Integer.class)) {
+			result = (T) Integer.valueOf(get(key));
+		} else if(clazz.equals(Short.class)) {
+			result = (T) Short.valueOf(get(key));
+		} else if(clazz.equals(Byte.class)) {
+			result = (T) Byte.valueOf(get(key));
+		} else if(clazz.equals(Boolean.class)) {
+			result = (T) Boolean.valueOf(get(key));
+		} else  {
+			throw new IllegalArgumentException();
+		}
+		return result;
+	}
 }
