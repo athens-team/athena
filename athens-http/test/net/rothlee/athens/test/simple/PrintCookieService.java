@@ -1,8 +1,8 @@
 package net.rothlee.athens.test.simple;
 
-import net.rothlee.athens.handler.codec.http.HttpContentType;
 import net.rothlee.athens.handler.service.simple.Bind;
 import net.rothlee.athens.handler.service.simple.SimpleService;
+import net.rothlee.athens.message.AthensContentType;
 import net.rothlee.athens.message.AthensRequest;
 import net.rothlee.athens.message.AthensResponse;
 
@@ -16,7 +16,7 @@ public class PrintCookieService implements SimpleService {
 
 	@Override
 	public void doServe(AthensRequest request, AthensResponse response) {
-		response.setContentType(HttpContentType.TEXT_HTML);
+		response.setContentType(AthensContentType.TEXT_HTML);
 		response.setContents(getResponseString(request));
 	}
 

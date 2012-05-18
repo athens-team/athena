@@ -17,7 +17,6 @@ package net.rothlee.athens.message;
 
 import java.nio.charset.Charset;
 
-import net.rothlee.athens.handler.codec.http.HttpContentType;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
@@ -36,9 +35,9 @@ public interface AthensResponse extends AthensMessage {
     
     void setContents(ChannelBuffer contents);
     
-    HttpContentType getContentType();
+    AthensContentType getContentType();
     
-    void setContentType(HttpContentType contentType);
+    void setContentType(AthensContentType contentType);
 
 	Charset getCharset();
 	

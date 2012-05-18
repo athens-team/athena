@@ -21,6 +21,7 @@ import java.nio.charset.Charset;
 
 
 import net.rothlee.athens.HttpResponseWrapper;
+import net.rothlee.athens.message.AthensContentType;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
@@ -34,7 +35,7 @@ public class AthensHttpResponse extends HttpResponseWrapper {
 
 	private final AthensHttpRequest request;
 	private ChannelBuffer resultBuffer;
-	private HttpContentType contentType;
+	private AthensContentType contentType;
 	private Charset charset;
 	
 	public AthensHttpResponse(AthensHttpRequest request) {
@@ -63,11 +64,11 @@ public class AthensHttpResponse extends HttpResponseWrapper {
 		return contentType!=null;
 	}
 	
-	public void setContentType(HttpContentType contentType) {
+	public void setContentType(AthensContentType contentType) {
 		this.contentType = contentType;
 	}
 	
-	public HttpContentType getContentType() {
+	public AthensContentType getContentType() {
 		return contentType;
 	}
 

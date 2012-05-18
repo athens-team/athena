@@ -17,7 +17,6 @@ package net.rothlee.athens.message;
 
 import java.nio.charset.Charset;
 
-import net.rothlee.athens.handler.codec.http.HttpContentType;
 import net.rothlee.athens.message.attach.AthensCookies;
 import net.rothlee.athens.message.attach.AthensHeaders;
 
@@ -36,7 +35,7 @@ public class DefaultAthensResponse extends DefaultAthensMessage implements
 
 	private HttpResponseStatus status = HttpResponseStatus.OK;
 	private ChannelBuffer contents = ChannelBuffers.EMPTY_BUFFER;
-	private HttpContentType contentType = HttpContentType.TEXT_PLAIN;
+	private AthensContentType contentType = AthensContentType.TEXT_PLAIN;
 	private Charset charset = CharsetUtil.UTF_8;
 	
 	public DefaultAthensResponse(AthensRequest request) {
@@ -72,12 +71,12 @@ public class DefaultAthensResponse extends DefaultAthensMessage implements
 	}
 
 	@Override
-	public HttpContentType getContentType() {
+	public AthensContentType getContentType() {
 		return contentType;
 	}
 
 	@Override
-	public void setContentType(HttpContentType contentType) {
+	public void setContentType(AthensContentType contentType) {
 		this.contentType = contentType;
 	}
 

@@ -13,14 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package net.rothlee.athens.handler.codec.http;
+package net.rothlee.athens.message;
 
 import java.nio.charset.Charset;
 
 /**
  * @author roth2520@gmail.com
  */
-public enum HttpContentType {
+public enum AthensContentType {
 
 	TEXT_PLAIN("text/plain"),
 	TEXT_HTML("text/html"),
@@ -30,7 +30,7 @@ public enum HttpContentType {
 	APPLICATION_XML("text/xml");
 	
 	private final String notation;
-	HttpContentType(String notation) {
+	AthensContentType(String notation) {
 		this.notation = notation;
 	}
 	
