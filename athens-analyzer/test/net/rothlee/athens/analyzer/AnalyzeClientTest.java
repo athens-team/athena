@@ -20,9 +20,9 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.atomic.AtomicLong;
 
+import net.rothlee.athens.analyzer.core.Transfers;
 import net.rothlee.athens.analyzer.message.AnalyzeRequest;
 import net.rothlee.athens.analyzer.message.AnalyzeTags;
-import net.rothlee.athens.analyzer.transfer.Transfers;
 import net.rothlee.athens.message.attach.AthensCookies;
 import net.rothlee.athens.message.attach.AthensParams;
 

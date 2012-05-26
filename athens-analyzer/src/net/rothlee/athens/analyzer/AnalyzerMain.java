@@ -18,7 +18,7 @@ package net.rothlee.athens.analyzer;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
-import net.rothlee.athens.analyzer.transfer.AnalyzeRequestHandler;
+import net.rothlee.athens.analyzer.handler.AnalyzeTransferRequestHandler;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.ChannelPipeline;
@@ -49,7 +49,7 @@ public class AnalyzerMain {
 						new ObjectEncoder(),
 						new ObjectDecoder(ClassResolvers
 								.cacheDisabled(getClass().getClassLoader())),
-						new AnalyzeRequestHandler());
+						new AnalyzeTransferRequestHandler());
 			}
 		});
 		

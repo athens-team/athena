@@ -13,14 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package net.rothlee.athens.analyzer;
-
-import net.rothlee.athens.analyzer.message.AnalyzeRequest;
+package net.rothlee.athens.analyzer.core;
 
 /**
  * @author Jung-Haeng Lee
  */
-public interface Analyzer {
+public class BlockInfo {
 
-	public void analyze(AnalyzeRequest request);
 }

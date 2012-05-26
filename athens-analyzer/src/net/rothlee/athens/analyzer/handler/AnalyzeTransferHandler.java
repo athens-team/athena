@@ -17,8 +17,8 @@ package net.rothlee.athens.analyzer.handler;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import net.rothlee.athens.analyzer.core.Transfers;
 import net.rothlee.athens.analyzer.message.AnalyzeRequest;
-import net.rothlee.athens.analyzer.transfer.Transfers;
 import net.rothlee.athens.message.AthensRequest;
 
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -31,6 +31,7 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 public class AnalyzeTransferHandler extends SimpleChannelHandler {
 
 	private static AtomicLong analzyeReqSeq = new AtomicLong();
+	
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {

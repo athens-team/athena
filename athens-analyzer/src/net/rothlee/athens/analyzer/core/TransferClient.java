@@ -13,11 +13,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package net.rothlee.athens.analyzer.transfer;
+package net.rothlee.athens.analyzer.core;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import net.rothlee.athens.analyzer.handler.AnalyzeTransferReportHandler;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
@@ -25,6 +27,7 @@ import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
+import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
@@ -33,12 +36,17 @@ import org.jboss.netty.handler.codec.serialization.ClassResolvers;
 import org.jboss.netty.handler.codec.serialization.ObjectDecoder;
 import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
 import org.jboss.netty.handler.execution.ExecutionHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Jung-Haeng Lee
  */
 public class TransferClient {
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(TransferClient.class);
+	
 	private Executor executor = Executors.newFixedThreadPool(16);
 	private final String host;
 	private final int port;
@@ -65,14 +73,13 @@ public class TransferClient {
 						new ObjectDecoder(ClassResolvers
 								.cacheDisabled(getClass().getClassLoader())),
 						new ExecutionHandler(executor),
-						new AnalyzeReportHandler(),
+						new AnalyzeTransferReportHandler(),
 						new ConnectionHandler());
 			}
 		});
 	}
 
 	public Channel getChannel() {
-
 		if (channel != null) {
 			return channel;
 		} else {
@@ -83,7 +90,7 @@ public class TransferClient {
 				} else {
 					ChannelFuture future = bootstrap
 							.connect(new InetSocketAddress(host, port));
-					channel = future.getChannel();
+					future.getChannel();
 				}
 				return channel;
 			}
@@ -93,11 +100,24 @@ public class TransferClient {
 	private class ConnectionHandler extends SimpleChannelHandler {
 
 		@Override
+		public void channelConnected(ChannelHandlerContext ctx,
+				ChannelStateEvent e) throws Exception {
+			super.channelConnected(ctx, e);
+			channel = e.getChannel();
+		}
+		
+		@Override
+		public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e)
+				throws Exception {
+			super.channelClosed(ctx, e);
+			channel = null;
+		}
+		
+		@Override
 		public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e)
 				throws Exception {
 			super.exceptionCaught(ctx, e);
 			e.getChannel().close();
-			channel = null;
 		}
 	}
 }

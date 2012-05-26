@@ -16,6 +16,7 @@
 package net.rothlee.athens.analyzer.message;
 
 import java.io.Serializable;
+import java.net.InetSocketAddress;
 
 /**
  * @author Jung-Haeng Lee
@@ -26,12 +27,8 @@ public class AnalyzeReport implements Serializable {
 
 	private long requestSeq;
 	
-	private String ip;
+	private InetSocketAddress ip;
 	
-	private int port;
-	
-	private String cookie;
-
 	public long getRequestSeq() {
 		return requestSeq;
 	}
@@ -40,28 +37,11 @@ public class AnalyzeReport implements Serializable {
 		this.requestSeq = requestSeq;
 	}
 	
-	public String getIp() {
+	public InetSocketAddress getIp() {
 		return ip;
 	}
 
-	public void setIp(String ip) {
-		this.ip = ip;
+	public void setIp(InetSocketAddress inetSocketAddress) {
+		this.ip = inetSocketAddress;
 	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public String getCookie() {
-		return cookie;
-	}
-
-	public void setCookie(String cookie) {
-		this.cookie = cookie;
-	}
-		
 }

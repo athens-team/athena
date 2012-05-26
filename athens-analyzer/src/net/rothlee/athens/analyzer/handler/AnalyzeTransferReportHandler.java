@@ -13,10 +13,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package net.rothlee.athens.analyzer.transfer;
+package net.rothlee.athens.analyzer.handler;
 
 
-import net.rothlee.athens.analyzer.message.AnalyzeRequest;
+import net.rothlee.athens.analyzer.message.AnalyzeReport;
 
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ExceptionEvent;
@@ -28,17 +28,17 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Jung-Haeng Lee
  */
-public class AnalyzeReportHandler extends SimpleChannelUpstreamHandler {
+public class AnalyzeTransferReportHandler extends SimpleChannelUpstreamHandler {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(AnalyzeReportHandler.class);
+			.getLogger(AnalyzeTransferReportHandler.class);
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
-		Object message = e.getMessage();
-		if(message instanceof AnalyzeRequest) {
-			logger.info("recv object {}", ((AnalyzeRequest)message).toString());
+		if(e.getMessage() instanceof AnalyzeReport) {
+			AnalyzeReport report = (AnalyzeReport)e.getMessage();
+			logger.info("recv object {}", report.toString());
 			return;
 		}
 		super.messageReceived(ctx, e);
@@ -47,6 +47,10 @@ public class AnalyzeReportHandler extends SimpleChannelUpstreamHandler {
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		e.getChannel().close();
-		logger.error(e.getCause().getMessage(), e.getCause());
+		try {
+			logger.error(e.getCause().getMessage(), e.getCause());
+		} catch(Exception ex) {
+			
+		}
 	}
 }

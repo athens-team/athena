@@ -138,7 +138,13 @@ public class AnalyzeRequest implements Serializable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
-		sb.append("seq:").append(requestSeq);
+		sb.append("seq:").append(requestSeq).append(", ");
+		sb.append("method:").append(method).append(", ");
+		sb.append("path:").append(path).append(", ");
+		sb.append("params:").append(params).append(", ");
+		sb.append("local:").append(localAddress).append(", ");
+		sb.append("remote:").append(remoteAddress).append(", ");
+		sb.append("origin:").append(originAddress);
 		sb.append("]");
 		return sb.toString();
 	}

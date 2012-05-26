@@ -13,13 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package net.rothlee.athens.analyzer.transfer;
+package net.rothlee.athens.analyzer.core;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import net.rothlee.athens.analyzer.message.AnalyzeRequest;
 
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.Channels;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,10 @@ public class Transfers {
 			@Override
 			public void run() {
 				try {
-					Channels.write(client.getChannel(), analyzeRequest);
+					Channel ch = client.getChannel();
+					if (ch != null) {
+						Channels.write(ch, analyzeRequest);
+					}
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 				}
