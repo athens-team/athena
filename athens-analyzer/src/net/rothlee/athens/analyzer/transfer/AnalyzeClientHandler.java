@@ -30,14 +30,13 @@ public class AnalyzeClientHandler extends SimpleChannelUpstreamHandler {
 	private static final Logger logger = LoggerFactory
 			.getLogger(AnalyzeClientHandler.class);
 
-
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
-		e.getChannel().write(e.getMessage());
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		e.getChannel().close();
+		logger.error(e.getCause().getMessage(), e.getCause());
 	}
 }

@@ -16,9 +16,12 @@
 package net.rothlee.athens.analyzer.transfer;
 
 
+import net.rothlee.athens.analyzer.message.AnalyzeRequest;
+
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,14 +29,20 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Jung-Haeng Lee
  */
-public class AnalyzeServerHandler extends SimpleChannelUpstreamHandler {
+public class AnalyzeServerHandler extends SimpleChannelHandler {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(AnalyzeServerHandler.class);
 
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
-		e.getChannel().write(e.getMessage());
+	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
+			throws Exception {
+		Object message = e.getMessage();
+		if(message instanceof AnalyzeRequest) {
+			logger.info("recv object {}", ((AnalyzeRequest)message).toString());
+			return;
+		}
+		super.messageReceived(ctx, e);
 	}
 
 	@Override

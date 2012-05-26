@@ -15,12 +15,12 @@
  */
 package net.rothlee.athens.analyzer;
 
-import net.rothlee.athens.analyzer.message.AnalyzeRequest;
-
 /**
  * @author Jung-Haeng Lee
  */
-public interface Analyzer {
+public class AnalyzeServerTest {
 
-	public void analyze(AnalyzeRequest request);
+	public static void main(String[] args) {
+		
+	}
 }

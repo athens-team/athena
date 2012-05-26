@@ -19,6 +19,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
+import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
@@ -30,20 +31,21 @@ import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
 /**
  * @author Jung-Haeng Lee
  */
-public class AnalyzeTransferClient {
-
+public class TransferClient {
 
 	private final String host;
 	private final int port;
-
-	public AnalyzeTransferClient(String host, int port) {
+	private ClientBootstrap bootstrap;
+	
+	public TransferClient(String host, int port) {
 		this.host = host;
 		this.port = port;
+		init();
 	}
-
-	public void run() {
+	
+	private void init() {
 		// Configure the client.
-		ClientBootstrap bootstrap = new ClientBootstrap(
+		bootstrap = new ClientBootstrap(
 				new NioClientSocketChannelFactory(
 						Executors.newCachedThreadPool(),
 						Executors.newCachedThreadPool()));
@@ -58,8 +60,12 @@ public class AnalyzeTransferClient {
 						new AnalyzeClientHandler());
 			}
 		});
+	}
 
+	public ChannelFuture connect() {
 		// Start the connection attempt.
-		bootstrap.connect(new InetSocketAddress(host, port));
+		ChannelFuture future = bootstrap.connect(new InetSocketAddress(host,
+				port));
+		return future;
 	}
 }

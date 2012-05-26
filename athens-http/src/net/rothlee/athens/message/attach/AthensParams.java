@@ -15,6 +15,7 @@
  */
 package net.rothlee.athens.message.attach;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -23,8 +24,16 @@ import net.rothlee.athens.utils.collections.MapWrapper;
 /**
  * @author roth2520@gmail.com
  */
-public class AthensParams extends MapWrapper<String, String> {
+public class AthensParams extends MapWrapper<String, String> implements
+		Serializable {
 
+	private static final long serialVersionUID = -2564615820320854731L;
+
+	public static AthensParams create() {
+		AthensParams result = new AthensParams();
+		return result;
+	}
+	
 	public static AthensParams create(Map<String, List<String>> params) {
 		AthensParams result = new AthensParams();
 		for(Entry<String, List<String>> entry : params.entrySet()) {
@@ -69,4 +78,5 @@ public class AthensParams extends MapWrapper<String, String> {
 		}
 		return result;
 	}
+
 }

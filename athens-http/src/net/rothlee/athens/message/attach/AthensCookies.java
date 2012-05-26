@@ -15,6 +15,7 @@
  */
 package net.rothlee.athens.message.attach;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -27,7 +28,10 @@ import com.google.common.collect.Sets;
 /**
  * @author roth2520@gmail.com
  */
-public final class AthensCookies extends SetWrapper<Cookie> {
+public final class AthensCookies extends SetWrapper<Cookie> implements
+		Serializable {
+
+	private static final long serialVersionUID = -7295640878451405134L;
 
 	public static AthensCookies create() {
 		AthensCookies result = new AthensCookies();
