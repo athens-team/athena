@@ -13,26 +13,31 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.eincs.athens.analyzer.message;
+package com.eincs.pantheon;
 
-import java.io.Serializable;
-
-import com.eincs.pantheon.utils.collections.MapWrapper;
-
+import org.jboss.netty.handler.codec.http.HttpResponse;
+import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 
 /**
- * @author Jung-Haeng Lee
+ * @author roth2520@gmail.com
  */
-public final class AnalyzeTags extends
-		MapWrapper<String, Serializable> implements
-		Serializable {
+public class HttpResponseWrapper extends HttpMessageWrapper implements HttpResponse {
 
-	private static final long serialVersionUID = -5382774207676648775L;
+	private final HttpResponse delegate;
+	
+	public HttpResponseWrapper(HttpResponse delegate) {
+		super(delegate);
+		this.delegate = delegate;
+	}
 
-	public static AnalyzeTags create() {
-		AnalyzeTags result = new AnalyzeTags();
-		return result;
+	@Override
+	public HttpResponseStatus getStatus() {
+		return delegate.getStatus();
+	}
+
+	@Override
+	public void setStatus(HttpResponseStatus arg0) {
+		delegate.setStatus(arg0);
 	}
 	
-	private AnalyzeTags() { super(); }
 }

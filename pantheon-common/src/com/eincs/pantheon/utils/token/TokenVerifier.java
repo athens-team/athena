@@ -13,30 +13,43 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.core;
+package com.eincs.pantheon.utils.token;
 
-import com.eincs.pantheon.message.AthensRequest;
+import java.io.Serializable;
+
+import javax.crypto.Mac;
 
 /**
- * @author Jung-Haeng Lee
+ * @author roth2520@gmail.com
+ * @param <T>
+ *            token content
  */
-public class BlockFilter {
+public interface TokenVerifier<T extends Serializable> {
 
-	private static final BlockFilter instance = new BlockFilter();
-	
-	public static BlockFilter getInstance() {
-		return instance;
-	}
-	
-	public boolean isBlocked(AthensRequest request) {
-		return false;
-	}
-	
-	public void addBlock(BlockInfo blockInfo) {
-		
-	}
-	
-	public void removeBlock(BlockInfo blockInfo) {
-		
-	}
+	long getExpiry();
+
+	void setExpiry(long expiry);
+
+	long getTimestamp();
+
+	void setTimestamp(long timestamp);
+
+	void setSignature(byte[] signature);
+
+	byte[] getSignature();
+
+	void setContent(T content);
+
+	T getContent();
+
+	byte[] getBody();
+
+	void sign(Mac mac);
+
+	boolean verify(Mac mac);
+
+	byte[] toByteArray();
+
+	void fromByteArray(byte[] token);
+
 }

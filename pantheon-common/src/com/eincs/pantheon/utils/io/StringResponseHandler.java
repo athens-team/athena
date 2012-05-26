@@ -13,30 +13,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.core;
+package com.eincs.pantheon.utils.io;
 
-import com.eincs.pantheon.message.AthensRequest;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+
+import com.google.common.io.CharStreams;
 
 /**
- * @author Jung-Haeng Lee
+ * @author roth2520@gmail.com
  */
-public class BlockFilter {
+public class StringResponseHandler implements ResponseHandler<String> {
 
-	private static final BlockFilter instance = new BlockFilter();
-	
-	public static BlockFilter getInstance() {
-		return instance;
+	@Override
+	public String handleResponse(HttpResponse response)
+			throws ClientProtocolException, IOException {
+		return CharStreams.toString(new InputStreamReader(response.getEntity()
+				.getContent()));
 	}
-	
-	public boolean isBlocked(AthensRequest request) {
-		return false;
-	}
-	
-	public void addBlock(BlockInfo blockInfo) {
-		
-	}
-	
-	public void removeBlock(BlockInfo blockInfo) {
-		
-	}
+
 }

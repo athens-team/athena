@@ -13,30 +13,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.core;
+package com.eincs.pantheon.utils.token;
 
-import com.eincs.pantheon.message.AthensRequest;
 
 /**
- * @author Jung-Haeng Lee
+ * @author roth2520@gmail.com
+ * @param <T>
+ *            token content
  */
-public class BlockFilter {
+public interface TokenFactory<T extends Token<?>> {
 
-	private static final BlockFilter instance = new BlockFilter();
-	
-	public static BlockFilter getInstance() {
-		return instance;
-	}
-	
-	public boolean isBlocked(AthensRequest request) {
-		return false;
-	}
-	
-	public void addBlock(BlockInfo blockInfo) {
-		
-	}
-	
-	public void removeBlock(BlockInfo blockInfo) {
-		
-	}
+	T fromBytes(byte[] bytes) throws TokenException;
+
+	byte[] toBytes(T token) throws TokenException;
 }

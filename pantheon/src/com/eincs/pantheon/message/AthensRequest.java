@@ -13,26 +13,28 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.eincs.athens.analyzer.message;
+package com.eincs.pantheon.message;
 
-import java.io.Serializable;
 
-import com.eincs.pantheon.utils.collections.MapWrapper;
+import org.jboss.netty.handler.codec.http.HttpMethod;
+
+import com.eincs.pantheon.AddressProvider;
+import com.eincs.pantheon.message.attach.AthensAttaches;
+import com.eincs.pantheon.message.attach.AthensParams;
 
 
 /**
- * @author Jung-Haeng Lee
+ * @author roth2520@gmail.com
  */
-public final class AnalyzeTags extends
-		MapWrapper<String, Serializable> implements
-		Serializable {
+public interface AthensRequest extends AthensMessage, AddressProvider {
 
-	private static final long serialVersionUID = -5382774207676648775L;
+    HttpMethod getMethod();
 
-	public static AnalyzeTags create() {
-		AnalyzeTags result = new AnalyzeTags();
-		return result;
-	}
-	
-	private AnalyzeTags() { super(); }
+    String getUri();
+    
+    String getPath();
+    
+    AthensParams getParams();
+    
+    AthensAttaches getAttachs();
 }

@@ -13,36 +13,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.handler;
-
-import java.util.concurrent.atomic.AtomicLong;
+package com.eincs.pantheon.handler.service.simple;
 
 
 import org.jboss.netty.channel.ChannelHandlerContext;
+import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
-import com.eincs.athens.analyzer.core.TransferClients;
-import com.eincs.athens.analyzer.message.AnalyzeRequest;
 import com.eincs.pantheon.message.AthensRequest;
+import com.eincs.pantheon.message.DefaultAthensResponse;
 
 /**
- * @author Jung-Haeng Lee
+ * @author roth2520@gmail.com
  */
-public class AnalyzeTransferHandler extends SimpleChannelHandler {
+public class SimpleServiceInvoker extends SimpleChannelHandler {
 
-	private static AtomicLong analzyeReqSeq = new AtomicLong();
-	
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
+		
 		if (e.getMessage() instanceof AthensRequest) {
-			final AthensRequest request = (AthensRequest) e
-					.getMessage();
-			final AnalyzeRequest analyzeRequest = AnalyzeRequest.create(
-					analzyeReqSeq.getAndIncrement(), request);
-			
-			TransferClients.transfer(analyzeRequest);
+			AthensRequest request = (AthensRequest) e.getMessage();
+			DefaultAthensResponse response = new DefaultAthensResponse(request);
+			SimpleService service = (SimpleService) request.getTags().get(
+					SimpleServiceNames.SERVICE);
+			service.doServe(request, response);
+			Channels.write(ctx.getChannel(), response);
+			return;
 		}
 		super.messageReceived(ctx, e);
 	}

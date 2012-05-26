@@ -13,26 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.eincs.athens.analyzer.message;
-
-import java.io.Serializable;
+package com.eincs.pantheon.message.attach;
 
 import com.eincs.pantheon.utils.collections.MapWrapper;
 
-
 /**
- * @author Jung-Haeng Lee
+ * @author roth2520@gmail.com
  */
-public final class AnalyzeTags extends
-		MapWrapper<String, Serializable> implements
-		Serializable {
+public final class AthensTags extends MapWrapper<String, Object> {
 
-	private static final long serialVersionUID = -5382774207676648775L;
-
-	public static AnalyzeTags create() {
-		AnalyzeTags result = new AnalyzeTags();
+	public static AthensTags create() {
+		AthensTags result = new AthensTags();
 		return result;
 	}
 	
-	private AnalyzeTags() { super(); }
+	private AthensTags() { super(); }
 }

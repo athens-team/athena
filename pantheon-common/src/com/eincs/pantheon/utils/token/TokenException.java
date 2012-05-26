@@ -13,30 +13,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.core;
+package com.eincs.pantheon.utils.token;
 
-import com.eincs.pantheon.message.AthensRequest;
+import org.apache.commons.lang.exception.NestableException;
 
 /**
- * @author Jung-Haeng Lee
+ * @author roth2520@gmail.com
  */
-public class BlockFilter {
+public class TokenException extends NestableException{
 
-	private static final BlockFilter instance = new BlockFilter();
-	
-	public static BlockFilter getInstance() {
-		return instance;
-	}
-	
-	public boolean isBlocked(AthensRequest request) {
-		return false;
-	}
-	
-	public void addBlock(BlockInfo blockInfo) {
-		
-	}
-	
-	public void removeBlock(BlockInfo blockInfo) {
-		
+	private static final long serialVersionUID = -6800175175236638133L;
+
+	public TokenException(Throwable e) {
+		super(e);
 	}
 }

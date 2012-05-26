@@ -19,9 +19,9 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
-import com.eincs.athens.message.AthensRequest;
-import com.eincs.athens.message.attach.AthensCookies;
-import com.eincs.athens.message.attach.AthensParams;
+import com.eincs.pantheon.message.AthensRequest;
+import com.eincs.pantheon.message.attach.AthensCookies;
+import com.eincs.pantheon.message.attach.AthensParams;
 
 
 /**

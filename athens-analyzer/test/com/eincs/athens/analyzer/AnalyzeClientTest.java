@@ -23,8 +23,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.eincs.athens.analyzer.core.TransferClients;
 import com.eincs.athens.analyzer.message.AnalyzeRequest;
 import com.eincs.athens.analyzer.message.AnalyzeTags;
-import com.eincs.athens.message.attach.AthensCookies;
-import com.eincs.athens.message.attach.AthensParams;
+import com.eincs.pantheon.message.attach.AthensCookies;
+import com.eincs.pantheon.message.attach.AthensParams;
 
 
 /**

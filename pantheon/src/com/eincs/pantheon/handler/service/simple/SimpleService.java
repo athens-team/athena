@@ -13,30 +13,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.core;
+package com.eincs.pantheon.handler.service.simple;
 
 import com.eincs.pantheon.message.AthensRequest;
+import com.eincs.pantheon.message.AthensResponse;
 
 /**
- * @author Jung-Haeng Lee
+ * @author roth2520@gmail.com
  */
-public class BlockFilter {
-
-	private static final BlockFilter instance = new BlockFilter();
-	
-	public static BlockFilter getInstance() {
-		return instance;
-	}
-	
-	public boolean isBlocked(AthensRequest request) {
-		return false;
-	}
-	
-	public void addBlock(BlockInfo blockInfo) {
-		
-	}
-	
-	public void removeBlock(BlockInfo blockInfo) {
-		
-	}
+public interface SimpleService {
+	public void doServe(AthensRequest request, AthensResponse response)
+			throws Exception;
 }

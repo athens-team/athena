@@ -13,26 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.eincs.athens.analyzer.message;
+package com.eincs.pantheon.utils.concuurent;
 
-import java.io.Serializable;
-
-import com.eincs.pantheon.utils.collections.MapWrapper;
-
+import java.util.concurrent.Executor;
 
 /**
- * @author Jung-Haeng Lee
+ * Executor which executes runnable on current thread
+ * @author roth2520@gmail.com
  */
-public final class AnalyzeTags extends
-		MapWrapper<String, Serializable> implements
-		Serializable {
+public class CurrentExecutor implements Executor {
 
-	private static final long serialVersionUID = -5382774207676648775L;
-
-	public static AnalyzeTags create() {
-		AnalyzeTags result = new AnalyzeTags();
-		return result;
+	@Override
+	public void execute(Runnable runnable) {
+		runnable.run();
 	}
-	
-	private AnalyzeTags() { super(); }
+
 }

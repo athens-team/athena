@@ -13,26 +13,33 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.eincs.athens.analyzer.message;
+package com.eincs.pantheon.message;
 
-import java.io.Serializable;
+import java.nio.charset.Charset;
 
-import com.eincs.pantheon.utils.collections.MapWrapper;
+
+import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 
 
 /**
- * @author Jung-Haeng Lee
+ * @author roth2520@gmail.com
  */
-public final class AnalyzeTags extends
-		MapWrapper<String, Serializable> implements
-		Serializable {
+public interface AthensResponse extends AthensMessage {
 
-	private static final long serialVersionUID = -5382774207676648775L;
+    HttpResponseStatus getStatus();
 
-	public static AnalyzeTags create() {
-		AnalyzeTags result = new AnalyzeTags();
-		return result;
-	}
+    void setStatus(HttpResponseStatus status);
+    
+    ChannelBuffer getContents();
+    
+    void setContents(ChannelBuffer contents);
+    
+    AthensContentType getContentType();
+    
+    void setContentType(AthensContentType contentType);
+
+	Charset getCharset();
 	
-	private AnalyzeTags() { super(); }
+	void setCharset(Charset charset);
 }

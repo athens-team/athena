@@ -13,26 +13,24 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.eincs.athens.analyzer.message;
+package com.eincs.pantheon;
 
-import java.io.Serializable;
-
-import com.eincs.pantheon.utils.collections.MapWrapper;
-
+import java.net.InetAddress;
 
 /**
- * @author Jung-Haeng Lee
+ * @author roth2520@gmail.com
  */
-public final class AnalyzeTags extends
-		MapWrapper<String, Serializable> implements
-		Serializable {
-
-	private static final long serialVersionUID = -5382774207676648775L;
-
-	public static AnalyzeTags create() {
-		AnalyzeTags result = new AnalyzeTags();
-		return result;
-	}
+public final class AddressProviders {
+	private AddressProviders() {}
 	
-	private AnalyzeTags() { super(); }
+	public static InetAddress getRemoteOrOriginAddress(AddressProvider addressProvider){
+		InetAddress address = null;
+		if (addressProvider.getRemoteAddress() != null){
+			address = addressProvider.getRemoteAddress().getAddress();
+		}
+		if (addressProvider.getOriginAddress() != null){
+			address = addressProvider.getOriginAddress();
+		}
+		return address;
+	}
 }
