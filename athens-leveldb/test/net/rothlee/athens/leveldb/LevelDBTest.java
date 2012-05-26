@@ -1,35 +1,29 @@
-package net.rothlee.athens.leveldb;
-/**
- * Copyright (C) 2011 the original author or authors.
- * See the notice.md file distributed with this work for additional
- * information regarding copyright ownership.
+/*
+ * Copyright 2012 Athens Team
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This file to you under the Apache License, version 2.0
+ * (the "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at:
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
  */
+package net.rothlee.athens.leveldb;
+
 import static com.google.common.base.Charsets.UTF_8;
-import static net.rothlee.athens.leveldb.LevelDBTest.DBState.FRESH;
-import static net.rothlee.athens.leveldb.LevelDBTest.Order.SEQUENTIAL;
-import static org.iq80.leveldb.impl.DbConstants.NUM_LEVELS;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.DBFactory;
@@ -37,9 +31,7 @@ import org.iq80.leveldb.DBIterator;
 import org.iq80.leveldb.Options;
 import org.iq80.leveldb.WriteBatch;
 import org.iq80.leveldb.WriteOptions;
-import org.iq80.leveldb.impl.DbImpl;
 import org.iq80.leveldb.util.FileUtils;
-import org.iq80.leveldb.util.PureJavaCrc32C;
 import org.iq80.leveldb.util.Slice;
 import org.iq80.leveldb.util.SliceOutput;
 import org.iq80.leveldb.util.Slices;
@@ -47,7 +39,6 @@ import org.iq80.leveldb.util.Snappy;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
-import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
@@ -74,7 +65,7 @@ public class LevelDBTest
 
     //    Cache cache_;
     private List<String> benchmarks;
-    private DB db_;
+    private DB database;
     private final int num_;
     private int reads_;
     private final int valueSize;
@@ -130,18 +121,18 @@ public class LevelDBTest
         printHeader();
         open();
         String hello = "Hello World!";
+        
         byte []test;
         byte []test2;
-        //test = gen_.generate(valueSize);
         test = hello.getBytes();
-        WriteBatch batch = db_.createWriteBatch();
-       /*
-        int k = 10;
-            byte[] key = formatNumber(k);
-            batch.put(key, test);
-            */
-        byte[] key = null;
         
+        
+        
+        /* 
+         * put test
+         */
+        byte[] key = null;
+        WriteBatch batch = database.createWriteBatch();
         for(int i = 9; 0 <= i; i--)
         {
         	String temp = hello + Integer.toString(6);
@@ -151,103 +142,24 @@ public class LevelDBTest
         	batch.put(key, temp.getBytes());
         }
         
+        /*
+         * write test
+         */
         bytes_ += valueSize + key.length;
-        db_.write(batch, new WriteOptions());
-        test2 = db_.get(key);
-        
+        database.write(batch, new WriteOptions());
+        System.out.println(new String(database.get(key)));
         batch.close();
         
+        
+        /*
+         * sequential read 
+         */
         byte[] key_from = formatNumber(0);
         byte[] key_to = formatNumber(9);
         readSequential(key_from, key_to);
-        
-/*
-        for (String benchmark : benchmarks) {
-            start();
 
-            boolean known = true;
-            
-            if (benchmark.equals("fillseq")) {
-                write(new WriteOptions(), SEQUENTIAL, FRESH, num_, valueSize, 1);
-            }
-            else if (benchmark.equals("fillbatch")) {
-                write(new WriteOptions(), SEQUENTIAL, FRESH, num_, valueSize, 1000);
-            }
-            else if (benchmark.equals("fillrandom")) {
-                write(new WriteOptions(), RANDOM, FRESH, num_, valueSize, 1);
-            }
-            else if (benchmark.equals("overwrite")) {
-                write(new WriteOptions(), RANDOM, EXISTING, num_, valueSize, 1);
-            }
-            else if (benchmark.equals("fillsync")) {
-                write(new WriteOptions().sync(true), RANDOM, FRESH, num_ / 1000, valueSize, 1);
-            }
-            else if (benchmark.equals("fill100K")) {
-                write(new WriteOptions(), RANDOM, FRESH, num_ / 1000, 100 * 1000, 1);
-            }
-            else if (benchmark.equals("readseq")) {
-                readSequential();
-            }
-            else if (benchmark.equals("readreverse")) {
-                readReverse();
-            }
-            else if (benchmark.equals("readrandom")) {
-                readRandom();
-            }
-            else if (benchmark.equals("readhot")) {
-                readHot();
-            }
-            else if (benchmark.equals("readrandomsmall")) {
-                int n = reads_;
-                reads_ /= 1000;
-                readRandom();
-                reads_ = n;
-            }
-            else if (benchmark.equals("compact")) {
-                compact();
-            }
-            else if (benchmark.equals("crc32c")) {
-                crc32c(4096, "(4k per op)");
-            }
-            else if (benchmark.equals("acquireload")) {
-                acquireLoad();
-            }
-            else if (benchmark.equals("snappycomp")) {
-                if( Snappy.available() ) {
-                    snappyCompress();
-                }
-            }
-            else if (benchmark.equals("snappyuncomp")) {
-                if( Snappy.available() ) {
-                    snappyUncompressDirectBuffer();
-                }
-            }
-            else if (benchmark.equals("unsnap-array")) {
-                if( Snappy.available() ) {
-                    snappyUncompressArray();
-                }
-            }
-            else if (benchmark.equals("unsnap-direct")) {
-                if( Snappy.available() ) {
-                    snappyUncompressDirectBuffer();
-                }
-            }
-            else if (benchmark.equals("heapprofile")) {
-                heapProfile();
-            }
-            else if (benchmark.equals("stats")) {
-                printStats();
-            }
-            else {
-                known = false;
-                System.err.println("Unknown benchmark: " + benchmark);
-            }
-            if (known) {
-                stop(benchmark);
-            }
-        }
-        */
-        db_.close();
+        
+        database.close();
     }
 
     private void printHeader()
@@ -335,91 +247,7 @@ public class LevelDBTest
         if (writeBufferSize != null) {
             options.writeBufferSize(writeBufferSize);
         }
-        db_ = factory.open(databaseDir, options);
-    }
-
-    private void start()
-    {
-        startTime = System.nanoTime();
-        bytes_ = 0;
-        message_ = null;
-        last_op_finish_ = startTime;
-        // hist.clear();
-        done_ = 0;
-        next_report_ = 100;
-    }
-
-    private void stop(String benchmark)
-    {
-        long endTime = System.nanoTime();
-        double elapsedSeconds = 1.0d * (endTime - startTime) / TimeUnit.SECONDS.toNanos(1);
-
-        // Pretend at least one op was done in case we are running a benchmark
-        // that does nto call FinishedSingleOp().
-        if (done_ < 1) {
-            done_ = 1;
-        }
-
-        if (bytes_ > 0) {
-            String rate = String.format("%6.1f MB/s", (bytes_ / 1048576.0) / elapsedSeconds);
-            if (message_ != null) {
-                message_ = rate + " " + message_;
-            }
-            else {
-                message_ = rate;
-            }
-        }
-        else if (message_ == null) {
-            message_ = "";
-        }
-
-        System.out.printf("%-12s : %11.5f micros/op;%s%s\n",
-                benchmark,
-                elapsedSeconds * 1e6 / done_,
-                (message_ == null ? "" : " "),
-                message_);
-//        if (FLAGS_histogram) {
-//            System.out.printf("Microseconds per op:\n%s\n", hist_.ToString().c_str());
-//        }
-
-        if (post_message_ != null) {
-            System.out.printf("\n%s\n", post_message_);
-            post_message_ = null;
-        }
-
-    }
-
-    private void write(WriteOptions writeOptions, Order order, DBState state, int numEntries, int valueSize, int entries_per_batch)
-            throws IOException
-    {
-        if (state == FRESH) {
-            if (useExisting) {
-                message_ = "skipping (--use_existing_db is true)";
-                return;
-            }
-            db_.close();
-            db_ = null;
-            destroyDb();
-            open();
-            start(); // Do not count time taken to destroy/open
-        }
-
-        if (numEntries != num_) {
-            message_ = String.format("(%d ops)", numEntries);
-        }
-
-        for (int i = 0; i < numEntries; i += entries_per_batch) {
-            WriteBatch batch = db_.createWriteBatch();
-            for (int j = 0; j < entries_per_batch; j++) {
-                int k = (order == SEQUENTIAL) ? i + j : rand_.nextInt(num_);
-                byte[] key = formatNumber(k);
-                batch.put(key, gen_.generate(valueSize));
-                bytes_ += valueSize + key.length;
-                 
-            }
-            db_.write(batch, writeOptions);
-            batch.close();
-        }
+        database = factory.open(databaseDir, options);
     }
 
     public static byte[] formatNumber(long n)
@@ -441,7 +269,7 @@ public class LevelDBTest
 
     private void readSequential(byte[] from, byte[] to)
     {
-    	DBIterator iterator = db_.iterator();
+    	DBIterator iterator = database.iterator();
 		iterator.seek(from);
 		 
 		while(iterator.hasNext())
@@ -452,177 +280,24 @@ public class LevelDBTest
             if(java.util.Arrays.equals(entry.getKey(), to)) break;
         }
             
-        //Closeables.closeQuietly(iterator);
-    }
+		try {
+			iterator.close();
+		} catch (Exception e) {
 
-    private void readReverse()
-    {
-        //To change body of created methods use File | Settings | File Templates.
-    }
-
-    private void readRandom()
-    {
-        for (int i = 0; i < reads_; i++) {
-            byte[] key = formatNumber(rand_.nextInt(num_));
-            byte[] value = db_.get(key);
-            Preconditions.checkNotNull(value, "db.get(%s) is null", new String(key, UTF_8));
-            bytes_ += key.length + value.length;
-             
-        }
-    }
-
-    private void readHot()
-    {
-        int range = (num_ + 99) / 100;
-        for (int i = 0; i < reads_; i++) {
-            byte[] key = formatNumber(rand_.nextInt(range));
-            byte[] value = db_.get(key);
-            bytes_ += key.length + value.length;
-             
-        }
-    }
-
-    private void compact()
-            throws IOException
-    {
-        if(db_ instanceof DbImpl) {
-            ((DbImpl)db_).compactMemTable();
-            for (int level = 0; level < NUM_LEVELS - 1; level++) {
-                ((DbImpl)db_).compactRange(level, Slices.copiedBuffer("", UTF_8), Slices.copiedBuffer("~", UTF_8));
-            }
-        }
-    }
-
-    private void crc32c(int blockSize, String message)
-    {
-        // Checksum about 500MB of data total
-        byte[] data = new byte[blockSize];
-        for (int i = 0; i < data.length; i++) {
-            data[i] = 'x';
-
-        }
-
-        long bytes = 0;
-        int crc = 0;
-        while (bytes < 1000 * 1048576) {
-            PureJavaCrc32C checksum = new PureJavaCrc32C();
-            checksum.update(data, 0, blockSize);
-            crc = checksum.getMaskedValue();
-             
-            bytes += blockSize;
-        }
-        System.out.printf("... crc=0x%x\r", crc);
-
-        bytes_ = bytes;
-        // Print so result is not dead
-        message_ = message;
-    }
-
-    private void acquireLoad()
-    {
-        //To change body of created methods use File | Settings | File Templates.
-    }
-
-    private void snappyCompress()
-    {
-        byte[] raw = gen_.generate(new Options().blockSize());
-        byte[] compressedOutput = new byte[Snappy.maxCompressedLength(raw.length)];
-
-        long produced = 0;
-
-        // attempt to compress the block
-        while (bytes_ < 1024 * 1048576) {  // Compress 1G
-            try {
-                int compressedSize = Snappy.compress(raw, 0, raw.length, compressedOutput, 0);
-                bytes_ += raw.length;
-                produced += compressedSize;
-            }
-            catch (IOException ignored) {
-                throw Throwables.propagate(ignored);
-            }
-
-             
-        }
-
-        message_ = String.format("(output: %.1f%%)", (produced * 100.0) / bytes_);
-    }
-
-    private void snappyUncompressArray()
-    {
-        int inputSize = new Options().blockSize();
-        byte[] compressedOutput = new byte[Snappy.maxCompressedLength(inputSize)];
-        byte raw[] = gen_.generate(inputSize);
-        int compressedLength;
-        try {
-            compressedLength = Snappy.compress(raw, 0, raw.length, compressedOutput, 0);
-        }
-        catch (IOException e) {
-            throw Throwables.propagate(e);
-        }
-        // attempt to uncompress the block
-        while (bytes_ < 5L * 1024 * 1048576) {  // Compress 1G
-            try {
-                Snappy.uncompress(compressedOutput, 0, compressedLength, raw, 0);
-                bytes_ += inputSize;
-            }
-            catch (IOException ignored) {
-                throw Throwables.propagate(ignored);
-            }
-
-             
-        }
-    }
-
-    private void snappyUncompressDirectBuffer()
-    {
-        int inputSize = new Options().blockSize();
-        byte[] compressedOutput = new byte[Snappy.maxCompressedLength(inputSize)];
-        byte raw[] = gen_.generate(inputSize);
-        int compressedLength;
-        try {
-            compressedLength = Snappy.compress(raw, 0, raw.length, compressedOutput, 0);
-        }
-        catch (IOException e) {
-            throw Throwables.propagate(e);
-        }
-
-        ByteBuffer uncompressedBuffer = ByteBuffer.allocateDirect(inputSize);
-        ByteBuffer compressedBuffer = ByteBuffer.allocateDirect(compressedLength);
-        compressedBuffer.put(compressedOutput, 0, compressedLength);
-
-        // attempt to uncompress the block
-        while (bytes_ < 5L * 1024 * 1048576) {  // Compress 1G
-            try {
-                uncompressedBuffer.clear();
-                compressedBuffer.position(0);
-                compressedBuffer.limit(compressedLength);
-                Snappy.uncompress(compressedBuffer, uncompressedBuffer);
-                bytes_ += inputSize;
-            }
-            catch (IOException ignored) {
-                throw Throwables.propagate(ignored);
-            }
-
-             
-        }
-    }
-
-    private void heapProfile()
-    {
-        //To change body of created methods use File | Settings | File Templates.
+		}
     }
 
     private void destroyDb()
     {
-        //Closeables.closeQuietly(db_);
-        db_ = null;
+    	try  {
+			database.close();
+		} catch (Exception e) {
+
+		}
+        database = null;
         FileUtils.deleteRecursively(databaseDir);
     }
 
-    private void printStats()
-    {
-        //To change body of created methods use File | Settings | File Templates.
-    }
 
     public static void main(String[] args)
             throws Exception
