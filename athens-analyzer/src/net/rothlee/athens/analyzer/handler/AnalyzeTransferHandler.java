@@ -17,7 +17,7 @@ package net.rothlee.athens.analyzer.handler;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import net.rothlee.athens.analyzer.core.Transfers;
+import net.rothlee.athens.analyzer.core.TransferClients;
 import net.rothlee.athens.analyzer.message.AnalyzeRequest;
 import net.rothlee.athens.message.AthensRequest;
 
@@ -41,7 +41,7 @@ public class AnalyzeTransferHandler extends SimpleChannelHandler {
 			final AnalyzeRequest analyzeRequest = AnalyzeRequest.create(
 					analzyeReqSeq.getAndIncrement(), request);
 			
-			Transfers.transfer(analyzeRequest);
+			TransferClients.transfer(analyzeRequest);
 		}
 		super.messageReceived(ctx, e);
 	}

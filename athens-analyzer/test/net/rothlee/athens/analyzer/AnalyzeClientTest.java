@@ -20,7 +20,7 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.atomic.AtomicLong;
 
-import net.rothlee.athens.analyzer.core.Transfers;
+import net.rothlee.athens.analyzer.core.TransferClients;
 import net.rothlee.athens.analyzer.message.AnalyzeRequest;
 import net.rothlee.athens.analyzer.message.AnalyzeTags;
 import net.rothlee.athens.message.attach.AthensCookies;
@@ -47,7 +47,7 @@ public class AnalyzeClientTest {
 			request.setPath("/path");
 			request.setMethod("GET");
 
-			Transfers.transfer(request);
+			TransferClients.transfer(request);
 		}
 	}
 	

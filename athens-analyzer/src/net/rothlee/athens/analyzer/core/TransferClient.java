@@ -29,7 +29,6 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.Channels;
-import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.serialization.ClassResolvers;
@@ -90,6 +89,7 @@ public class TransferClient {
 				} else {
 					ChannelFuture future = bootstrap
 							.connect(new InetSocketAddress(host, port));
+					// wait for connect finish
 					future.getChannel();
 				}
 				return channel;
@@ -113,11 +113,5 @@ public class TransferClient {
 			channel = null;
 		}
 		
-		@Override
-		public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e)
-				throws Exception {
-			super.exceptionCaught(ctx, e);
-			e.getChannel().close();
-		}
 	}
 }

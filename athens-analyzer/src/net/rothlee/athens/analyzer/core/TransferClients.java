@@ -28,16 +28,16 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Jung-Haeng Lee
  */
-public class Transfers {
+public class TransferClients {
 	
 	private static final Logger logger = LoggerFactory
-			.getLogger(Transfers.class);
+			.getLogger(TransferClients.class);
 
-	private static final Transfers instance = new Transfers();
+	private static final TransferClients instance = new TransferClients();
 	private static Executor executor = Executors.newFixedThreadPool(10);
 	private static TransferClient client = new TransferClient("localhost", 8081);
 	
-	public static Transfers getInstnace() {
+	public static TransferClients getInstnace() {
 		return instance;
 	}
 
