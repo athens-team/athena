@@ -13,40 +13,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package net.rothlee.athens.analyzer.transfer;
+package net.rothlee.athens.analyzer.handler;
 
+import java.util.concurrent.atomic.AtomicLong;
 
 import net.rothlee.athens.analyzer.message.AnalyzeRequest;
+import net.rothlee.athens.analyzer.transfer.Transfers;
+import net.rothlee.athens.message.AthensRequest;
 
 import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
-import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Jung-Haeng Lee
  */
-public class AnalyzeServerHandler extends SimpleChannelHandler {
+public class AnalyzeTransferHandler extends SimpleChannelHandler {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(AnalyzeServerHandler.class);
-
+	private static AtomicLong analzyeReqSeq = new AtomicLong();
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
-		Object message = e.getMessage();
-		if(message instanceof AnalyzeRequest) {
-			logger.info("recv object {}", ((AnalyzeRequest)message).toString());
-			return;
+		if (e.getMessage() instanceof AthensRequest) {
+			final AthensRequest request = (AthensRequest) e
+					.getMessage();
+			final AnalyzeRequest analyzeRequest = AnalyzeRequest.create(
+					analzyeReqSeq.getAndIncrement(), request);
+			
+			Transfers.transfer(analyzeRequest);
 		}
 		super.messageReceived(ctx, e);
-	}
-
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-		e.getChannel().close();
 	}
 }

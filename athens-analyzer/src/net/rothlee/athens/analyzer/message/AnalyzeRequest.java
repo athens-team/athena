@@ -16,8 +16,10 @@
 package net.rothlee.athens.analyzer.message;
 
 import java.io.Serializable;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
+import net.rothlee.athens.message.AthensRequest;
 import net.rothlee.athens.message.attach.AthensCookies;
 import net.rothlee.athens.message.attach.AthensParams;
 
@@ -28,13 +30,27 @@ public class AnalyzeRequest implements Serializable {
 	
 	private static final long serialVersionUID = -5509385458282534203L;
 
+	public static AnalyzeRequest create(long reqSeq, AthensRequest request) {
+		AnalyzeRequest result = new AnalyzeRequest();
+		result.setRequestSeq(reqSeq);
+		result.setLocalAddress(request.getLocalAddress());
+		result.setOriginAddress(request.getOriginAddress());
+		result.setRemoteAddress(request.getRemoteAddress());
+		result.setMethod(request.getMethod().getName());
+		result.setPath(request.getPath());
+		result.setParams(request.getParams());
+		result.setCookies(request.getCookies());
+		result.setTags(AnalyzeTags.create());
+		return result;
+	}
+	
 	private long requestSeq;
 	
 	private InetSocketAddress remoteAddress;
 	
 	private InetSocketAddress localAddress;
 	
-	private InetSocketAddress originAddress;
+	private InetAddress originAddress;
 	
 	private String method;
 	
@@ -70,12 +86,12 @@ public class AnalyzeRequest implements Serializable {
 		this.localAddress = localAddress;
 	}
 
-	public InetSocketAddress getOriginAddress() {
+	public InetAddress getOriginAddress() {
 		return originAddress;
 	}
 
-	public void setOriginAddress(InetSocketAddress originAddress) {
-		this.originAddress = originAddress;
+	public void setOriginAddress(InetAddress inetAddress) {
+		this.originAddress = inetAddress;
 	}
 
 	public String getMethod() {

@@ -13,30 +13,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package net.rothlee.athens.analyzer.transfer;
+package net.rothlee.athens.analyzer.handler;
 
 import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.netty.channel.SimpleChannelHandler;
 
 /**
  * @author Jung-Haeng Lee
  */
-public class AnalyzeClientHandler extends SimpleChannelUpstreamHandler {
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(AnalyzeClientHandler.class);
+public class AnalyzeBlockHandler extends SimpleChannelHandler {
 
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
-	}
-
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-		e.getChannel().close();
-		logger.error(e.getCause().getMessage(), e.getCause());
+	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
+			throws Exception {
+		super.messageReceived(ctx, e);
 	}
 }
