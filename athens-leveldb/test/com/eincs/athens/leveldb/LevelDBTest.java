@@ -129,34 +129,45 @@ public class LevelDBTest
         
         
         /* 
-         * put test
+         * batch put test
          */
         byte[] key = null;
         WriteBatch batch = database.createWriteBatch();
         for(int i = 9; 0 <= i; i--)
         {
-        	String temp = hello + Integer.toString(6);
+        	String temp = hello + Integer.toString(i);
         	System.out.println("For test : " + temp);
         	test = hello.getBytes();
-        	key = formatNumber (6);
+        	key = formatNumber (i);
         	batch.put(key, temp.getBytes());
         }
+         /*
+          * batch delete test
+          */
+        batch.delete(formatNumber(6));
         
         /*
-         * write test
+         * database write with batch test
+         * database only can be written with batch
          */
+        
         bytes_ += valueSize + key.length;
         database.write(batch, new WriteOptions());
-        System.out.println(new String(database.get(key)));
+        
         batch.close();
         
-        
+        /*
+         * database delete test
+         */
+        database.delete(formatNumber(5));
         /*
          * sequential read 
          */
         byte[] key_from = formatNumber(0);
         byte[] key_to = formatNumber(9);
         readSequential(key_from, key_to);
+        
+        
 
         
         database.close();
