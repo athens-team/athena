@@ -15,6 +15,7 @@
  */
 package com.eincs.athens.analyzer.core;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -36,7 +37,8 @@ public class TransferClients {
 
 	private static final TransferClients instance = new TransferClients();
 	private static Executor executor = Executors.newFixedThreadPool(10);
-	private static TransferClient client = new TransferClient("localhost", 8081);
+	private static TransferClient client = new TransferClient(
+			new InetSocketAddress("localhost", 8081));
 	
 	public static TransferClients getInstnace() {
 		return instance;

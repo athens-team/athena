@@ -85,12 +85,12 @@ public class NettyClient {
 	 */
 	public static class NettyClientHandler extends SimpleChannelHandler {
 
-		private final NettyClient client;
+		private NettyClient client;
 
-		private NettyClientHandler(NettyClient client) {
+		private void setClient(NettyClient client) {
 			this.client = client;
 		}
-
+		
 		@Override
 		public void channelConnected(ChannelHandlerContext ctx,
 				ChannelStateEvent e) throws Exception {
@@ -116,10 +116,13 @@ public class NettyClient {
 
 		private ClientBootstrap clientBootstrap;
 		private InetSocketAddress address;
-
+		private NettyClientHandler clientHandler;
+		
 		public Builder setClientBootstrap(ClientBootstrap clientBootstrap) {
 			ensureClientBootstrap(clientBootstrap);
 			this.clientBootstrap = clientBootstrap;
+			this.clientHandler = clientBootstrap.getPipeline()
+					.get(NettyClientHandler.class);
 			return this;
 		}
 
@@ -153,6 +156,7 @@ public class NettyClient {
 			NettyClient client = new NettyClient();
 			client.setAddress(address);
 			client.setClientBootstrap(clientBootstrap);
+			clientHandler.setClient(client);
 			return client;
 		}
 	}
