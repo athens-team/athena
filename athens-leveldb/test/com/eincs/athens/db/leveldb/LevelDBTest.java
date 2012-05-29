@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.eincs.athens.leveldb;
+package com.eincs.athens.db.leveldb;
 
 import static com.google.common.base.Charsets.UTF_8;
 

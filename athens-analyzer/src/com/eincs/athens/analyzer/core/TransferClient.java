@@ -41,6 +41,7 @@ import com.eincs.pantheon.utils.client.NettyClient.NettyClientHandler;
  */
 public class TransferClient {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory
 			.getLogger(TransferClient.class);
 

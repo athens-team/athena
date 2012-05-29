@@ -54,6 +54,7 @@ public class TransferClients {
 						Channels.write(ch, analyzeRequest);
 					}
 				} catch (Exception e) {
+					// ignore exception (analyze request can be not accurate)
 					logger.error(e.getMessage(), e);
 				}
 			}

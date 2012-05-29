@@ -40,6 +40,11 @@ public class Analyzers {
 		analyzerHolders.add(holder);
 	}
 
+	/**
+	 * travel all analyzers and invoke analyze method
+	 * @param request request information of analyze
+	 * @return report of analyze
+	 */
 	public AnalyzeReport invokeAnalyzers(AnalyzeRequest request) {
 		for(AnalyzerHodler holder : analyzerHolders) {
 			holder.analyzer.analyze(request);
