@@ -35,7 +35,7 @@ public class BlockDBTest {
 			IllegalAccessException, ClassNotFoundException, IOException {
 
 		AthensDBFactory factory = new AthensDBFactory();
-		AthensDB athensDB = factory.open("./db/block/block.db");
+		AthensDB athensDB = factory.open("./database/block/block.db");
 		LevelDBBlockDB blockDB = new LevelDBBlockDB(athensDB);
 		
 		// test codes herer:
