@@ -15,6 +15,9 @@
  */
 package com.eincs.athens.db.data;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 
@@ -27,14 +30,42 @@ public class Statistics implements Serializable {
 
 	private static final long serialVersionUID = 7143689667989007723L;
 	
-	private List<Integer> counts = Lists.newArrayList();
-
-	public List<Integer> getCounts() {
-		return counts;
+	private long timestamp;
+	
+	private List<Integer> countList = Lists.newArrayList();
+	
+	public long getTimestamp() {
+		return timestamp;
 	}
 
-	public void setCounts(List<Integer> counts) {
-		this.counts = counts;
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 
+	public List<Integer> getCountList() {
+		return countList;
+	}
+
+	public void setCountList(List<Integer> countList) {
+		this.countList = countList;
+	}
+
+	public void addCount(long timestamp, int count) {
+		// timestamp System.currentTimeMillis();
+		// timestamp 10초 단위로 잘 쪼개야되고
+		// Statistics는 무조건 전체 1분치를 저장함
+	}
+	
+	public int getSumOfCount() {
+		// countList에 있는거 전체 다 더한거
+		// (1분동안 보낸거 합친거)
+		return 0;
+	}
+	
+	public byte[] toBytes() throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(baos);
+		oos.writeObject(this);
+		return baos.toByteArray();
+	}
 }

@@ -15,9 +15,22 @@
  */
 package com.eincs.athens.db;
 
+import org.iq80.leveldb.DBException;
+
+import com.eincs.athens.db.data.Statistics;
+import com.eincs.athens.db.data.StatisticsKey;
+
 /**
  * @author Jung-Haeng Lee
  */
 public interface StatisticsDB {
 
+	public Statistics getStatistics(StatisticsKey key) throws DBException;
+
+	public void setStatistics(StatisticsKey key, Statistics block)
+			throws DBException;
+
+	public void removeStatistics(StatisticsKey key) throws DBException;
+
+	public void clear() throws DBException;
 }
