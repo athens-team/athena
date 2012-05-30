@@ -240,8 +240,8 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
 		releaseBuilder();
-		e.getCause().printStackTrace();
 		e.getChannel().close();
+		super.exceptionCaught(ctx, e);
 	}
 
 	private void writeResponse(ChannelHandlerContext ctx, MessageEvent e, AthensHttpResponse response) {
