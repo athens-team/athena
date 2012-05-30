@@ -1,5 +1,7 @@
 package com.eincs.athens.db.leveldb;
 
+import java.io.IOException;
+
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.DBException;
 import org.iq80.leveldb.DBIterator;
@@ -19,7 +21,11 @@ public class DBWrapper implements DB {
 	
 	@Override
 	public void close() {
-		wrppaed.close();
+		try {
+			wrppaed.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
