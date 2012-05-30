@@ -22,6 +22,7 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipeline;
+import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.slf4j.Logger;
@@ -50,8 +51,24 @@ public class NettyClient {
 
 	private void setClientBootstrap(ClientBootstrap clientBootstrap) {
 		this.clientBootstrap = clientBootstrap;
+		setClientHandler(clientBootstrap);
 	}
 
+	private void setClientHandler(ClientBootstrap clientBootstrap) {
+		final ChannelPipelineFactory pipelineFactory = clientBootstrap
+				.getPipelineFactory();
+		this.clientBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
+			@Override
+			public ChannelPipeline getPipeline() throws Exception {
+				ChannelPipeline pipeline = pipelineFactory.getPipeline();
+				NettyClientHandler clientHandler = pipeline
+						.get(NettyClientHandler.class);
+				clientHandler.setClient(NettyClient.this);
+				return pipeline;
+			}
+		});
+	}
+	
 	public Channel getChannelNow() {
 		return channel;
 	}
@@ -116,27 +133,16 @@ public class NettyClient {
 
 		private ClientBootstrap clientBootstrap;
 		private InetSocketAddress address;
-		private NettyClientHandler clientHandler;
 		
 		public Builder setClientBootstrap(ClientBootstrap clientBootstrap) {
 			ensureClientBootstrap(clientBootstrap);
 			this.clientBootstrap = clientBootstrap;
-			this.clientHandler = clientBootstrap.getPipeline()
-					.get(NettyClientHandler.class);
 			return this;
 		}
 
 		private void ensureClientBootstrap(ClientBootstrap clientBootstrap) {
 			Preconditions.checkNotNull(clientBootstrap,
 					"ClientBootstrap is required.");
-
-			// ChannelPipeline for NettyClient must contain NettyClientHandler
-			// for connection state management
-			NettyClientHandler clientHandler = clientBootstrap.getPipeline()
-					.get(NettyClientHandler.class);
-
-			Preconditions.checkNotNull(clientHandler,
-					"ClientBootstrap should contain NettyClientHandler.");
 		}
 
 		public Builder setAddress(InetSocketAddress address) {
@@ -152,11 +158,10 @@ public class NettyClient {
 		public NettyClient build() {
 			ensureClientBootstrap(clientBootstrap);
 			ensureAddress(address);
-
+			
 			NettyClient client = new NettyClient();
 			client.setAddress(address);
 			client.setClientBootstrap(clientBootstrap);
-			clientHandler.setClient(client);
 			return client;
 		}
 	}

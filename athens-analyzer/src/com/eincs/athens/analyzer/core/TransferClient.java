@@ -90,16 +90,16 @@ public class TransferClient {
 	}
 
 	/**
-	 * 
-	 * @param handler
+	 * Add AnalyzeReportHandler to TransferClient
+	 * @param handler AnalyzeReportHandler
 	 */
 	public void addReportHandler(AnalyzeReportHandler handler) {
 		mReportHandlers.add(handler);
 	}
 	
 	/**
-	 * 
-	 * @param handler
+	 * Remove AnalyzeReportHandler from TransferClient
+	 * @param handler AnalyzeReportHandler
 	 */
 	public void removeReportHandler(AnalyzeReportHandler handler) {
 		mReportHandlers.add(handler);
