@@ -20,6 +20,8 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eincs.athens.db.data.Statistics;
+import com.eincs.athens.db.data.StatisticsKey;
 import com.eincs.athens.db.leveldb.AthensDBFactory;
 import com.eincs.athens.db.leveldb.LevelDBStatisticsDB;
 import com.eincs.athens.db.leveldb.AthensDBFactory.AthensDB;
@@ -38,9 +40,24 @@ public class StatisticsDBTest {
 
 		AthensDBFactory factory = new AthensDBFactory();
 		AthensDB athensDB = factory.open("./database/statistics/statistics.db");
-		LevelDBStatisticsDB blockDB = new LevelDBStatisticsDB(athensDB);
+		LevelDBStatisticsDB statisticsDB = new LevelDBStatisticsDB(athensDB);
 
-		// test codes herer:
+		// test codes here:
 		// blockDB.setBlock(key, block)
+		Statistics test = Statistics.creatStatisticsByCount(System.currentTimeMillis(), 100);
+		StatisticsKey key = StatisticsKey.createKeyByUserId("IDisNow", "IdontCare");
+		test.addCount(System.currentTimeMillis()-5000, 100-10);
+		test.addCount(System.currentTimeMillis()-10000, 100-20);
+		test.addCount(System.currentTimeMillis()-15000, 100-30);
+		test.addCount(System.currentTimeMillis()+5000, 100+10);
+		test.addCount(System.currentTimeMillis()+10000, 100+20);
+		test.addCount(System.currentTimeMillis()+15000, 100+30);
+		statisticsDB.addStatistics(key, test);
+		test = statisticsDB.getStatistics(key);
+		System.out.println(test.getCountList());
+		System.out.println(test.getTimestamp());
+		System.out.println(test.getSumOfCount());
+		statisticsDB.removeStatistics(key);
+		//statisticsDB.clear();
 	}
 }

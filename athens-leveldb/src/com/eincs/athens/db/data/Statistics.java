@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 
 import com.beust.jcommander.internal.Lists;
@@ -29,11 +30,29 @@ import com.beust.jcommander.internal.Lists;
 public class Statistics implements Serializable {
 
 	private static final long serialVersionUID = 7143689667989007723L;
-	
+
 	private long timestamp;
-	
-	private List<Integer> countList = Lists.newArrayList();
-	
+
+	private List<Integer> countList;
+
+	public Statistics() {
+		countList = Lists.newArrayList(6);
+		countList.add(0);
+		countList.add(0);
+		countList.add(0);
+		countList.add(0);
+		countList.add(0);
+		countList.add(0);
+		this.timestamp = System.currentTimeMillis();
+	}
+
+	public static Statistics creatStatisticsByCount(long timestamp, int count) {
+		Statistics result = new Statistics();
+		result.countList.set(5, count);
+		result.timestamp = timestamp;
+		return result;
+	}
+
 	public long getTimestamp() {
 		return timestamp;
 	}
@@ -51,17 +70,69 @@ public class Statistics implements Serializable {
 	}
 
 	public void addCount(long timestamp, int count) {
-		// timestamp System.currentTimeMillis();
-		// timestamp 10초 단위로 잘 쪼개야되고
-		// Statistics는 무조건 전체 1분치를 저장함
+		if (timestamp <= this.timestamp) {
+			if (timestamp + 60000 <= this.timestamp) {
+				return;
+			} else {
+				int index = (int) (5 - ((this.timestamp - timestamp) / 10000));
+				countList.set(index, countList.get(index) + count);
+				return;
+			}
+		}
+		if (timestamp > 50000 + this.timestamp) {
+			countList.clear();
+			countList.add(0);
+			countList.add(0);
+			countList.add(0);
+			countList.add(0);
+			countList.add(0);
+			this.timestamp = timestamp;
+			countList.add(count);
+			return;
+		}
+		int index = (int) (timestamp - this.timestamp);
+		if (index <= 10000)
+			;
+		else if (index <= 20000) {
+			countList.remove(0);
+			countList.add(0);
+		} else if (index <= 30000) {
+			countList.remove(0);
+			countList.add(0);
+			countList.remove(0);
+			countList.add(0);
+		} else if (index <= 40000) {
+			countList.remove(0);
+			countList.add(0);
+			countList.remove(0);
+			countList.add(0);
+			countList.remove(0);
+			countList.add(0);
+		} else {
+			countList.remove(0);
+			countList.add(0);
+			countList.remove(0);
+			countList.add(0);
+			countList.remove(0);
+			countList.add(0);
+			countList.remove(0);
+			countList.add(0);
+		}
+		countList.remove(0);
+		this.timestamp = timestamp;
+		countList.add(count);
+		return;
 	}
-	
+
 	public int getSumOfCount() {
-		// countList에 있는거 전체 다 더한거
-		// (1분동안 보낸거 합친거)
-		return 0;
+		Iterator<Integer> iterator = countList.iterator();
+		Integer sum = 0;
+		while (iterator.hasNext()) {
+			sum += iterator.next();
+		}
+		return sum;
 	}
-	
+
 	public byte[] toBytes() throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(baos);

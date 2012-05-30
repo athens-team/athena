@@ -15,7 +15,17 @@
  */
 package com.eincs.athens.db.leveldb;
 
+import static com.google.common.base.Charsets.UTF_8;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.Map;
+
 import org.iq80.leveldb.DBException;
+import org.iq80.leveldb.DBIterator;
+import org.iq80.leveldb.WriteBatch;
+import org.iq80.leveldb.WriteOptions;
 
 import com.eincs.athens.db.StatisticsDB;
 import com.eincs.athens.db.data.Statistics;
@@ -32,31 +42,34 @@ public class LevelDBStatisticsDB implements StatisticsDB {
 	public LevelDBStatisticsDB(AthensDB athensDB) {
 		this.athensDB = athensDB;
 	}
-	
+
 	@Override
-	public Statistics getStatistics(StatisticsKey key) throws DBException {
-		// TODO Auto-generated method stub
-		return null;
+	public Statistics getStatistics(StatisticsKey key) throws DBException,
+			IOException, ClassNotFoundException {
+		ByteArrayInputStream bais = new ByteArrayInputStream(athensDB.get(key
+				.toBytes()));
+		ObjectInputStream ois = new ObjectInputStream(bais);
+		Statistics obj = (Statistics) ois.readObject();
+		return obj;
 	}
 
 	@Override
-	public void setStatistics(StatisticsKey key, Statistics block)
-			throws DBException {
-		// TODO Auto-generated method stub
-		
+	public void addStatistics(StatisticsKey key, Statistics statistics)
+			throws DBException, IOException {
+		WriteBatch batch = athensDB.createWriteBatch();
+		batch.put(key.toBytes(), statistics.toBytes());
+		athensDB.write(batch, new WriteOptions());
+		batch.close();
 	}
 
 	@Override
-	public void removeStatistics(StatisticsKey key) throws DBException {
-		// TODO Auto-generated method stub
-		
+	public void removeStatistics(StatisticsKey key) throws DBException,
+			IOException {
+		athensDB.delete(key.toBytes());
 	}
 
 	@Override
 	public void clear() throws DBException {
 		// TODO Auto-generated method stub
-		
 	}
-
-	
 }

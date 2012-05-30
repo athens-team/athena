@@ -15,6 +15,8 @@
  */
 package com.eincs.athens.db;
 
+import java.io.IOException;
+
 import org.iq80.leveldb.DBException;
 
 import com.eincs.athens.db.data.Statistics;
@@ -25,12 +27,12 @@ import com.eincs.athens.db.data.StatisticsKey;
  */
 public interface StatisticsDB {
 
-	public Statistics getStatistics(StatisticsKey key) throws DBException;
+	public Statistics getStatistics(StatisticsKey key) throws DBException, IOException, ClassNotFoundException;
 
-	public void setStatistics(StatisticsKey key, Statistics block)
-			throws DBException;
+	public void addStatistics(StatisticsKey key, Statistics block)
+			throws DBException, IOException;
 
-	public void removeStatistics(StatisticsKey key) throws DBException;
+	public void removeStatistics(StatisticsKey key) throws DBException, IOException;
 
 	public void clear() throws DBException;
 }
