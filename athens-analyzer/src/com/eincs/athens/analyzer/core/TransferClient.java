@@ -16,14 +16,19 @@
 package com.eincs.athens.analyzer.core;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
+import org.jboss.netty.channel.ExceptionEvent;
+import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.serialization.ClassResolvers;
 import org.jboss.netty.handler.codec.serialization.ObjectDecoder;
@@ -32,9 +37,10 @@ import org.jboss.netty.handler.execution.ExecutionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.eincs.athens.analyzer.handler.AnalyzeTransferReportHandler;
+import com.eincs.athens.analyzer.message.AnalyzeReport;
 import com.eincs.pantheon.utils.client.NettyClient;
 import com.eincs.pantheon.utils.client.NettyClient.NettyClientHandler;
+import com.google.common.collect.Lists;
 
 /**
  * @author Jung-Haeng Lee
@@ -46,6 +52,8 @@ public class TransferClient {
 			.getLogger(TransferClient.class);
 
 	private final Executor executor = Executors.newFixedThreadPool(16);
+	private final List<AnalyzeReportHandler> mReportHandlers = Lists
+			.newArrayList();
 	private final NettyClient client;
 
 	public TransferClient(InetSocketAddress address) {
@@ -81,4 +89,57 @@ public class TransferClient {
 		return client.getChannel();
 	}
 
+	/**
+	 * 
+	 * @param handler
+	 */
+	public void addReportHandler(AnalyzeReportHandler handler) {
+		mReportHandlers.add(handler);
+	}
+	
+	/**
+	 * 
+	 * @param handler
+	 */
+	public void removeReportHandler(AnalyzeReportHandler handler) {
+		mReportHandlers.add(handler);
+	}
+	
+	/**
+	 * @author Jung-Haeng Lee
+	 */
+	private static class AnalyzeTransferReportHandler extends
+			SimpleChannelUpstreamHandler {
+
+		private static final Logger logger = LoggerFactory
+				.getLogger(AnalyzeTransferReportHandler.class);
+
+		@Override
+		public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
+				throws Exception {
+			if (e.getMessage() instanceof AnalyzeReport) {
+				AnalyzeReport report = (AnalyzeReport) e.getMessage();
+				logger.info("recv object {}", report.toString());
+				return;
+			}
+			super.messageReceived(ctx, e);
+		}
+
+		@Override
+		public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
+			e.getChannel().close();
+			try {
+				logger.error(e.getCause().getMessage(), e.getCause());
+			} catch (Exception ex) {
+
+			}
+		}
+	}
+	
+	/**
+	 * @author Jung-Haeng Lee
+	 */
+	public interface AnalyzeReportHandler {
+		public void handlerReport(AnalyzeReport report);
+	}
 }

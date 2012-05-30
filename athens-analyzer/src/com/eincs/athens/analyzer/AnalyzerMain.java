@@ -18,17 +18,24 @@ package com.eincs.athens.analyzer;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
-
 import org.jboss.netty.bootstrap.ServerBootstrap;
+import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
+import org.jboss.netty.channel.ExceptionEvent;
+import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.serialization.ClassResolvers;
 import org.jboss.netty.handler.codec.serialization.ObjectDecoder;
 import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.eincs.athens.analyzer.handler.AnalyzeTransferRequestHandler;
+import com.eincs.athens.analyzer.core.Analyzers;
+import com.eincs.athens.analyzer.message.AnalyzeReport;
+import com.eincs.athens.analyzer.message.AnalyzeRequest;
 
 /**
  * @author Jung-Haeng Lee
@@ -56,5 +63,34 @@ public class AnalyzerMain {
 		
 		// Bind and start to accept incoming connections.
 		bootstrap.bind(new InetSocketAddress(8081));
+	}
+	
+	public static class AnalyzeTransferRequestHandler extends SimpleChannelUpstreamHandler {
+
+		private static final Logger logger = LoggerFactory
+				.getLogger(AnalyzeTransferRequestHandler.class);
+
+		@Override
+		public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
+				throws Exception {
+
+			if (e.getMessage() instanceof AnalyzeRequest) {
+				AnalyzeRequest request = (AnalyzeRequest) e.getMessage();
+				
+				logger.info("analyze {}", request.toString());
+				AnalyzeReport report = Analyzers.getInstance().invokeAnalyzers(
+						request);
+				
+				Channels.write(ctx.getChannel(), report);
+				return;
+			}
+			super.messageReceived(ctx, e);
+		}
+
+		@Override
+		public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
+			e.getChannel().close();
+			logger.error(e.getCause().getMessage(), e.getCause());
+		}
 	}
 }

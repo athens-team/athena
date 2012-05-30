@@ -19,7 +19,6 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.Channels;
 import org.slf4j.Logger;
@@ -36,8 +35,8 @@ public class TransferClients {
 			.getLogger(TransferClients.class);
 
 	private static final TransferClients instance = new TransferClients();
-	private static Executor executor = Executors.newFixedThreadPool(10);
-	private static TransferClient client = new TransferClient(
+	private static final Executor executor = Executors.newFixedThreadPool(10);
+	private static final TransferClient client = new TransferClient(
 			new InetSocketAddress("localhost", 8081));
 	
 	public static TransferClients getInstnace() {
