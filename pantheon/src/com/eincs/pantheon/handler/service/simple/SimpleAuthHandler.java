@@ -27,8 +27,8 @@ import org.jboss.netty.handler.codec.http.HttpHeaders;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.util.CharsetUtil;
 
-import com.eincs.pantheon.message.AthensRequest;
-import com.eincs.pantheon.message.DefaultAthensResponse;
+import com.eincs.pantheon.message.PanteonRequest;
+import com.eincs.pantheon.message.DefaultPanteonResponse;
 
 /**
  * @author roth2520@gmail.com
@@ -39,8 +39,8 @@ public class SimpleAuthHandler extends SimpleChannelHandler {
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
 
-		if (e.getMessage() instanceof AthensRequest) {
-			AthensRequest request = (AthensRequest) e.getMessage();
+		if (e.getMessage() instanceof PanteonRequest) {
+			PanteonRequest request = (PanteonRequest) e.getMessage();
 			String authorization = request.getHeaders().get(
 					HttpHeaders.Names.AUTHORIZATION);
 			if (authorization != null) {
@@ -56,7 +56,7 @@ public class SimpleAuthHandler extends SimpleChannelHandler {
 					return;
 				}
 			}
-			DefaultAthensResponse response = new DefaultAthensResponse(request);
+			DefaultPanteonResponse response = new DefaultPanteonResponse(request);
 			response.getHeaders().put("WWW-Authenticate", "Basic");
 			response.setStatus(HttpResponseStatus.UNAUTHORIZED);
 			Channels.write(ctx.getChannel(), response);

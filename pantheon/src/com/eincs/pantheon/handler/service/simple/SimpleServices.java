@@ -19,7 +19,7 @@ package com.eincs.pantheon.handler.service.simple;
 import org.jboss.netty.handler.codec.http.HttpMethod;
 
 import com.eincs.pantheon.handler.service.simple.SimpleServices.SimpleServiceId;
-import com.eincs.pantheon.message.AthensRequest;
+import com.eincs.pantheon.message.PanteonRequest;
 import com.eincs.pantheon.utils.collections.MapWrapper;
 
 /**
@@ -46,7 +46,7 @@ public class SimpleServices extends MapWrapper<SimpleServiceId, SimpleService> {
 		return containsKey(serviceId);
 	}
 
-	public boolean match(AthensRequest request) {
+	public boolean match(PanteonRequest request) {
 		return match(request.getMethod(), request.getPath());
 	}
 
@@ -55,7 +55,7 @@ public class SimpleServices extends MapWrapper<SimpleServiceId, SimpleService> {
 		return get(serviceId);
 	}
 
-	public SimpleService getService(AthensRequest request) {
+	public SimpleService getService(PanteonRequest request) {
 		return getService(request.getMethod(), request.getPath());
 	}
 

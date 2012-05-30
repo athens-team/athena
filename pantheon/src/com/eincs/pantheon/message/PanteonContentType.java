@@ -20,7 +20,7 @@ import java.nio.charset.Charset;
 /**
  * @author roth2520@gmail.com
  */
-public enum AthensContentType {
+public enum PanteonContentType {
 
 	TEXT_PLAIN("text/plain"),
 	TEXT_HTML("text/html"),
@@ -30,7 +30,7 @@ public enum AthensContentType {
 	APPLICATION_XML("text/xml");
 	
 	private final String notation;
-	AthensContentType(String notation) {
+	PanteonContentType(String notation) {
 		this.notation = notation;
 	}
 	

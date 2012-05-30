@@ -24,7 +24,7 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 
 import com.eincs.athens.analyzer.core.TransferClients;
 import com.eincs.athens.analyzer.message.AnalyzeRequest;
-import com.eincs.pantheon.message.AthensRequest;
+import com.eincs.pantheon.message.PanteonRequest;
 
 /**
  * @author Jung-Haeng Lee
@@ -36,8 +36,8 @@ public class AnalyzeTransferHandler extends SimpleChannelHandler {
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
-		if (e.getMessage() instanceof AthensRequest) {
-			final AthensRequest request = (AthensRequest) e
+		if (e.getMessage() instanceof PanteonRequest) {
+			final PanteonRequest request = (PanteonRequest) e
 					.getMessage();
 			final AnalyzeRequest analyzeRequest = AnalyzeRequest.create(
 					analzyeReqSeq.getAndIncrement(), request);

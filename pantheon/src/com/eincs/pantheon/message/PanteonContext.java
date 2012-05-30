@@ -21,15 +21,15 @@ import java.util.Map;
 /**
  * @author roth2520@gmail.com
  */
-public class AthensContext {
+public class PanteonContext {
 	
-	private static final ThreadLocal<AthensContext> REQUEST_CONTEXT = new ThreadLocal<AthensContext>();
+	private static final ThreadLocal<PanteonContext> REQUEST_CONTEXT = new ThreadLocal<PanteonContext>();
 	
-	public static AthensContext getCurrent(){
+	public static PanteonContext getCurrent(){
 		return REQUEST_CONTEXT.get();
 	}
 	
-	static void setCurrnet(AthensContext requestContent){
+	static void setCurrnet(PanteonContext requestContent){
 		REQUEST_CONTEXT.set(requestContent);
 	}
 	
@@ -37,8 +37,8 @@ public class AthensContext {
 		REQUEST_CONTEXT.remove();
 	}
 	
-	public static AthensContext create(AthensRequest request){
-		AthensContext context = new AthensContext();
+	public static PanteonContext create(PanteonRequest request){
+		PanteonContext context = new PanteonContext();
 		return context;
 	}
 	

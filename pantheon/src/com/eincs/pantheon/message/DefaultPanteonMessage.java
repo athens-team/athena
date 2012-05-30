@@ -15,60 +15,60 @@
  */
 package com.eincs.pantheon.message;
 
-import com.eincs.pantheon.AthensLifeCycle;
-import com.eincs.pantheon.AthensLifeCycleLIstener;
-import com.eincs.pantheon.message.attach.AthensCookies;
-import com.eincs.pantheon.message.attach.AthensHeaders;
-import com.eincs.pantheon.message.attach.AthensTags;
+import com.eincs.pantheon.PanteonLifeCycle;
+import com.eincs.pantheon.PanteonLifeCycleLIstener;
+import com.eincs.pantheon.message.attach.PanteonCookies;
+import com.eincs.pantheon.message.attach.PanteonHeaders;
+import com.eincs.pantheon.message.attach.PanteonTags;
 
 
 /**
  * @author roth2520@gmail.com
  */
-public class DefaultAthensMessage implements AthensMessage {
+public class DefaultPanteonMessage implements PanteonMessage {
 
-	protected AthensTags tags;
-	protected AthensCookies cookies;
-	protected AthensHeaders headers;
-	protected AthensLifeCycle lifeCycle;
+	protected PanteonTags tags;
+	protected PanteonCookies cookies;
+	protected PanteonHeaders headers;
+	protected PanteonLifeCycle lifeCycle;
 	
-	public AthensLifeCycle getLifeCycle() {
+	public PanteonLifeCycle getLifeCycle() {
 		return lifeCycle;
 	}
 	
 	@Override
-	public AthensHeaders getHeaders() {
+	public PanteonHeaders getHeaders() {
 		return headers;
 	}
 
 	@Override
-	public void addListener(AthensLifeCycleLIstener listener) {
+	public void addListener(PanteonLifeCycleLIstener listener) {
 		this.lifeCycle.addListener(listener);
 	}
 
 	@Override
-	public AthensCookies getCookies() {
+	public PanteonCookies getCookies() {
 		return cookies;
 	}
 	
 	@Override
-	public AthensTags getTags() {
+	public PanteonTags getTags() {
 		return tags;
 	}
 
-	public void setTags(AthensTags tags) {
+	public void setTags(PanteonTags tags) {
 		this.tags = tags;
 	}
 
-	public void setHeaders(AthensHeaders headers) {
+	public void setHeaders(PanteonHeaders headers) {
 		this.headers = headers;
 	}
 	
-	public void setCookies(AthensCookies cookies) {
+	public void setCookies(PanteonCookies cookies) {
 		this.cookies = cookies;
 	}
 
-	public void setLifeCycle(AthensLifeCycle lifeCycle) {
+	public void setLifeCycle(PanteonLifeCycle lifeCycle) {
 		this.lifeCycle = lifeCycle;
 	}
 	

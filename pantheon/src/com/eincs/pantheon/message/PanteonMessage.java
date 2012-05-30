@@ -15,26 +15,17 @@
  */
 package com.eincs.pantheon.message;
 
-
-import org.jboss.netty.handler.codec.http.HttpMethod;
-
-import com.eincs.pantheon.AddressProvider;
-import com.eincs.pantheon.message.attach.AthensAttaches;
-import com.eincs.pantheon.message.attach.AthensParams;
+import com.eincs.pantheon.PanteonLifeCycle;
+import com.eincs.pantheon.message.attach.PanteonCookies;
+import com.eincs.pantheon.message.attach.PanteonHeaders;
+import com.eincs.pantheon.message.attach.PanteonTags;
 
 
 /**
  * @author roth2520@gmail.com
  */
-public interface AthensRequest extends AthensMessage, AddressProvider {
-
-    HttpMethod getMethod();
-
-    String getUri();
-    
-    String getPath();
-    
-    AthensParams getParams();
-    
-    AthensAttaches getAttachs();
+public interface PanteonMessage extends PanteonLifeCycle {
+	PanteonHeaders getHeaders();
+	PanteonCookies getCookies();
+	PanteonTags getTags();
 }

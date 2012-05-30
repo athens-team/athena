@@ -25,18 +25,18 @@ import com.eincs.pantheon.utils.collections.MapWrapper;
 /**
  * @author roth2520@gmail.com
  */
-public class AthensParams extends MapWrapper<String, String> implements
+public class PanteonParams extends MapWrapper<String, String> implements
 		Serializable {
 
 	private static final long serialVersionUID = -2564615820320854731L;
 
-	public static AthensParams create() {
-		AthensParams result = new AthensParams();
+	public static PanteonParams create() {
+		PanteonParams result = new PanteonParams();
 		return result;
 	}
 	
-	public static AthensParams create(Map<String, List<String>> params) {
-		AthensParams result = new AthensParams();
+	public static PanteonParams create(Map<String, List<String>> params) {
+		PanteonParams result = new PanteonParams();
 		for(Entry<String, List<String>> entry : params.entrySet()) {
 			String key = entry.getKey();
 			List<String> values = entry.getValue();
@@ -48,7 +48,7 @@ public class AthensParams extends MapWrapper<String, String> implements
 		return result;
 	}
 	
-	private AthensParams() { super(); }
+	private PanteonParams() { super(); }
 	
 	@SuppressWarnings("unchecked")
 	public <T> T getParam(String key, Class<T> clazz) {

@@ -23,31 +23,31 @@ import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.util.CharsetUtil;
 
-import com.eincs.pantheon.message.attach.AthensCookies;
-import com.eincs.pantheon.message.attach.AthensHeaders;
+import com.eincs.pantheon.message.attach.PanteonCookies;
+import com.eincs.pantheon.message.attach.PanteonHeaders;
 
 /**
  * @author roth2520@gmail.com
  */
-public class DefaultAthensResponse extends DefaultAthensMessage implements
-		AthensResponse {
+public class DefaultPanteonResponse extends DefaultPanteonMessage implements
+		PanteonResponse {
 
-	private final AthensRequest request;
+	private final PanteonRequest request;
 
 	private HttpResponseStatus status = HttpResponseStatus.OK;
 	private ChannelBuffer contents = ChannelBuffers.EMPTY_BUFFER;
-	private AthensContentType contentType = AthensContentType.TEXT_PLAIN;
+	private PanteonContentType contentType = PanteonContentType.TEXT_PLAIN;
 	private Charset charset = CharsetUtil.UTF_8;
 	
-	public DefaultAthensResponse(AthensRequest request) {
+	public DefaultPanteonResponse(PanteonRequest request) {
 		this.request = request;
 		setTags(request.getTags());
 		setLifeCycle(request);
-		setHeaders(AthensHeaders.create());
-		setCookies(AthensCookies.create());
+		setHeaders(PanteonHeaders.create());
+		setCookies(PanteonCookies.create());
 	}
 
-	public AthensRequest getRequest() {
+	public PanteonRequest getRequest() {
 		return request;
 	}
 
@@ -72,12 +72,12 @@ public class DefaultAthensResponse extends DefaultAthensMessage implements
 	}
 
 	@Override
-	public AthensContentType getContentType() {
+	public PanteonContentType getContentType() {
 		return contentType;
 	}
 
 	@Override
-	public void setContentType(AthensContentType contentType) {
+	public void setContentType(PanteonContentType contentType) {
 		this.contentType = contentType;
 	}
 

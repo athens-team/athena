@@ -27,52 +27,52 @@ import org.jboss.netty.handler.codec.http.CookieEncoder;
 import org.jboss.netty.handler.codec.http.HttpHeaders;
 import org.jboss.netty.handler.codec.http.HttpVersion;
 
-import com.eincs.pantheon.AthensLifeCycle;
-import com.eincs.pantheon.AthensLifeCycles;
-import com.eincs.pantheon.message.AthensResponse;
-import com.eincs.pantheon.message.DefaultAthensRequest;
-import com.eincs.pantheon.message.attach.AthensAttaches;
-import com.eincs.pantheon.message.attach.AthensCookies;
-import com.eincs.pantheon.message.attach.AthensHeaders;
-import com.eincs.pantheon.message.attach.AthensParams;
-import com.eincs.pantheon.message.attach.AthensTags;
+import com.eincs.pantheon.PanteonLifeCycle;
+import com.eincs.pantheon.PanteonLifeCycles;
+import com.eincs.pantheon.message.PanteonResponse;
+import com.eincs.pantheon.message.DefaultPanteonRequest;
+import com.eincs.pantheon.message.attach.PanteonAttaches;
+import com.eincs.pantheon.message.attach.PanteonCookies;
+import com.eincs.pantheon.message.attach.PanteonHeaders;
+import com.eincs.pantheon.message.attach.PanteonParams;
+import com.eincs.pantheon.message.attach.PanteonTags;
 
 /**
  * @author roth2520@gmail.com
  */
-public class AthensHttpProcessor extends SimpleChannelHandler {
+public class PanteonHttpProcessor extends SimpleChannelHandler {
 
-	private final AthensLifeCycles lifeCycles = new AthensLifeCycles();
+	private final PanteonLifeCycles lifeCycles = new PanteonLifeCycles();
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
 
-		if (e.getMessage() instanceof AthensHttpRequest) {
-			final AthensHttpRequest httpRequest = (AthensHttpRequest) e
+		if (e.getMessage() instanceof PanteonHttpRequest) {
+			final PanteonHttpRequest httpRequest = (PanteonHttpRequest) e
 					.getMessage();
-			final AthensHttpResponse httpResponse = new AthensHttpResponse(
+			final PanteonHttpResponse httpResponse = new PanteonHttpResponse(
 					httpRequest);
 
 			/* request properties */
-			DefaultAthensRequest request = new DefaultAthensRequest();
+			DefaultPanteonRequest request = new DefaultPanteonRequest();
 			request.setMethod(httpRequest.getMethod());
 			request.setUrl(httpRequest.getUri());
 			request.setPath(httpRequest.getPath());
-			request.setHeaders(AthensHeaders.create(httpRequest.getHeaders()));
-			request.setParams(AthensParams.create(httpRequest.getParams()));
-			request.setAttaches(AthensAttaches.create(httpRequest
+			request.setHeaders(PanteonHeaders.create(httpRequest.getHeaders()));
+			request.setParams(PanteonParams.create(httpRequest.getParams()));
+			request.setAttaches(PanteonAttaches.create(httpRequest
 					.getFileUploads()));
-			request.setCookies(AthensCookies.create(httpRequest.getCookies()));
+			request.setCookies(PanteonCookies.create(httpRequest.getCookies()));
 
 			/* internals */
-			AthensLifeCycle lifeCycle = lifeCycles.createLifeCycle();
+			PanteonLifeCycle lifeCycle = lifeCycles.createLifeCycle();
 			request.setLifeCycle(lifeCycle);
 			request.setAddressProvider(new HttpAddressProvider(e.getChannel(),
 					httpRequest));
 
 			/* tags */
-			AthensTags tags = AthensTags.create();
+			PanteonTags tags = PanteonTags.create();
 			tags.put(HttpNames.HTTP_REQUEST, httpRequest);
 			tags.put(HttpNames.HTTP_RESPONSE, httpResponse);
 
@@ -89,10 +89,10 @@ public class AthensHttpProcessor extends SimpleChannelHandler {
 	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
 
-		if (e.getMessage() instanceof AthensResponse) {
-			final AthensResponse response = (AthensResponse) e.getMessage();
+		if (e.getMessage() instanceof PanteonResponse) {
+			final PanteonResponse response = (PanteonResponse) e.getMessage();
 
-			final AthensHttpResponse httpResponse = (AthensHttpResponse) response
+			final PanteonHttpResponse httpResponse = (PanteonHttpResponse) response
 					.getTags().get(HttpNames.HTTP_RESPONSE);
 
 			/* set properties */

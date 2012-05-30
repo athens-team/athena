@@ -9,26 +9,26 @@ import org.jboss.netty.util.CharsetUtil;
 
 import com.eincs.pantheon.handler.service.simple.Bind;
 import com.eincs.pantheon.handler.service.simple.SimpleService;
-import com.eincs.pantheon.message.AthensContentType;
-import com.eincs.pantheon.message.AthensRequest;
-import com.eincs.pantheon.message.AthensResponse;
+import com.eincs.pantheon.message.PanteonContentType;
+import com.eincs.pantheon.message.PanteonRequest;
+import com.eincs.pantheon.message.PanteonResponse;
 
 @Bind(path="/setCookie", method={ "GET" })
 public class SetCookieService implements SimpleService {
 
 	@Override
-	public void doServe(AthensRequest request, AthensResponse response) {
+	public void doServe(PanteonRequest request, PanteonResponse response) {
 		String name = request.getParams().get("name");
 		String value = request.getParams().get("value");
 		
 		Cookie newCookie = new DefaultCookie(name, value);
 		
-		response.setContentType(AthensContentType.TEXT_HTML);
+		response.setContentType(PanteonContentType.TEXT_HTML);
 		response.setContents(getResponseString(newCookie, request));
 		response.getCookies().add(newCookie);
 	}
 
-	private ChannelBuffer getResponseString(Cookie newCookie, AthensRequest request) {
+	private ChannelBuffer getResponseString(Cookie newCookie, PanteonRequest request) {
 
 		final StringBuilder sb = new StringBuilder();
 

@@ -22,8 +22,8 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 
-import com.eincs.pantheon.message.AthensRequest;
-import com.eincs.pantheon.message.DefaultAthensResponse;
+import com.eincs.pantheon.message.PanteonRequest;
+import com.eincs.pantheon.message.DefaultPanteonResponse;
 
 /**
  * @author roth2520@gmail.com
@@ -39,14 +39,14 @@ public class SimpleServiceDiscovery extends SimpleChannelHandler {
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
 		
-		if(e.getMessage() instanceof AthensRequest) {
-			AthensRequest request = (AthensRequest) e.getMessage();
+		if(e.getMessage() instanceof PanteonRequest) {
+			PanteonRequest request = (PanteonRequest) e.getMessage();
 			if(services.match(request)) {
 				SimpleService service = services.getService(request);
 				request.getTags().put(SimpleServiceNames.SERVICE, service);
 				super.messageReceived(ctx, e);		
 			} else {
-				DefaultAthensResponse response = new DefaultAthensResponse(request);
+				DefaultPanteonResponse response = new DefaultPanteonResponse(request);
 				response.setStatus(HttpResponseStatus.NOT_FOUND);
 				Channels.write(ctx.getChannel(), response);
 			}

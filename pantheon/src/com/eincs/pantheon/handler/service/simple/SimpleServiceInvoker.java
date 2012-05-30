@@ -21,8 +21,8 @@ import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
-import com.eincs.pantheon.message.AthensRequest;
-import com.eincs.pantheon.message.DefaultAthensResponse;
+import com.eincs.pantheon.message.PanteonRequest;
+import com.eincs.pantheon.message.DefaultPanteonResponse;
 
 /**
  * @author roth2520@gmail.com
@@ -33,9 +33,9 @@ public class SimpleServiceInvoker extends SimpleChannelHandler {
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
 		
-		if (e.getMessage() instanceof AthensRequest) {
-			AthensRequest request = (AthensRequest) e.getMessage();
-			DefaultAthensResponse response = new DefaultAthensResponse(request);
+		if (e.getMessage() instanceof PanteonRequest) {
+			PanteonRequest request = (PanteonRequest) e.getMessage();
+			DefaultPanteonResponse response = new DefaultPanteonResponse(request);
 			SimpleService service = (SimpleService) request.getTags().get(
 					SimpleServiceNames.SERVICE);
 			service.doServe(request, response);

@@ -28,23 +28,23 @@ import com.google.common.collect.Sets;
 /**
  * @author roth2520@gmail.com
  */
-public final class AthensCookies extends SetWrapper<Cookie> implements
+public final class PanteonCookies extends SetWrapper<Cookie> implements
 		Serializable {
 
 	private static final long serialVersionUID = -7295640878451405134L;
 
-	public static AthensCookies create() {
-		AthensCookies result = new AthensCookies();
+	public static PanteonCookies create() {
+		PanteonCookies result = new PanteonCookies();
 		return result;
 	}
 	
-	public static AthensCookies create(Set<Cookie> cookie) {
-		AthensCookies result = new AthensCookies();
+	public static PanteonCookies create(Set<Cookie> cookie) {
+		PanteonCookies result = new PanteonCookies();
 		result.addAll(cookie);
 		return result;
 	}
 	
-	private AthensCookies() { super(); }
+	private PanteonCookies() { super(); }
 	
 	public Cookie getCookieByName(String name) {
 		Iterator<Cookie> iter = iterator();

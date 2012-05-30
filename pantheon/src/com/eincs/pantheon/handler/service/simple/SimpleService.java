@@ -15,13 +15,13 @@
  */
 package com.eincs.pantheon.handler.service.simple;
 
-import com.eincs.pantheon.message.AthensRequest;
-import com.eincs.pantheon.message.AthensResponse;
+import com.eincs.pantheon.message.PanteonRequest;
+import com.eincs.pantheon.message.PanteonResponse;
 
 /**
  * @author roth2520@gmail.com
  */
 public interface SimpleService {
-	public void doServe(AthensRequest request, AthensResponse response)
+	public void doServe(PanteonRequest request, PanteonResponse response)
 			throws Exception;
 }

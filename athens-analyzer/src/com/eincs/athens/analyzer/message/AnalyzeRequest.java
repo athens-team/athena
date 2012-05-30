@@ -19,9 +19,9 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
-import com.eincs.pantheon.message.AthensRequest;
-import com.eincs.pantheon.message.attach.AthensCookies;
-import com.eincs.pantheon.message.attach.AthensParams;
+import com.eincs.pantheon.message.PanteonRequest;
+import com.eincs.pantheon.message.attach.PanteonCookies;
+import com.eincs.pantheon.message.attach.PanteonParams;
 
 
 /**
@@ -31,7 +31,7 @@ public class AnalyzeRequest implements Serializable {
 	
 	private static final long serialVersionUID = -5509385458282534203L;
 
-	public static AnalyzeRequest create(long reqSeq, AthensRequest request) {
+	public static AnalyzeRequest create(long reqSeq, PanteonRequest request) {
 		AnalyzeRequest result = new AnalyzeRequest();
 		result.setRequestSeq(reqSeq);
 		result.setLocalAddress(request.getLocalAddress());
@@ -57,9 +57,9 @@ public class AnalyzeRequest implements Serializable {
 	
 	private String path;
 	
-	private AthensParams params;
+	private PanteonParams params;
 	
-	private AthensCookies cookies;
+	private PanteonCookies cookies;
 
 	private AnalyzeTags tags;
 	
@@ -111,19 +111,19 @@ public class AnalyzeRequest implements Serializable {
 		this.path = path;
 	}
 
-	public AthensParams getParams() {
+	public PanteonParams getParams() {
 		return params;
 	}
 
-	public void setParams(AthensParams params) {
+	public void setParams(PanteonParams params) {
 		this.params = params;
 	}
 
-	public AthensCookies getCookies() {
+	public PanteonCookies getCookies() {
 		return cookies;
 	}
 
-	public void setCookies(AthensCookies cookies) {
+	public void setCookies(PanteonCookies cookies) {
 		this.cookies = cookies;
 	}
 

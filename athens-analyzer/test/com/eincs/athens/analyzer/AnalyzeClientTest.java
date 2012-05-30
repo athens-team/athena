@@ -23,8 +23,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.eincs.athens.analyzer.core.TransferClients;
 import com.eincs.athens.analyzer.message.AnalyzeRequest;
 import com.eincs.athens.analyzer.message.AnalyzeTags;
-import com.eincs.pantheon.message.attach.AthensCookies;
-import com.eincs.pantheon.message.attach.AthensParams;
+import com.eincs.pantheon.message.attach.PanteonCookies;
+import com.eincs.pantheon.message.attach.PanteonParams;
 
 
 /**
@@ -39,8 +39,8 @@ public class AnalyzeClientTest {
 		while (true) {
 			AnalyzeRequest request = new AnalyzeRequest();
 			request.setRequestSeq(seqNum.getAndIncrement());
-			request.setCookies(AthensCookies.create());
-			request.setParams(AthensParams.create());
+			request.setCookies(PanteonCookies.create());
+			request.setParams(PanteonParams.create());
 			request.setTags(AnalyzeTags.create());
 			request.setOriginAddress(InetAddress.getByName("localhost"));
 			request.setRemoteAddress(new InetSocketAddress("localhost", 28080));

@@ -39,13 +39,13 @@ import org.jboss.netty.handler.codec.http.QueryStringDecoder;
  */
 public class HttpRequestBuilder {
 
-	private final AthensHttpRequest request;
+	private final PanteonHttpRequest request;
 	private final String path;
 
 	private QueryStringDecoder queryDecoder;
 	private HttpPostRequestDecoder postDataDecoder;
 	
-	public HttpRequestBuilder(AthensHttpRequest request) {
+	public HttpRequestBuilder(PanteonHttpRequest request) {
 		this.queryDecoder = new QueryStringDecoder(request.getUri());
 
 		this.request = request;
@@ -110,7 +110,7 @@ public class HttpRequestBuilder {
 	 * @throws NotEnoughDataDecoderException chunked요청일때 chunked데이터를 모두 처리 하지 않았는데도 불구하고 호출된 경우.
 	 * @throws IOException decoding 하다가 에러가 나는 경우.
 	 */
-	public AthensHttpRequest doneDecode() throws NotEnoughDataDecoderException, IOException {
+	public PanteonHttpRequest doneDecode() throws NotEnoughDataDecoderException, IOException {
 		
 		/* decoded result */
 		Map<String, List<String>> params;
@@ -136,7 +136,7 @@ public class HttpRequestBuilder {
 		return request;
 	}
 
-	public AthensHttpRequest getRequest() {
+	public PanteonHttpRequest getRequest() {
 		return request;
 	}
 

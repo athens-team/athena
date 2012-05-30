@@ -22,20 +22,20 @@ import java.net.InetSocketAddress;
 import org.jboss.netty.handler.codec.http.HttpMethod;
 
 import com.eincs.pantheon.AddressProvider;
-import com.eincs.pantheon.message.attach.AthensAttaches;
-import com.eincs.pantheon.message.attach.AthensParams;
+import com.eincs.pantheon.message.attach.PanteonAttaches;
+import com.eincs.pantheon.message.attach.PanteonParams;
 
 /**
  * @author roth2520@gmail.com
  */
-public class DefaultAthensRequest extends DefaultAthensMessage implements
-		AthensRequest {
+public class DefaultPanteonRequest extends DefaultPanteonMessage implements
+		PanteonRequest {
 
 	private HttpMethod method;
 	private String url;
 	private String path;
-	private AthensParams params;
-	private AthensAttaches attaches;
+	private PanteonParams params;
+	private PanteonAttaches attaches;
 	private AddressProvider addrProvider;
 
 	@Override
@@ -54,12 +54,12 @@ public class DefaultAthensRequest extends DefaultAthensMessage implements
 	}
 
 	@Override
-	public AthensParams getParams() {
+	public PanteonParams getParams() {
 		return this.params;
 	}
 
 	@Override
-	public AthensAttaches getAttachs() {
+	public PanteonAttaches getAttachs() {
 		return this.attaches;
 	}
 
@@ -86,11 +86,11 @@ public class DefaultAthensRequest extends DefaultAthensMessage implements
 		this.url = url;
 	}
 
-	public AthensAttaches getAttaches() {
+	public PanteonAttaches getAttaches() {
 		return attaches;
 	}
 
-	public void setAttaches(AthensAttaches attaches) {
+	public void setAttaches(PanteonAttaches attaches) {
 		this.attaches = attaches;
 	}
 
@@ -110,7 +110,7 @@ public class DefaultAthensRequest extends DefaultAthensMessage implements
 		this.path = path;
 	}
 
-	public void setParams(AthensParams params) {
+	public void setParams(PanteonParams params) {
 		this.params = params;
 	}
 }

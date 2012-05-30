@@ -15,7 +15,7 @@
  */
 package com.eincs.athens.analyzer.core;
 
-import com.eincs.pantheon.message.AthensRequest;
+import com.eincs.pantheon.message.PanteonRequest;
 
 /**
  * @author Jung-Haeng Lee
@@ -28,7 +28,7 @@ public class BlockFilter {
 		return instance;
 	}
 	
-	public boolean isBlocked(AthensRequest request) {
+	public boolean isBlocked(PanteonRequest request) {
 		return false;
 	}
 	

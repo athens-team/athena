@@ -39,13 +39,13 @@ import com.google.common.collect.Sets;
 /**
  * @author roth2520@gmail.com
  */
-public class AthensHttpRequest extends HttpRequestWrapper {
+public class PanteonHttpRequest extends HttpRequestWrapper {
 
 	private String path;
 	private List<InterfaceHttpData> datas;
 	private Map<String, List<String>> params;
 	
-	public AthensHttpRequest(HttpRequest request) {
+	public PanteonHttpRequest(HttpRequest request) {
 		super(request);
 		this.path = null;
 	}

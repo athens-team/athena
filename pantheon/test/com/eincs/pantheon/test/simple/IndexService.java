@@ -7,16 +7,16 @@ import org.jboss.netty.util.CharsetUtil;
 
 import com.eincs.pantheon.handler.service.simple.Bind;
 import com.eincs.pantheon.handler.service.simple.SimpleService;
-import com.eincs.pantheon.message.AthensContentType;
-import com.eincs.pantheon.message.AthensRequest;
-import com.eincs.pantheon.message.AthensResponse;
+import com.eincs.pantheon.message.PanteonContentType;
+import com.eincs.pantheon.message.PanteonRequest;
+import com.eincs.pantheon.message.PanteonResponse;
 
 @Bind(path="/", method={ "GET" })
 public class IndexService implements SimpleService {
 
 	@Override
-	public void doServe(AthensRequest request, AthensResponse response) {
-		response.setContentType(AthensContentType.TEXT_HTML);
+	public void doServe(PanteonRequest request, PanteonResponse response) {
+		response.setContentType(PanteonContentType.TEXT_HTML);
 		response.setContents(getMenuString());
 	}
 

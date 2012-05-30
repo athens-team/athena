@@ -13,33 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.eincs.pantheon.message;
+package com.eincs.pantheon.message.attach;
 
-import java.nio.charset.Charset;
-
-
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.handler.codec.http.HttpResponseStatus;
-
+import com.eincs.pantheon.utils.collections.MapWrapper;
 
 /**
  * @author roth2520@gmail.com
  */
-public interface AthensResponse extends AthensMessage {
+public final class PanteonTags extends MapWrapper<String, Object> {
 
-    HttpResponseStatus getStatus();
-
-    void setStatus(HttpResponseStatus status);
-    
-    ChannelBuffer getContents();
-    
-    void setContents(ChannelBuffer contents);
-    
-    AthensContentType getContentType();
-    
-    void setContentType(AthensContentType contentType);
-
-	Charset getCharset();
+	public static PanteonTags create() {
+		PanteonTags result = new PanteonTags();
+		return result;
+	}
 	
-	void setCharset(Charset charset);
+	private PanteonTags() { super(); }
 }

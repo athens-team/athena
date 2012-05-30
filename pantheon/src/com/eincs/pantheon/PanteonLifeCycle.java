@@ -19,7 +19,7 @@ package com.eincs.pantheon;
 /**
  * @author roth2520@gmail.com
  */
-public interface AthensLifeCycleLIstener {
-	public void onComplete(AthensLifeCycle listener);
+public interface PanteonLifeCycle {
+	public void addListener(PanteonLifeCycleLIstener listener);
 	
 }

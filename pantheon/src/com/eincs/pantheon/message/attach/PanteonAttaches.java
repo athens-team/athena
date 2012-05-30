@@ -22,23 +22,23 @@ import java.util.List;
 
 import org.jboss.netty.handler.codec.http.FileUpload;
 
-import com.eincs.pantheon.message.attach.AthensAttaches.AthensAttach;
+import com.eincs.pantheon.message.attach.PanteonAttaches.AthensAttach;
 import com.eincs.pantheon.utils.collections.ListWrapper;
 
 /**
  * @author roth2520@gmail.com
  */
-public class AthensAttaches extends ListWrapper<AthensAttach> {
+public class PanteonAttaches extends ListWrapper<AthensAttach> {
 
-	public static AthensAttaches create(List<FileUpload> uploads) throws IOException {
-		AthensAttaches result = new AthensAttaches();
+	public static PanteonAttaches create(List<FileUpload> uploads) throws IOException {
+		PanteonAttaches result = new PanteonAttaches();
 		for(FileUpload upload : uploads) {
 			result.add(AthensAttach.create(upload));
 		}
 		return result;
 	}
 	
-	private AthensAttaches() { super(); }
+	private PanteonAttaches() { super(); }
 	
 	public static class AthensAttach {
 

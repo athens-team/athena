@@ -27,29 +27,29 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.util.CharsetUtil;
 
 import com.eincs.pantheon.HttpResponseWrapper;
-import com.eincs.pantheon.message.AthensContentType;
+import com.eincs.pantheon.message.PanteonContentType;
 
 /**
  * @author roth2520@gmail.com
  */
-public class AthensHttpResponse extends HttpResponseWrapper {
+public class PanteonHttpResponse extends HttpResponseWrapper {
 
-	private final AthensHttpRequest request;
+	private final PanteonHttpRequest request;
 	private ChannelBuffer resultBuffer;
-	private AthensContentType contentType;
+	private PanteonContentType contentType;
 	private Charset charset;
 	
-	public AthensHttpResponse(AthensHttpRequest request) {
+	public PanteonHttpResponse(PanteonHttpRequest request) {
 		this(request, HttpResponseStatus.OK);
 	}
 	
-	public AthensHttpResponse(AthensHttpRequest request, HttpResponseStatus status) {
+	public PanteonHttpResponse(PanteonHttpRequest request, HttpResponseStatus status) {
 		super(new DefaultHttpResponse(HTTP_1_1, status));
 		this.request = request;
 		this.charset = CharsetUtil.UTF_8;
 	}
 
-	public AthensHttpRequest getRequest() {
+	public PanteonHttpRequest getRequest() {
 		return request;
 	}
 
@@ -65,11 +65,11 @@ public class AthensHttpResponse extends HttpResponseWrapper {
 		return contentType!=null;
 	}
 	
-	public void setContentType(AthensContentType contentType) {
+	public void setContentType(PanteonContentType contentType) {
 		this.contentType = contentType;
 	}
 	
-	public AthensContentType getContentType() {
+	public PanteonContentType getContentType() {
 		return contentType;
 	}
 

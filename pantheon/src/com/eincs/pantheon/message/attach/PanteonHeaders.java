@@ -24,22 +24,22 @@ import com.google.common.collect.Lists;
 /**
  * @author roth2520@gmail.com
  */
-public class AthensHeaders extends MapWrapper<String, String> {
+public class PanteonHeaders extends MapWrapper<String, String> {
 
-	public static AthensHeaders create() {
+	public static PanteonHeaders create() {
 		List<Entry<String, String>> emptyList = Lists.newArrayList();
 		return create(emptyList);
 	}
 	
-	public static AthensHeaders create(List<Entry<String, String>> headers) {
-		AthensHeaders result = new AthensHeaders();
+	public static PanteonHeaders create(List<Entry<String, String>> headers) {
+		PanteonHeaders result = new PanteonHeaders();
 		for(Entry<String, String> entry : headers) {
 			result.put(entry.getKey(), entry.getValue());
 		}
 		return result;
 	}
 	
-	private AthensHeaders() { super(); }
+	private PanteonHeaders() { super(); }
 
 	public void setCookie(String cookie) {
 	}

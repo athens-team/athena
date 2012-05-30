@@ -31,7 +31,7 @@ import org.jboss.netty.handler.codec.http.InterfaceHttpData;
 import org.jboss.netty.handler.codec.http.MemoryAttribute;
 import org.jboss.netty.handler.codec.http.MixedAttribute;
 
-public class AthensHttpDataFactory implements HttpDataFactory {
+public class PanteonHttpDataFactory implements HttpDataFactory {
 	
 	 /**
      * Proposed default MINSIZE as 16 KB.
@@ -51,7 +51,7 @@ public class AthensHttpDataFactory implements HttpDataFactory {
      * HttpData will be in memory if less than default size (16KB).
      * The type will be Mixed.
      */
-    public AthensHttpDataFactory() {
+    public PanteonHttpDataFactory() {
         checkSize = true;
         this.minSize = MINSIZE;
     }
@@ -61,7 +61,7 @@ public class AthensHttpDataFactory implements HttpDataFactory {
      * will be in memory. The type will be Mixed.
      * @param minSize
      */
-    public AthensHttpDataFactory(long minSize) {
+    public PanteonHttpDataFactory(long minSize) {
         checkSize = true;
         this.minSize = minSize;
     }

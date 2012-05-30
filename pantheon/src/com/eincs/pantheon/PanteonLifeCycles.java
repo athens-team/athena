@@ -26,18 +26,18 @@ import com.google.common.util.concurrent.ExecutionList;
 /**
  * @author roth2520@gmail.com
  */
-public class AthensLifeCycles {
+public class PanteonLifeCycles {
 
 	private final HashMap<Integer, AthensLifeCycleImpl> lifeCycles = Maps
 			.newHashMap();
 
-	public synchronized AthensLifeCycle createLifeCycle() {
+	public synchronized PanteonLifeCycle createLifeCycle() {
 		AthensLifeCycleImpl lifeCycle = new AthensLifeCycleImpl();
 		lifeCycles.put(lifeCycle.hashCode(), lifeCycle);
 		return lifeCycle;
 	}
 
-	public synchronized void complete(AthensLifeCycle lifeCycle) {
+	public synchronized void complete(PanteonLifeCycle lifeCycle) {
 		AthensLifeCycleImpl lifeCycleImpl = lifeCycles.remove(lifeCycle
 				.hashCode());
 		if (lifeCycleImpl != null) {
@@ -51,7 +51,7 @@ public class AthensLifeCycles {
 		}
 	}
 
-	private class AthensLifeCycleImpl implements AthensLifeCycle {
+	private class AthensLifeCycleImpl implements PanteonLifeCycle {
 
 		private final Executor executor = new CurrentExecutor();
 		private final ExecutionList listeners = new ExecutionList();
@@ -61,7 +61,7 @@ public class AthensLifeCycles {
 		}
 
 		@Override
-		public void addListener(final AthensLifeCycleLIstener listener) {
+		public void addListener(final PanteonLifeCycleLIstener listener) {
 			this.listeners.add(new Runnable() {
 				@Override
 				public void run() {

@@ -48,10 +48,10 @@ import org.slf4j.LoggerFactory;
 /**
  * @author roth2520@gmail.com
  */
-public class AthensHttpHandler extends SimpleChannelHandler {
+public class PanteonHttpHandler extends SimpleChannelHandler {
 
-	private static final Logger logger = LoggerFactory.getLogger(AthensHttpHandler.class);
-	private static final HttpDataFactory factory = new AthensHttpDataFactory();
+	private static final Logger logger = LoggerFactory.getLogger(PanteonHttpHandler.class);
+	private static final HttpDataFactory factory = new PanteonHttpDataFactory();
 	static {
 		DiskFileUpload.deleteOnExitTemporaryFile = false;
 		DiskFileUpload.baseDirectory = "./temp";
@@ -60,10 +60,10 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 	}
 
 	private AthensHttpState currentState;
-	private AthensHttpRequest currentRequest;
+	private PanteonHttpRequest currentRequest;
 	private HttpRequestBuilder currentBuilder;
 
-	public AthensHttpHandler() {
+	public PanteonHttpHandler() {
 		this.currentState = READING;
 	}
 
@@ -102,7 +102,7 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 	@Override
 	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		Object message = e.getMessage();
-		if (message instanceof AthensHttpResponse) {
+		if (message instanceof PanteonHttpResponse) {
 			AthensHttpState nextState = currentState.writeRequested(ctx, e);
 			currentState = nextState;
 		} else {
@@ -121,7 +121,7 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 			/* create thrift invovation instance */
 			final HttpRequest request = (HttpRequest) e.getMessage();
 			try {
-				currentRequest = new AthensHttpRequest(request);
+				currentRequest = new PanteonHttpRequest(request);
 				currentBuilder = new HttpRequestBuilder(currentRequest);
 				currentBuilder.beginDecode(factory);
 	
@@ -130,7 +130,7 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 				/*
 				 * chunked data decoder problem
 				 */
-				Channels.write(e.getChannel(), new AthensHttpResponse(currentRequest, HttpResponseStatus.BAD_REQUEST));
+				Channels.write(e.getChannel(), new PanteonHttpResponse(currentRequest, HttpResponseStatus.BAD_REQUEST));
 				releaseBuilder();
 				return READING;
 			} catch (IncompatibleDataDecoderException ex) {
@@ -138,7 +138,7 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 				/*
 				 * chunked data decoder problem
 				 */
-				Channels.write(e.getChannel(), new AthensHttpResponse(currentRequest, HttpResponseStatus.BAD_REQUEST));
+				Channels.write(e.getChannel(), new PanteonHttpResponse(currentRequest, HttpResponseStatus.BAD_REQUEST));
 				releaseBuilder();
 				return READING;
 			}
@@ -158,7 +158,7 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 				/*
 				 * chunked data decoder problem not last chunk problem
 				 */
-				Channels.write(e.getChannel(), new AthensHttpResponse(currentRequest, HttpResponseStatus.INTERNAL_SERVER_ERROR));
+				Channels.write(e.getChannel(), new PanteonHttpResponse(currentRequest, HttpResponseStatus.INTERNAL_SERVER_ERROR));
 				releaseBuilder();
 				return READING;
 			} catch (NotEnoughDataDecoderException ex) {
@@ -166,7 +166,7 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 				/*
 				 * chunked data decoder problem not last chunk problem
 				 */
-				Channels.write(e.getChannel(), new AthensHttpResponse(currentRequest, HttpResponseStatus.INTERNAL_SERVER_ERROR));
+				Channels.write(e.getChannel(), new PanteonHttpResponse(currentRequest, HttpResponseStatus.INTERNAL_SERVER_ERROR));
 				releaseBuilder();
 				return READING;
 			}
@@ -187,7 +187,7 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 				/*
 				 * chunked data decoder problem not last chunk problem
 				 */
-				Channels.write(e.getChannel(), new AthensHttpResponse(currentRequest, HttpResponseStatus.BAD_REQUEST));
+				Channels.write(e.getChannel(), new PanteonHttpResponse(currentRequest, HttpResponseStatus.BAD_REQUEST));
 				Channels.close(e.getChannel());
 				releaseBuilder();
 				return READING;
@@ -208,7 +208,7 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 				/*
 				 * chunked data decoder problem not last chunk problem
 				 */
-				Channels.write(e.getChannel(), new AthensHttpResponse(currentRequest, HttpResponseStatus.INTERNAL_SERVER_ERROR));
+				Channels.write(e.getChannel(), new PanteonHttpResponse(currentRequest, HttpResponseStatus.INTERNAL_SERVER_ERROR));
 				releaseBuilder();
 				return READING;
 			} catch (NotEnoughDataDecoderException ex) {
@@ -216,7 +216,7 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 				/*
 				 * chunked data decoder problem not last chunk problem
 				 */
-				Channels.write(e.getChannel(), new AthensHttpResponse(currentRequest, HttpResponseStatus.INTERNAL_SERVER_ERROR));
+				Channels.write(e.getChannel(), new PanteonHttpResponse(currentRequest, HttpResponseStatus.INTERNAL_SERVER_ERROR));
 				releaseBuilder();
 				return READING;
 			}
@@ -244,12 +244,12 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 		super.exceptionCaught(ctx, e);
 	}
 
-	private void writeResponse(ChannelHandlerContext ctx, MessageEvent e, AthensHttpResponse response) {
+	private void writeResponse(ChannelHandlerContext ctx, MessageEvent e, PanteonHttpResponse response) {
 		final Channel channel = e.getChannel();
 		final ChannelFuture future = e.getFuture();
 		final ChannelBuffer resultBytes = response.getResultBuffer();
 		
-		response.setHeader(HttpHeaders.Names.SERVER, "athens");
+		response.setHeader(HttpHeaders.Names.SERVER, "panteon");
 		
 		/* content type */
 		if (response.hasContentType()) {
@@ -297,8 +297,8 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 	
 		@Override
 		public AthensHttpState writeRequested(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-			final AthensHttpResponse response = (AthensHttpResponse) e.getMessage();
-			final AthensHttpRequest request = response.getRequest();
+			final PanteonHttpResponse response = (PanteonHttpResponse) e.getMessage();
+			final PanteonHttpRequest request = response.getRequest();
 			if (request != null && request.equals(currentRequest)) {
 				writeResponse(ctx, e, response);
 				releaseBuilder();
@@ -307,7 +307,7 @@ public class AthensHttpHandler extends SimpleChannelHandler {
 			return INVOKED;
 		}
 	
-		public void sendUpstreamInvoke(ChannelHandlerContext ctx, MessageEvent e, AthensHttpRequest request) {
+		public void sendUpstreamInvoke(ChannelHandlerContext ctx, MessageEvent e, PanteonHttpRequest request) {
 			ctx.sendUpstream(new UpstreamMessageEvent(e.getChannel(), request, e.getRemoteAddress()));
 		}
 	
