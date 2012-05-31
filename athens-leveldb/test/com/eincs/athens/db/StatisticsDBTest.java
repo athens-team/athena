@@ -49,10 +49,10 @@ public class StatisticsDBTest {
 		statistics.addCount(System.currentTimeMillis(), 100+30);
 		statistics.addCount(System.currentTimeMillis(), 100+30);
 		System.out.println(statistics);
-		statistics.addCount(System.currentTimeMillis()+91000, 100+30);
-		statistics.addCount(System.currentTimeMillis()+91000, 100+30);
-		statistics.addCount(System.currentTimeMillis()+91000, 100+30);
-		statistics.addCount(System.currentTimeMillis()+61000, 100+30);
+		statistics.addCount(System.currentTimeMillis()+90000, 100+30);
+		statistics.addCount(System.currentTimeMillis()+90000, 100+30);
+		statistics.addCount(System.currentTimeMillis()+90000, 100+30);
+		statistics.addCount(System.currentTimeMillis()+60000, 100+30);
 		System.out.println(statistics);
 		
 		statisticsDB.putStatistics(key, statistics);

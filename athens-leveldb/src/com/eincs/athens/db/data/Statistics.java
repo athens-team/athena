@@ -34,9 +34,9 @@ public class Statistics implements Serializable {
 	private static final long serialVersionUID = 7143689667989007723L;
 
 	private static final long DEFAULT_TOTAL_LENGTH = 60000;
-	
+
 	private static final long DEFAULT_SLICE_LENGTH = 10000;
-	
+
 	public static Statistics fromBytes(byte[] result) throws IOException,
 			ClassNotFoundException {
 		if (result == null) {
@@ -47,11 +47,11 @@ public class Statistics implements Serializable {
 		Statistics obj = (Statistics) ois.readObject();
 		return obj;
 	}
-	
+
 	private long totalLength = DEFAULT_TOTAL_LENGTH;
-	
-	private long sliceLength = DEFAULT_SLICE_LENGTH; 
-	
+
+	private long sliceLength = DEFAULT_SLICE_LENGTH;
+
 	private long timestamp;
 
 	private List<Integer> countList;
@@ -63,20 +63,18 @@ public class Statistics implements Serializable {
 	public Statistics(long totalLength, long sliceLength) {
 		this.totalLength = totalLength;
 		this.sliceLength = sliceLength;
-		this.timestamp = System.currentTimeMillis() + 10000;
-		countList = Lists.newArrayList(6);
-		countList.add(0);
-		countList.add(0);
-		countList.add(0);
-		countList.add(0);
-		countList.add(0);
-		countList.add(0);
+		this.timestamp = System.currentTimeMillis() + sliceLength;
+		countList = Lists.newArrayList();
+		while ((totalLength -= sliceLength) >= 0) {
+			countList.add(0);
+		}
 	}
-	
+
 	public static Statistics creatStatisticsByCount(long timestamp, int count) {
 		Statistics result = new Statistics();
-		result.countList.set(5, count);
-		result.timestamp = timestamp + 10000;
+		int index = result.countList.size() - 1;
+		result.countList.set(index, result.countList.get(index) + count);
+		result.timestamp = timestamp + result.sliceLength-1;
 		return result;
 	}
 
@@ -113,58 +111,44 @@ public class Statistics implements Serializable {
 	}
 
 	public void addCount(long timestamp, int count) {
-		if (timestamp <= this.timestamp) {
-			if (timestamp + 60000 <= this.timestamp) {
+		if (timestamp == this.timestamp) {
+			int index = (int) (countList.size() - 1);
+			countList.set(index, countList.get(index) + count);
+			return;
+		}
+		if (timestamp < this.timestamp) {
+			if (timestamp + totalLength <= this.timestamp) {
 				return;
 			} else {
-				int index = (int) (5 - ((this.timestamp - timestamp) / 10000));
+				int index = (int) (countList.size() - 1 - ((this.timestamp - timestamp) / sliceLength));
 				countList.set(index, countList.get(index) + count);
 				return;
 			}
 		}
-		if (timestamp > 50000 + this.timestamp) {
+		if (timestamp > totalLength - sliceLength + this.timestamp) {
 			countList.clear();
-			countList.add(0);
-			countList.add(0);
-			countList.add(0);
-			countList.add(0);
-			countList.add(0);
-			this.timestamp = timestamp;
+			long temp = totalLength;
+			while ((temp -= sliceLength) > 0) {
+				countList.add(0);
+			}
+			this.timestamp = timestamp + sliceLength-1;
 			countList.add(count);
 			return;
 		}
 		int index = (int) (timestamp - this.timestamp);
-		if (index <= 10000) {
-
-		} else if (index <= 20000) {
-			countList.remove(0);
-			countList.add(0);
-		} else if (index <= 30000) {
-			countList.remove(0);
-			countList.add(0);
-			countList.remove(0);
-			countList.add(0);
-		} else if (index <= 40000) {
-			countList.remove(0);
-			countList.add(0);
-			countList.remove(0);
-			countList.add(0);
-			countList.remove(0);
-			countList.add(0);
-		} else {
-			countList.remove(0);
-			countList.add(0);
-			countList.remove(0);
-			countList.add(0);
-			countList.remove(0);
-			countList.add(0);
-			countList.remove(0);
-			countList.add(0);
+		for (int i = 0; i <= totalLength - sliceLength; i += sliceLength) {
+			if (index <= sliceLength) {
+				while (index > sliceLength) {
+					countList.remove(0);
+					countList.add(0);
+					index -= sliceLength;
+				}
+				countList.remove(0);
+				countList.add(count);
+				this.timestamp = timestamp + sliceLength-1;
+				return;
+			}
 		}
-		countList.remove(0);
-		this.timestamp = timestamp +10000;
-		countList.add(count);
-		return;
 	}
 
 	public int getSumOfCount() {
