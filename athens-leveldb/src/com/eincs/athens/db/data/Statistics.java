@@ -15,8 +15,10 @@
  */
 package com.eincs.athens.db.data;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Iterator;
@@ -31,11 +33,37 @@ public class Statistics implements Serializable {
 
 	private static final long serialVersionUID = 7143689667989007723L;
 
+	private static final long DEFAULT_TOTAL_LENGTH = 60000;
+	
+	private static final long DEFAULT_SLICE_LENGTH = 10000;
+	
+	public static Statistics fromBytes(byte[] result) throws IOException,
+			ClassNotFoundException {
+		if (result == null) {
+			return null;
+		}
+		ByteArrayInputStream bais = new ByteArrayInputStream(result);
+		ObjectInputStream ois = new ObjectInputStream(bais);
+		Statistics obj = (Statistics) ois.readObject();
+		return obj;
+	}
+	
+	private long totalLength = DEFAULT_TOTAL_LENGTH;
+	
+	private long sliceLength = DEFAULT_SLICE_LENGTH; 
+	
 	private long timestamp;
 
 	private List<Integer> countList;
 
 	public Statistics() {
+		this(DEFAULT_TOTAL_LENGTH, DEFAULT_SLICE_LENGTH);
+	}
+
+	public Statistics(long totalLength, long sliceLength) {
+		this.totalLength = totalLength;
+		this.sliceLength = sliceLength;
+		this.timestamp = System.currentTimeMillis() + 10000;
 		countList = Lists.newArrayList(6);
 		countList.add(0);
 		countList.add(0);
@@ -43,14 +71,29 @@ public class Statistics implements Serializable {
 		countList.add(0);
 		countList.add(0);
 		countList.add(0);
-		this.timestamp = System.currentTimeMillis() + 10000;
 	}
-
+	
 	public static Statistics creatStatisticsByCount(long timestamp, int count) {
 		Statistics result = new Statistics();
 		result.countList.set(5, count);
 		result.timestamp = timestamp + 10000;
 		return result;
+	}
+
+	public long getTotalLength() {
+		return totalLength;
+	}
+
+	public void setTotalLength(long totalLength) {
+		this.totalLength = totalLength;
+	}
+
+	public long getSliceLength() {
+		return sliceLength;
+	}
+
+	public void setSliceLength(long sliceLength) {
+		this.sliceLength = sliceLength;
 	}
 
 	public long getTimestamp() {
