@@ -32,11 +32,4 @@ public class BlockFilter {
 		return false;
 	}
 	
-	public void addBlock(BlockInfo blockInfo) {
-		
-	}
-	
-	public void removeBlock(BlockInfo blockInfo) {
-		
-	}
 }
