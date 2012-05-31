@@ -113,6 +113,7 @@ public class NettyClient {
 				ChannelStateEvent e) throws Exception {
 			super.channelConnected(ctx, e);
 			client.channel = e.getChannel();
+			logger.debug("connection to [{}] establised.", e.getChannel());
 		}
 
 		@Override
@@ -120,6 +121,7 @@ public class NettyClient {
 				throws Exception {
 			super.channelClosed(ctx, e);
 			client.channel = null;
+			logger.debug("connection to [{}] closed.", e.getChannel());
 		}
 
 	}

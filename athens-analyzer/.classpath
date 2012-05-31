@@ -18,7 +18,7 @@
 	<classpathentry kind="lib" path="/athens-common/libs/guava-12.0-sources.jar"/>
 	<classpathentry kind="lib" path="/athens-common/libs/guava-12.0.jar"/>
 	<classpathentry kind="lib" path="/athens-common/libs/guice-3.0-src.zip"/>
-	<classpathentry kind="lib" path="/athens-common/libs/guice-3.0.jar"/>
+	<classpathentry kind="lib" path="/athens-common/libs/guice-3.0.jar" sourcepath="/athens-common/libs/guice-3.0-src.zip"/>
 	<classpathentry kind="lib" path="/athens-common/libs/httpclient-4.1.1.jar"/>
 	<classpathentry kind="lib" path="/athens-common/libs/httpclient-cache-4.1.1.jar"/>
 	<classpathentry kind="lib" path="/athens-common/libs/httpcomponents-client-4.1.1-src.zip"/>
