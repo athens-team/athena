@@ -13,14 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer;
+package com.eincs.athens;
 
 import java.net.UnknownHostException;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.eincs.athens.analyzer.core.TransferClients;
-import com.eincs.athens.analyzer.message.AnalyzeRequest;
-import com.eincs.athens.analyzer.message.AnalyzeTags;
+import com.eincs.athens.core.TransferClients;
+import com.eincs.athens.message.AthensRequest;
+import com.eincs.athens.message.AthensTags;
 import com.eincs.pantheon.message.attach.PanteonCookies;
 import com.eincs.pantheon.message.attach.PanteonParams;
 
@@ -35,11 +35,11 @@ public class AnalyzeClientTest {
 		AtomicLong seqNum = new AtomicLong();
 		
 		while (true) {
-			AnalyzeRequest request = new AnalyzeRequest();
+			AthensRequest request = new AthensRequest();
 			request.setRequestSeq(seqNum.getAndIncrement());
 			request.setCookies(PanteonCookies.create());
 			request.setParams(PanteonParams.create());
-			request.setTags(AnalyzeTags.create());
+			request.setTags(AthensTags.create());
 			TransferClients.transfer(request);
 		}
 	}

@@ -13,14 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.core;
-
-import com.eincs.athens.analyzer.message.AnalyzeRequest;
-import com.eincs.athens.analyzer.message.AnalyzeResult;
+package com.eincs.athens.message;
 
 /**
  * @author Jung-Haeng Lee
  */
-public interface Analyzer {
-	public AnalyzeResult analyze(AnalyzeRequest request);
+public enum ResultType {
+	PANALTY, RELEASE;
 }

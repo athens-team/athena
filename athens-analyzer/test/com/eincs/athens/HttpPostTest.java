@@ -1,4 +1,4 @@
-package com.eincs.athens.analyzer;
+package com.eincs.athens;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

@@ -13,20 +13,39 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.handler;
+package com.eincs.athens.handler;
+
+import java.util.concurrent.atomic.AtomicLong;
+
 
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
+import com.eincs.athens.core.TransferClients;
+import com.eincs.athens.message.AthensRequest;
+import com.eincs.athens.message.TargetKey;
+import com.eincs.pantheon.message.PanteonRequest;
+
 /**
  * @author Jung-Haeng Lee
  */
-public class AnalyzeBlockHandler extends SimpleChannelHandler {
+public class AthensTransferHandler extends SimpleChannelHandler {
 
+	private static AtomicLong analzyeReqSeq = new AtomicLong();
+	
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
+		if (e.getMessage() instanceof PanteonRequest) {
+			final PanteonRequest request = (PanteonRequest) e
+					.getMessage();
+			final AthensRequest analyzeRequest = AthensRequest.create(
+					analzyeReqSeq.getAndIncrement(),
+					TargetKey.createKeyByAddress(request), request);
+			
+			TransferClients.transfer(analyzeRequest);
+		}
 		super.messageReceived(ctx, e);
 	}
 }

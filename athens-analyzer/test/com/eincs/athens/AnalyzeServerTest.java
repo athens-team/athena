@@ -13,11 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.message;
+package com.eincs.athens;
 
 /**
  * @author Jung-Haeng Lee
  */
-public enum ResultType {
-	PANALTY, RELEASE;
+public class AnalyzeServerTest {
+
+	public static void main(String[] args) {
+		
+	}
 }

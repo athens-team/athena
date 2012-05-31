@@ -13,14 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.core;
+package com.eincs.athens.core;
 
 import java.util.List;
 
-import com.eincs.athens.analyzer.message.AnalyzeReport;
-import com.eincs.athens.analyzer.message.AnalyzeRequest;
-import com.eincs.athens.analyzer.message.AnalyzeResult;
-import com.eincs.athens.analyzer.message.ResultType;
+import com.eincs.athens.message.AthensReport;
+import com.eincs.athens.message.AthensRequest;
+import com.eincs.athens.message.AthensResult;
+import com.eincs.athens.message.ResultType;
 import com.google.common.collect.Lists;
 
 /**
@@ -46,16 +46,16 @@ public class Analyzers {
 	 * @param request request information of analyze
 	 * @return report of analyze
 	 */
-	public AnalyzeReport invokeAnalyzers(AnalyzeRequest request) {
+	public AthensReport invokeAnalyzers(AthensRequest request) {
 		// invoke analyzers
-		AnalyzeResult result = AnalyzeResult.create(ResultType.PANALTY);
+		AthensResult result = AthensResult.create(ResultType.PANALTY);
 		for(AnalyzerHodler holder : analyzerHolders) {
-			AnalyzeResult newResult = holder.analyzer.analyze(request);
+			AthensResult newResult = holder.analyzer.analyze(request);
 			result.merge(newResult);
 		}
 		
 		// create report with result and request
-		AnalyzeReport report = new AnalyzeReport();
+		AthensReport report = new AthensReport();
 		report.setRequestSeq(request.getRequestSeq());
 		report.setTargetKey(request.getTargetKey());
 		report.setResult(result);

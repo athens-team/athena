@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.core;
+package com.eincs.athens.core;
 
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -37,7 +37,7 @@ import org.jboss.netty.handler.execution.ExecutionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.eincs.athens.analyzer.message.AnalyzeReport;
+import com.eincs.athens.message.AthensReport;
 import com.eincs.pantheon.utils.client.NettyClient;
 import com.eincs.pantheon.utils.client.NettyClient.NettyClientHandler;
 import com.google.common.collect.Lists;
@@ -112,7 +112,7 @@ public class TransferClient {
 		}
 	}
 
-	private void invokeReportHandler(AnalyzeReport report) {
+	private void invokeReportHandler(AthensReport report) {
 		synchronized (this) {
 			for (AnalyzeReportHandler handler : mReportHandlers) {
 				handler.handlerReport(report);
@@ -129,8 +129,8 @@ public class TransferClient {
 		@Override
 		public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 				throws Exception {
-			if (e.getMessage() instanceof AnalyzeReport) {
-				AnalyzeReport report = (AnalyzeReport) e.getMessage();
+			if (e.getMessage() instanceof AthensReport) {
+				AthensReport report = (AthensReport) e.getMessage();
 				invokeReportHandler(report);
 				return;
 			}
@@ -152,6 +152,6 @@ public class TransferClient {
 	 * @author Jung-Haeng Lee
 	 */
 	public interface AnalyzeReportHandler {
-		public void handlerReport(AnalyzeReport report);
+		public void handlerReport(AthensReport report);
 	}
 }

@@ -13,23 +13,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.core;
+package com.eincs.athens.handler;
 
-import com.eincs.pantheon.message.PanteonRequest;
+import org.jboss.netty.channel.ChannelHandlerContext;
+import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.channel.SimpleChannelHandler;
 
 /**
  * @author Jung-Haeng Lee
  */
-public class BlockFilter {
+public class AthensBlockHandler extends SimpleChannelHandler {
 
-	private static final BlockFilter instance = new BlockFilter();
-	
-	public static BlockFilter getInstance() {
-		return instance;
+	@Override
+	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
+			throws Exception {
+		super.messageReceived(ctx, e);
 	}
-	
-	public boolean isBlocked(PanteonRequest request) {
-		return false;
-	}
-	
 }

@@ -1,20 +1,20 @@
-package com.eincs.athens.analyzer.message;
+package com.eincs.athens.message;
 
 import java.io.Serializable;
 
 /**
  * @author Jung-Haeng Lee
  */
-public class AnalyzeResult implements Serializable {
+public class AthensResult implements Serializable {
 
 	private static final long serialVersionUID = 1420934476726186043L;
 
-	public static AnalyzeResult create(ResultType type) {
+	public static AthensResult create(ResultType type) {
 		return create(type, 0);
 	}
 	
-	public static AnalyzeResult create(ResultType type, int panalty) {
-		AnalyzeResult result = new AnalyzeResult();
+	public static AthensResult create(ResultType type, int panalty) {
+		AthensResult result = new AthensResult();
 		result.setPanalty(panalty);
 		result.setType(type);
 		return result;
@@ -44,7 +44,7 @@ public class AnalyzeResult implements Serializable {
 		this.panalty += panalty;
 	}
 	
-	public AnalyzeResult merge(AnalyzeResult result) {
+	public AthensResult merge(AthensResult result) {
 		switch (getType()) {
 		// add panalty only when current type is PANALTY
 		// otherwise, don't merge

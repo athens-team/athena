@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.core;
+package com.eincs.athens.core;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;
@@ -24,8 +24,8 @@ import org.jboss.netty.channel.Channels;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.eincs.athens.analyzer.core.TransferClient.AnalyzeReportHandler;
-import com.eincs.athens.analyzer.message.AnalyzeRequest;
+import com.eincs.athens.core.TransferClient.AnalyzeReportHandler;
+import com.eincs.athens.message.AthensRequest;
 
 /**
  * @author Jung-Haeng Lee
@@ -44,7 +44,7 @@ public class TransferClients {
 		return instance;
 	}
 
-	public static void transfer(final AnalyzeRequest analyzeRequest) {
+	public static void transfer(final AthensRequest analyzeRequest) {
 		executor.execute(new Runnable() {
 			@Override
 			public void run() {

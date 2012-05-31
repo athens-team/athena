@@ -13,25 +13,43 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer.message;
+package com.eincs.athens.message;
 
 import java.io.Serializable;
+
+import com.eincs.pantheon.message.PanteonRequest;
+import com.eincs.pantheon.message.attach.PanteonCookies;
+import com.eincs.pantheon.message.attach.PanteonParams;
+
 
 /**
  * @author Jung-Haeng Lee
  */
-public class AnalyzeReport implements Serializable {
+public class AthensRequest implements Serializable {
 	
-	private static final long serialVersionUID = -1102474292388248821L;
+	private static final long serialVersionUID = -5509385458282534203L;
 
+	public static AthensRequest create(long reqSeq, TargetKey targetKey,
+			PanteonRequest request) {
+		AthensRequest result = new AthensRequest();
+		result.setRequestSeq(reqSeq);
+		result.setTargetKey(targetKey);
+		result.setParams(request.getParams());
+		result.setCookies(request.getCookies());
+		result.setTags(AthensTags.create());
+		return result;
+	}
+	
 	private long requestSeq;
 	
 	private TargetKey targetKey;
 	
-	private AnalyzeResult result;
+	private PanteonParams params;
 	
-	private AnalyzeTags tags;
+	private PanteonCookies cookies;
 
+	private AthensTags tags;
+	
 	public long getRequestSeq() {
 		return requestSeq;
 	}
@@ -48,29 +66,38 @@ public class AnalyzeReport implements Serializable {
 		this.targetKey = targetKey;
 	}
 
-	public AnalyzeResult getResult() {
-		return result;
+	public PanteonParams getParams() {
+		return params;
 	}
 
-	public void setResult(AnalyzeResult result) {
-		this.result = result;
+	public void setParams(PanteonParams params) {
+		this.params = params;
 	}
 
-	public AnalyzeTags getTags() {
+	public PanteonCookies getCookies() {
+		return cookies;
+	}
+
+	public void setCookies(PanteonCookies cookies) {
+		this.cookies = cookies;
+	}
+
+	public AthensTags getTags() {
 		return tags;
 	}
 
-	public void setTags(AnalyzeTags tags) {
+	public void setTags(AthensTags tags) {
 		this.tags = tags;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 		sb.append("seq:").append(requestSeq).append(", ");
 		sb.append("key:").append(targetKey).append(", ");
-		sb.append("result:").append(result).append(", ");
+		sb.append("params:").append(params).append(", ");
+		sb.append("cookies:").append(cookies).append(", ");
 		sb.append("tags:").append(tags).append(", ");
 		sb.append("]");
 		return sb.toString();

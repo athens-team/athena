@@ -13,14 +13,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer;
+package com.eincs.athens.core;
+
+import com.eincs.pantheon.message.PanteonRequest;
 
 /**
  * @author Jung-Haeng Lee
  */
-public class AnalyzeServerTest {
+public class BlockFilter {
 
-	public static void main(String[] args) {
-		
+	private static final BlockFilter instance = new BlockFilter();
+	
+	public static BlockFilter getInstance() {
+		return instance;
 	}
+	
+	public boolean isBlocked(PanteonRequest request) {
+		return false;
+	}
+	
 }

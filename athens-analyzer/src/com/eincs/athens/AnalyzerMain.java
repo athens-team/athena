@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analyzer;
+package com.eincs.athens;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
@@ -33,9 +33,9 @@ import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.eincs.athens.analyzer.core.Analyzers;
-import com.eincs.athens.analyzer.message.AnalyzeReport;
-import com.eincs.athens.analyzer.message.AnalyzeRequest;
+import com.eincs.athens.core.Analyzers;
+import com.eincs.athens.message.AthensReport;
+import com.eincs.athens.message.AthensRequest;
 
 /**
  * @author Jung-Haeng Lee
@@ -74,11 +74,11 @@ public class AnalyzerMain {
 		public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 				throws Exception {
 
-			if (e.getMessage() instanceof AnalyzeRequest) {
-				AnalyzeRequest request = (AnalyzeRequest) e.getMessage();
+			if (e.getMessage() instanceof AthensRequest) {
+				AthensRequest request = (AthensRequest) e.getMessage();
 				
 				logger.info("analyze {}", request.toString());
-				AnalyzeReport report = Analyzers.getInstance().invokeAnalyzers(
+				AthensReport report = Analyzers.getInstance().invokeAnalyzers(
 						request);
 				
 				Channels.write(ctx.getChannel(), report);
