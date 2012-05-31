@@ -17,9 +17,10 @@ package com.eincs.athens.analyzer.core;
 
 import java.util.List;
 
-
 import com.eincs.athens.analyzer.message.AnalyzeReport;
 import com.eincs.athens.analyzer.message.AnalyzeRequest;
+import com.eincs.athens.analyzer.message.AnalyzeResult;
+import com.eincs.athens.analyzer.message.ResultType;
 import com.google.common.collect.Lists;
 
 /**
@@ -46,12 +47,19 @@ public class Analyzers {
 	 * @return report of analyze
 	 */
 	public AnalyzeReport invokeAnalyzers(AnalyzeRequest request) {
+		// invoke analyzers
+		AnalyzeResult result = AnalyzeResult.create(ResultType.PANALTY);
 		for(AnalyzerHodler holder : analyzerHolders) {
-			holder.analyzer.analyze(request);
+			AnalyzeResult newResult = holder.analyzer.analyze(request);
+			result.merge(newResult);
 		}
+		
+		// create report with result and request
 		AnalyzeReport report = new AnalyzeReport();
 		report.setRequestSeq(request.getRequestSeq());
-		report.setIp(request.getRemoteAddress());
+		report.setTargetKey(request.getTargetKey());
+		report.setResult(result);
+		report.setTags(request.getTags());
 		return report;
 	}
 	

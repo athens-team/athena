@@ -15,8 +15,6 @@
  */
 package com.eincs.athens.analyzer;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -42,12 +40,6 @@ public class AnalyzeClientTest {
 			request.setCookies(PanteonCookies.create());
 			request.setParams(PanteonParams.create());
 			request.setTags(AnalyzeTags.create());
-			request.setOriginAddress(InetAddress.getByName("localhost"));
-			request.setRemoteAddress(new InetSocketAddress("localhost", 28080));
-			request.setLocalAddress(new InetSocketAddress("localhost", 38080));
-			request.setPath("/path");
-			request.setMethod("GET");
-
 			TransferClients.transfer(request);
 		}
 	}

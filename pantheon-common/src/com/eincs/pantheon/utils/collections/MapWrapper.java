@@ -96,4 +96,8 @@ public class MapWrapper<K, V> implements Map<K, V> {
 		return delegate.values();
 	}
 
+	@Override
+	public String toString() {
+		return delegate.toString();
+	}
 }

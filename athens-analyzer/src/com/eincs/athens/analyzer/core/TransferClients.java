@@ -24,6 +24,7 @@ import org.jboss.netty.channel.Channels;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eincs.athens.analyzer.core.TransferClient.AnalyzeReportHandler;
 import com.eincs.athens.analyzer.message.AnalyzeRequest;
 
 /**
@@ -58,5 +59,9 @@ public class TransferClients {
 				}
 			}
 		});
+	}
+	
+	public static void addReportListener(AnalyzeReportHandler handler) {
+		client.addReportHandler(handler);
 	}
 }

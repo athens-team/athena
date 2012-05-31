@@ -16,7 +16,6 @@
 package com.eincs.athens.analyzer.message;
 
 import java.io.Serializable;
-import java.net.InetSocketAddress;
 
 /**
  * @author Jung-Haeng Lee
@@ -27,8 +26,12 @@ public class AnalyzeReport implements Serializable {
 
 	private long requestSeq;
 	
-	private InetSocketAddress ip;
+	private TargetKey targetKey;
 	
+	private AnalyzeResult result;
+	
+	private AnalyzeTags tags;
+
 	public long getRequestSeq() {
 		return requestSeq;
 	}
@@ -36,12 +39,40 @@ public class AnalyzeReport implements Serializable {
 	public void setRequestSeq(long requestSeq) {
 		this.requestSeq = requestSeq;
 	}
-	
-	public InetSocketAddress getIp() {
-		return ip;
+
+	public TargetKey getTargetKey() {
+		return targetKey;
 	}
 
-	public void setIp(InetSocketAddress inetSocketAddress) {
-		this.ip = inetSocketAddress;
+	public void setTargetKey(TargetKey targetKey) {
+		this.targetKey = targetKey;
+	}
+
+	public AnalyzeResult getResult() {
+		return result;
+	}
+
+	public void setResult(AnalyzeResult result) {
+		this.result = result;
+	}
+
+	public AnalyzeTags getTags() {
+		return tags;
+	}
+
+	public void setTags(AnalyzeTags tags) {
+		this.tags = tags;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		sb.append("seq:").append(requestSeq).append(", ");
+		sb.append("key:").append(targetKey).append(", ");
+		sb.append("result:").append(result).append(", ");
+		sb.append("tags:").append(tags).append(", ");
+		sb.append("]");
+		return sb.toString();
 	}
 }

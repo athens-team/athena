@@ -100,5 +100,9 @@ public class SetWrapper<E> implements Set<E> {
 	public <T> T[] toArray(T[] a) {
 		return delegate.toArray(a);
 	}
-
+	
+	@Override
+	public String toString() {
+		return delegate.toString();
+	}
 }

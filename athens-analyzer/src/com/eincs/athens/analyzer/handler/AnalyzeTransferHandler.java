@@ -24,6 +24,7 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 
 import com.eincs.athens.analyzer.core.TransferClients;
 import com.eincs.athens.analyzer.message.AnalyzeRequest;
+import com.eincs.athens.analyzer.message.TargetKey;
 import com.eincs.pantheon.message.PanteonRequest;
 
 /**
@@ -40,7 +41,8 @@ public class AnalyzeTransferHandler extends SimpleChannelHandler {
 			final PanteonRequest request = (PanteonRequest) e
 					.getMessage();
 			final AnalyzeRequest analyzeRequest = AnalyzeRequest.create(
-					analzyeReqSeq.getAndIncrement(), request);
+					analzyeReqSeq.getAndIncrement(),
+					TargetKey.createKeyByAddress(request), request);
 			
 			TransferClients.transfer(analyzeRequest);
 		}

@@ -47,7 +47,6 @@ import com.google.common.collect.Lists;
  */
 public class TransferClient {
 
-	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory
 			.getLogger(TransferClient.class);
 
@@ -81,7 +80,7 @@ public class TransferClient {
 						new NettyClientHandler());
 			}
 		});
-		
+
 		return bootstrap;
 	}
 
@@ -91,35 +90,48 @@ public class TransferClient {
 
 	/**
 	 * Add AnalyzeReportHandler to TransferClient
-	 * @param handler AnalyzeReportHandler
+	 * 
+	 * @param handler
+	 *            AnalyzeReportHandler
 	 */
 	public void addReportHandler(AnalyzeReportHandler handler) {
-		mReportHandlers.add(handler);
+		synchronized (this) {
+			mReportHandlers.add(handler);
+		}
 	}
-	
+
 	/**
 	 * Remove AnalyzeReportHandler from TransferClient
-	 * @param handler AnalyzeReportHandler
+	 * 
+	 * @param handler
+	 *            AnalyzeReportHandler
 	 */
 	public void removeReportHandler(AnalyzeReportHandler handler) {
-		mReportHandlers.add(handler);
+		synchronized (this) {
+			mReportHandlers.add(handler);
+		}
 	}
-	
+
+	private void invokeReportHandler(AnalyzeReport report) {
+		synchronized (this) {
+			for (AnalyzeReportHandler handler : mReportHandlers) {
+				handler.handlerReport(report);
+			}
+		}
+	}
+
 	/**
 	 * @author Jung-Haeng Lee
 	 */
-	private static class AnalyzeTransferReportHandler extends
+	private class AnalyzeTransferReportHandler extends
 			SimpleChannelUpstreamHandler {
-
-		private static final Logger logger = LoggerFactory
-				.getLogger(AnalyzeTransferReportHandler.class);
 
 		@Override
 		public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 				throws Exception {
 			if (e.getMessage() instanceof AnalyzeReport) {
 				AnalyzeReport report = (AnalyzeReport) e.getMessage();
-				logger.info("recv object {}", report.toString());
+				invokeReportHandler(report);
 				return;
 			}
 			super.messageReceived(ctx, e);
@@ -135,7 +147,7 @@ public class TransferClient {
 			}
 		}
 	}
-	
+
 	/**
 	 * @author Jung-Haeng Lee
 	 */

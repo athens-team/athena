@@ -41,7 +41,7 @@ import com.eincs.athens.analyzer.message.AnalyzeRequest;
  * @author Jung-Haeng Lee
  */
 public class AnalyzerMain {
-
+	
 	public static void main(String[] args) {
 
 		// Configure the server.
