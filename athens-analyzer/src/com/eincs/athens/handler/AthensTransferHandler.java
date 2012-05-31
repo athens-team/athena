@@ -24,7 +24,7 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 
 import com.eincs.athens.core.TransferClients;
 import com.eincs.athens.message.AthensRequest;
-import com.eincs.athens.message.TargetKey;
+import com.eincs.athens.message.AnalyzeTargetKey;
 import com.eincs.pantheon.message.PanteonRequest;
 
 /**
@@ -42,7 +42,7 @@ public class AthensTransferHandler extends SimpleChannelHandler {
 					.getMessage();
 			final AthensRequest analyzeRequest = AthensRequest.create(
 					analzyeReqSeq.getAndIncrement(),
-					TargetKey.createKeyByAddress(request), request);
+					AnalyzeTargetKey.createKeyByAddress(request), request);
 			
 			TransferClients.transfer(analyzeRequest);
 		}

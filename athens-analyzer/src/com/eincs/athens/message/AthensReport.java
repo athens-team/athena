@@ -26,9 +26,9 @@ public class AthensReport implements Serializable {
 
 	private long requestSeq;
 	
-	private TargetKey targetKey;
+	private AnalyzeTargetKey targetKey;
 	
-	private AthensResult result;
+	private AnalyzeResult result;
 	
 	private AthensTags tags;
 
@@ -40,19 +40,19 @@ public class AthensReport implements Serializable {
 		this.requestSeq = requestSeq;
 	}
 
-	public TargetKey getTargetKey() {
+	public AnalyzeTargetKey getTargetKey() {
 		return targetKey;
 	}
 
-	public void setTargetKey(TargetKey targetKey) {
+	public void setTargetKey(AnalyzeTargetKey targetKey) {
 		this.targetKey = targetKey;
 	}
 
-	public AthensResult getResult() {
+	public AnalyzeResult getResult() {
 		return result;
 	}
 
-	public void setResult(AthensResult result) {
+	public void setResult(AnalyzeResult result) {
 		this.result = result;
 	}
 

@@ -5,30 +5,30 @@ import java.io.Serializable;
 /**
  * @author Jung-Haeng Lee
  */
-public class AthensResult implements Serializable {
+public class AnalyzeResult implements Serializable {
 
 	private static final long serialVersionUID = 1420934476726186043L;
 
-	public static AthensResult create(ResultType type) {
+	public static AnalyzeResult create(AnalyzeResultType type) {
 		return create(type, 0);
 	}
 	
-	public static AthensResult create(ResultType type, int panalty) {
-		AthensResult result = new AthensResult();
+	public static AnalyzeResult create(AnalyzeResultType type, int panalty) {
+		AnalyzeResult result = new AnalyzeResult();
 		result.setPanalty(panalty);
 		result.setType(type);
 		return result;
 	}
 	
-	private ResultType type;
+	private AnalyzeResultType type;
 	
 	private int panalty;
 
-	public ResultType getType() {
+	public AnalyzeResultType getType() {
 		return type;
 	}
 
-	public void setType(ResultType type) {
+	public void setType(AnalyzeResultType type) {
 		this.type = type;
 	}
 
@@ -44,15 +44,15 @@ public class AthensResult implements Serializable {
 		this.panalty += panalty;
 	}
 	
-	public AthensResult merge(AthensResult result) {
+	public AnalyzeResult merge(AnalyzeResult result) {
 		switch (getType()) {
 		// add panalty only when current type is PANALTY
 		// otherwise, don't merge
 		case PANALTY: {
-			if(result.getType() == ResultType.PANALTY) {
+			if(result.getType() == AnalyzeResultType.PANALTY) {
 				addPanalty(result.getPanalty());
-			} else if(result.getType() == ResultType.RELEASE) {
-				setType(ResultType.RELEASE);
+			} else if(result.getType() == AnalyzeResultType.RELEASE) {
+				setType(AnalyzeResultType.RELEASE);
 				setPanalty(0);
 			}
 		}
@@ -61,7 +61,7 @@ public class AthensResult implements Serializable {
 	}
 	
 	public boolean needNotify() {
-		return type == ResultType.RELEASE || panalty > 0;
+		return type == AnalyzeResultType.RELEASE || panalty > 0;
 	}
 	
 	@Override

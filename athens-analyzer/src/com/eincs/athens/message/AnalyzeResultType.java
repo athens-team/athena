@@ -18,6 +18,6 @@ package com.eincs.athens.message;
 /**
  * @author Jung-Haeng Lee
  */
-public enum ResultType {
+public enum AnalyzeResultType {
 	PANALTY, RELEASE;
 }

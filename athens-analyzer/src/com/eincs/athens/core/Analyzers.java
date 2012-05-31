@@ -19,8 +19,8 @@ import java.util.List;
 
 import com.eincs.athens.message.AthensReport;
 import com.eincs.athens.message.AthensRequest;
-import com.eincs.athens.message.AthensResult;
-import com.eincs.athens.message.ResultType;
+import com.eincs.athens.message.AnalyzeResult;
+import com.eincs.athens.message.AnalyzeResultType;
 import com.google.common.collect.Lists;
 
 /**
@@ -48,9 +48,9 @@ public class Analyzers {
 	 */
 	public AthensReport invokeAnalyzers(AthensRequest request) {
 		// invoke analyzers
-		AthensResult result = AthensResult.create(ResultType.PANALTY);
+		AnalyzeResult result = AnalyzeResult.create(AnalyzeResultType.PANALTY);
 		for(AnalyzerHodler holder : analyzerHolders) {
-			AthensResult newResult = holder.analyzer.analyze(request);
+			AnalyzeResult newResult = holder.analyzer.analyze(request);
 			result.merge(newResult);
 		}
 		

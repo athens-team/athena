@@ -13,14 +13,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.core;
+package com.eincs.athens.analyzer;
 
+import com.eincs.athens.core.Analyzer;
 import com.eincs.athens.message.AthensRequest;
 import com.eincs.athens.message.AnalyzeResult;
+import com.eincs.athens.message.AnalyzeResultType;
 
 /**
  * @author Jung-Haeng Lee
  */
-public interface Analyzer {
-	public AnalyzeResult analyze(AthensRequest request);
+public class RateLimitAnalyzer implements Analyzer {
+
+	@Override
+	public AnalyzeResult analyze(AthensRequest request) {
+		return AnalyzeResult.create(AnalyzeResultType.PANALTY);
+	}
+
 }

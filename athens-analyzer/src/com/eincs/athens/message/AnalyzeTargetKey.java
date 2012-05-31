@@ -24,12 +24,12 @@ import com.google.common.primitives.Bytes;
 /**
  * @author Jung-Haeng Lee
  */
-public class TargetKey implements Serializable {
+public class AnalyzeTargetKey implements Serializable {
 
 	private static final long serialVersionUID = -3604231145525755533L;
 
-	public static TargetKey createKeyByAddress(PanteonRequest request) {
-		TargetKey result = new TargetKey();
+	public static AnalyzeTargetKey createKeyByAddress(PanteonRequest request) {
+		AnalyzeTargetKey result = new AnalyzeTargetKey();
 		result.setAddress(AddressProviders.getRemoteOrOriginAddress(request)
 				.getAddress());
 		result.setPath(request.getPath());
@@ -37,9 +37,9 @@ public class TargetKey implements Serializable {
 		return result;
 	}
 
-	public static TargetKey createKeyByUser(byte[] userId,
+	public static AnalyzeTargetKey createKeyByUser(byte[] userId,
 			PanteonRequest request) {
-		TargetKey result = new TargetKey();
+		AnalyzeTargetKey result = new AnalyzeTargetKey();
 		result.setUserId(userId);
 		result.setPath(request.getPath());
 		result.setMethod(request.getMethod().toString());

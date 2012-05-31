@@ -29,7 +29,7 @@ public class AthensRequest implements Serializable {
 	
 	private static final long serialVersionUID = -5509385458282534203L;
 
-	public static AthensRequest create(long reqSeq, TargetKey targetKey,
+	public static AthensRequest create(long reqSeq, AnalyzeTargetKey targetKey,
 			PanteonRequest request) {
 		AthensRequest result = new AthensRequest();
 		result.setRequestSeq(reqSeq);
@@ -42,7 +42,7 @@ public class AthensRequest implements Serializable {
 	
 	private long requestSeq;
 	
-	private TargetKey targetKey;
+	private AnalyzeTargetKey targetKey;
 	
 	private PanteonParams params;
 	
@@ -58,11 +58,11 @@ public class AthensRequest implements Serializable {
 		this.requestSeq = requestSeq;
 	}
 
-	public TargetKey getTargetKey() {
+	public AnalyzeTargetKey getTargetKey() {
 		return targetKey;
 	}
 
-	public void setTargetKey(TargetKey targetKey) {
+	public void setTargetKey(AnalyzeTargetKey targetKey) {
 		this.targetKey = targetKey;
 	}
 
