@@ -64,6 +64,10 @@ public class AthensReport implements Serializable {
 		this.tags = tags;
 	}
 	
+	public boolean needNotify() {
+		return result.needNotify();
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -75,4 +79,5 @@ public class AthensReport implements Serializable {
 		sb.append("]");
 		return sb.toString();
 	}
+
 }

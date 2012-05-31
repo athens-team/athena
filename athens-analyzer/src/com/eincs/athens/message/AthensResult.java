@@ -60,6 +60,10 @@ public class AthensResult implements Serializable {
 		return result;
 	}
 	
+	public boolean needNotify() {
+		return type == ResultType.RELEASE || panalty > 0;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -69,4 +73,5 @@ public class AthensResult implements Serializable {
 		sb.append("]");
 		return sb.toString();
 	}
+
 }

@@ -81,7 +81,11 @@ public class AnalyzerMain {
 				AthensReport report = Analyzers.getInstance().invokeAnalyzers(
 						request);
 				
-				Channels.write(ctx.getChannel(), report);
+				// Notify report only if needed
+				// type=RELEASE or panalty > 0 must be notify  
+				if (report.needNotify()) {
+					Channels.write(ctx.getChannel(), report);
+				}
 				return;
 			}
 			super.messageReceived(ctx, e);
