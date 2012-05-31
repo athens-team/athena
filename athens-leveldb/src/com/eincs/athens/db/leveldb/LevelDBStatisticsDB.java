@@ -43,13 +43,8 @@ public class LevelDBStatisticsDB implements StatisticsDB {
 	public Statistics getStatistics(StatisticsKey key) throws DBException,
 			IOException, ClassNotFoundException {
 		byte[] result = athensDB.get(key.toBytes());
-		if (result != null) {
-			ByteArrayInputStream bais = new ByteArrayInputStream(result);
-			ObjectInputStream ois = new ObjectInputStream(bais);
-			Statistics obj = (Statistics) ois.readObject();
-			return obj;
-		}
-		return null;
+		return Statistics.fromBytes(result);
+		
 	}
 
 	@Override
