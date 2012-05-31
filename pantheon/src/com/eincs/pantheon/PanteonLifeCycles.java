@@ -57,7 +57,7 @@ public class PanteonLifeCycles {
 		private final ExecutionList listeners = new ExecutionList();
 
 		void complete() {
-			listeners.run();
+			listeners.execute();
 		}
 
 		@Override

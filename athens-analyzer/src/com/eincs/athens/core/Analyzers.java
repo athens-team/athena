@@ -17,10 +17,13 @@ package com.eincs.athens.core;
 
 import java.util.List;
 
-import com.eincs.athens.message.AthensReport;
-import com.eincs.athens.message.AthensRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.eincs.athens.message.AnalyzeResult;
 import com.eincs.athens.message.AnalyzeResultType;
+import com.eincs.athens.message.AthensReport;
+import com.eincs.athens.message.AthensRequest;
 import com.google.common.collect.Lists;
 
 /**
@@ -28,6 +31,9 @@ import com.google.common.collect.Lists;
  */
 public class Analyzers {
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(Analyzers.class);
+	
 	private static final Analyzers instance = new Analyzers();
 
 	public static Analyzers getInstance() {
@@ -50,8 +56,13 @@ public class Analyzers {
 		// invoke analyzers
 		AnalyzeResult result = AnalyzeResult.create(AnalyzeResultType.PANALTY);
 		for(AnalyzerHodler holder : analyzerHolders) {
-			AnalyzeResult newResult = holder.analyzer.analyze(request);
-			result.merge(newResult);
+			try {
+				AnalyzeResult newResult = holder.analyzer.analyze(request);
+				result.merge(newResult);
+			} catch (Exception e) {
+				logger.error(e.getMessage(), e);
+			}
+			
 		}
 		
 		// create report with result and request

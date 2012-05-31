@@ -27,12 +27,14 @@ import com.eincs.athens.db.data.StatisticsKey;
  */
 public interface StatisticsDB {
 
-	public Statistics getStatistics(StatisticsKey key) throws DBException, IOException, ClassNotFoundException;
+	public Statistics getStatistics(StatisticsKey key) throws DBException,
+			IOException, ClassNotFoundException;
 
-	public void addStatistics(StatisticsKey key, Statistics block)
+	public void putStatistics(StatisticsKey key, Statistics statistics)
 			throws DBException, IOException;
 
-	public void removeStatistics(StatisticsKey key) throws DBException, IOException;
+	public void removeStatistics(StatisticsKey key) throws DBException,
+			IOException;
 
 	public void clear() throws DBException;
 }

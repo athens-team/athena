@@ -17,23 +17,16 @@ package com.eincs.athens.db;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.eincs.athens.db.data.Statistics;
 import com.eincs.athens.db.data.StatisticsKey;
 import com.eincs.athens.db.leveldb.AthensDBFactory;
-import com.eincs.athens.db.leveldb.LevelDBStatisticsDB;
 import com.eincs.athens.db.leveldb.AthensDBFactory.AthensDB;
-import com.eincs.athens.db.leveldb.LevelDBBlockDB;
+import com.eincs.athens.db.leveldb.LevelDBStatisticsDB;
 
 /**
  * @author Jung-Haeng Lee
  */
 public class StatisticsDBTest {
-
-	private static Logger logger = LoggerFactory
-			.getLogger(StatisticsDBTest.class);
 
 	public static void main(String[] args) throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException, IOException {
@@ -42,22 +35,35 @@ public class StatisticsDBTest {
 		AthensDB athensDB = factory.open("./database/statistics/statistics.db");
 		LevelDBStatisticsDB statisticsDB = new LevelDBStatisticsDB(athensDB);
 
-		// test codes here:
-		// blockDB.setBlock(key, block)
-		Statistics test = Statistics.creatStatisticsByCount(System.currentTimeMillis(), 100);
-		StatisticsKey key = StatisticsKey.createKeyByUserId("IDisNow", "IdontCare");
-		test.addCount(System.currentTimeMillis()-5000, 100-10);
-		test.addCount(System.currentTimeMillis()-10000, 100-20);
-		test.addCount(System.currentTimeMillis()-15000, 100-30);
-		test.addCount(System.currentTimeMillis()+5000, 100+10);
-		test.addCount(System.currentTimeMillis()+10000, 100+20);
-		test.addCount(System.currentTimeMillis()+15000, 100+30);
-		statisticsDB.addStatistics(key, test);
-		test = statisticsDB.getStatistics(key);
-		System.out.println(test.getCountList());
-		System.out.println(test.getTimestamp());
-		System.out.println(test.getSumOfCount());
+		Statistics statistics = Statistics.creatStatisticsByCount(
+				System.currentTimeMillis(), 100);
+		StatisticsKey key = StatisticsKey.createKeyByUserId(
+				"UserID".getBytes(), "GET", "path");
+		statistics.addCount(System.currentTimeMillis()-5000, 100-10);
+		statistics.addCount(System.currentTimeMillis()-10000, 100-20);
+		statistics.addCount(System.currentTimeMillis()-15000, 100-30);
+		statistics.addCount(System.currentTimeMillis()+5000, 100+10);
+		statistics.addCount(System.currentTimeMillis()+10000, 100+20);
+		statistics.addCount(System.currentTimeMillis()+15000, 100+30);
+		System.out.println(statistics);
+		statistics.addCount(System.currentTimeMillis(), 100+30);
+		statistics.addCount(System.currentTimeMillis(), 100+30);
+		System.out.println(statistics);
+		statistics.addCount(System.currentTimeMillis()+91000, 100+30);
+		statistics.addCount(System.currentTimeMillis()+91000, 100+30);
+		statistics.addCount(System.currentTimeMillis()+91000, 100+30);
+		statistics.addCount(System.currentTimeMillis()+61000, 100+30);
+		System.out.println(statistics);
+		
+		statisticsDB.putStatistics(key, statistics);
+		statistics = statisticsDB.getStatistics(key);
+		System.out.println(statistics);
 		statisticsDB.removeStatistics(key);
+		statistics = statisticsDB.getStatistics(key);
+		System.out.println(statistics);
+		
 		//statisticsDB.clear();
+		
+		
 	}
 }

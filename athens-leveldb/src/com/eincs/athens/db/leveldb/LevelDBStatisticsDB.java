@@ -15,15 +15,11 @@
  */
 package com.eincs.athens.db.leveldb;
 
-import static com.google.common.base.Charsets.UTF_8;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.Map;
 
 import org.iq80.leveldb.DBException;
-import org.iq80.leveldb.DBIterator;
 import org.iq80.leveldb.WriteBatch;
 import org.iq80.leveldb.WriteOptions;
 
@@ -46,15 +42,18 @@ public class LevelDBStatisticsDB implements StatisticsDB {
 	@Override
 	public Statistics getStatistics(StatisticsKey key) throws DBException,
 			IOException, ClassNotFoundException {
-		ByteArrayInputStream bais = new ByteArrayInputStream(athensDB.get(key
-				.toBytes()));
-		ObjectInputStream ois = new ObjectInputStream(bais);
-		Statistics obj = (Statistics) ois.readObject();
-		return obj;
+		byte[] result = athensDB.get(key.toBytes());
+		if (result != null) {
+			ByteArrayInputStream bais = new ByteArrayInputStream(result);
+			ObjectInputStream ois = new ObjectInputStream(bais);
+			Statistics obj = (Statistics) ois.readObject();
+			return obj;
+		}
+		return null;
 	}
 
 	@Override
-	public void addStatistics(StatisticsKey key, Statistics statistics)
+	public void putStatistics(StatisticsKey key, Statistics statistics)
 			throws DBException, IOException {
 		WriteBatch batch = athensDB.createWriteBatch();
 		batch.put(key.toBytes(), statistics.toBytes());

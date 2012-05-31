@@ -21,7 +21,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.InetSocketAddress;
+
+import com.eincs.athens.message.AnalyzeTargetKey;
 
 /**
  * @author Jung-Haeng Lee
@@ -30,21 +31,32 @@ public class StatisticsKey implements Serializable {
 
 	private static final long serialVersionUID = 4096509791999065431L;
 
-	public static StatisticsKey createKeyByAddress(InetSocketAddress address,
-			String path) {
+	public static StatisticsKey create(AnalyzeTargetKey targetKey) {
+		StatisticsKey result = new StatisticsKey();
+		result.setAddress(targetKey.getAddress());
+		result.setUserId(targetKey.getUserId());
+		result.setMethod(targetKey.getMethod());
+		result.setPath(targetKey.getPath());
+		return result;
+	}
+	
+	public static StatisticsKey createKeyByAddress(byte[] address,
+			 String method, String path) {
 		StatisticsKey result = new StatisticsKey();
 		result.setAddress(address);
+		result.setMethod(method);
 		result.setPath(path);
 		return result;
 	}
 
-	public static StatisticsKey createKeyByUserId(String userId, String path) {
+	public static StatisticsKey createKeyByUserId(byte[] userId, String method, String path) {
 		StatisticsKey result = new StatisticsKey();
 		result.setUserId(userId);
+		result.setMethod(method);
 		result.setPath(path);
 		return result;
 	}
-
+	
 	public static StatisticsKey createKeyByBytes(byte[] bytes)
 			throws IOException {
 		ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
@@ -56,26 +68,36 @@ public class StatisticsKey implements Serializable {
 		}
 	}
 
-	private InetSocketAddress address;
+	private byte[] address;
 
-	private String userId;
+	private byte[] userId;
 
+	private String method;
+	
 	private String path;
 
-	public InetSocketAddress getAddress() {
+	public byte[] getAddress() {
 		return address;
 	}
 
-	public void setAddress(InetSocketAddress address) {
+	public void setAddress(byte[] address) {
 		this.address = address;
 	}
 
-	public String getUserId() {
+	public byte[] getUserId() {
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(byte[] userId) {
 		this.userId = userId;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
 	}
 
 	public String getPath() {
@@ -92,4 +114,5 @@ public class StatisticsKey implements Serializable {
 		oos.writeObject(this);
 		return baos.toByteArray();
 	}
+
 }

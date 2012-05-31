@@ -19,6 +19,8 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
+import com.eincs.pantheon.message.PanteonRequest;
+
 /**
  * @author Jung-Haeng Lee
  */
@@ -27,6 +29,9 @@ public class AthensBlockHandler extends SimpleChannelHandler {
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
+		if(e.getMessage() instanceof PanteonRequest) {
+			PanteonRequest request = (PanteonRequest) e.getMessage();
+		}
 		super.messageReceived(ctx, e);
 	}
 }

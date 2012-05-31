@@ -15,6 +15,7 @@
  */
 package com.eincs.athens;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
@@ -33,7 +34,11 @@ import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eincs.athens.analyzer.RateLimitAnalyzer;
 import com.eincs.athens.core.Analyzers;
+import com.eincs.athens.db.leveldb.AthensDBFactory;
+import com.eincs.athens.db.leveldb.LevelDBStatisticsDB;
+import com.eincs.athens.db.leveldb.AthensDBFactory.AthensDB;
 import com.eincs.athens.message.AthensReport;
 import com.eincs.athens.message.AthensRequest;
 
@@ -41,8 +46,17 @@ import com.eincs.athens.message.AthensRequest;
  * @author Jung-Haeng Lee
  */
 public class AnalyzerMain {
-	
-	public static void main(String[] args) {
+
+	public static void main(String[] args) throws InstantiationException,
+			IllegalAccessException, ClassNotFoundException, IOException {
+
+		AthensDBFactory factory = new AthensDBFactory();
+		AthensDB athensDB = factory.open("./database/statistics/statistics.db");
+		LevelDBStatisticsDB statisticsDB = new LevelDBStatisticsDB(athensDB);
+
+		// register analzyer
+		Analyzers.getInstance()
+				.addAnalyzer(new RateLimitAnalyzer(statisticsDB));
 
 		// Configure the server.
 		ServerBootstrap bootstrap = new ServerBootstrap(
@@ -60,12 +74,13 @@ public class AnalyzerMain {
 						new AnalyzeTransferRequestHandler());
 			}
 		});
-		
+
 		// Bind and start to accept incoming connections.
 		bootstrap.bind(new InetSocketAddress(8081));
 	}
-	
-	public static class AnalyzeTransferRequestHandler extends SimpleChannelUpstreamHandler {
+
+	public static class AnalyzeTransferRequestHandler extends
+			SimpleChannelUpstreamHandler {
 
 		private static final Logger logger = LoggerFactory
 				.getLogger(AnalyzeTransferRequestHandler.class);
@@ -76,13 +91,13 @@ public class AnalyzerMain {
 
 			if (e.getMessage() instanceof AthensRequest) {
 				AthensRequest request = (AthensRequest) e.getMessage();
-				
+
 				logger.info("analyze {}", request.toString());
 				AthensReport report = Analyzers.getInstance().invokeAnalyzers(
 						request);
-				
+
 				// Notify report only if needed
-				// type=RELEASE or panalty > 0 must be notify  
+				// type=RELEASE or panalty > 0 must be notify
 				if (report.needNotify()) {
 					Channels.write(ctx.getChannel(), report);
 				}

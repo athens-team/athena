@@ -91,9 +91,9 @@ public class Statistics implements Serializable {
 			return;
 		}
 		int index = (int) (timestamp - this.timestamp);
-		if (index <= 10000)
-			;
-		else if (index <= 20000) {
+		if (index <= 10000) {
+
+		} else if (index <= 20000) {
 			countList.remove(0);
 			countList.add(0);
 		} else if (index <= 30000) {
@@ -138,5 +138,16 @@ public class Statistics implements Serializable {
 		ObjectOutputStream oos = new ObjectOutputStream(baos);
 		oos.writeObject(this);
 		return baos.toByteArray();
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		sb.append("countList=").append(countList).append(",");
+		sb.append("countSum=").append(getSumOfCount()).append(",");
+		sb.append("stimestamp=").append(getTimestamp());
+		sb.append("]");
+		return sb.toString();
 	}
 }

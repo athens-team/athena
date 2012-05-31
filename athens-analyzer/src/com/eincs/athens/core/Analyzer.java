@@ -15,12 +15,12 @@
  */
 package com.eincs.athens.core;
 
-import com.eincs.athens.message.AthensRequest;
 import com.eincs.athens.message.AnalyzeResult;
+import com.eincs.athens.message.AthensRequest;
 
 /**
  * @author Jung-Haeng Lee
  */
 public interface Analyzer {
-	public AnalyzeResult analyze(AthensRequest request);
+	public AnalyzeResult analyze(AthensRequest request) throws Exception;
 }

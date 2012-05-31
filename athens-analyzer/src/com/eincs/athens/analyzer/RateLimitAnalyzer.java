@@ -15,19 +15,48 @@
  */
 package com.eincs.athens.analyzer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.eincs.athens.core.Analyzer;
-import com.eincs.athens.message.AthensRequest;
+import com.eincs.athens.db.StatisticsDB;
+import com.eincs.athens.db.data.Statistics;
+import com.eincs.athens.db.data.StatisticsKey;
 import com.eincs.athens.message.AnalyzeResult;
 import com.eincs.athens.message.AnalyzeResultType;
+import com.eincs.athens.message.AthensRequest;
 
 /**
  * @author Jung-Haeng Lee
  */
 public class RateLimitAnalyzer implements Analyzer {
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(RateLimitAnalyzer.class);
+	
+	private final StatisticsDB statisticDB;
+	
+	public RateLimitAnalyzer(StatisticsDB statisticDB) {
+		this.statisticDB = statisticDB;
+	}
+	
 	@Override
-	public AnalyzeResult analyze(AthensRequest request) {
-		return AnalyzeResult.create(AnalyzeResultType.PANALTY);
+	public AnalyzeResult analyze(AthensRequest request) throws Exception{
+		StatisticsKey statKey = StatisticsKey.create(request.getTargetKey());
+		Statistics statistics = statisticDB.getStatistics(statKey);
+		if(statistics==null) {
+			statistics = new Statistics();
+		}
+		statistics.addCount(System.currentTimeMillis(), 1);
+		statisticDB.putStatistics(statKey, statistics);
+		
+		logger.info("statistics: {}", statistics);
+		
+		int requestCnt = statistics.getSumOfCount();
+		if(requestCnt > 10) {
+			return AnalyzeResult.create(AnalyzeResultType.PANALTY, 60000);	
+		}
+		return AnalyzeResult.create(AnalyzeResultType.PANALTY, 0);
 	}
 
 }
