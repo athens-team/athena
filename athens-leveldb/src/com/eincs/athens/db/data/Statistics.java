@@ -25,7 +25,7 @@ import java.util.List;
 import com.beust.jcommander.internal.Lists;
 
 /**
- * @author Jung-Haeng Lee
+ * @author Junseong So
  */
 public class Statistics implements Serializable {
 

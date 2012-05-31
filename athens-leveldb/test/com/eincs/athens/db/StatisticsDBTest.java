@@ -24,7 +24,7 @@ import com.eincs.athens.db.leveldb.AthensDBFactory.AthensDB;
 import com.eincs.athens.db.leveldb.LevelDBStatisticsDB;
 
 /**
- * @author Jung-Haeng Lee
+ * @author Junseong So
  */
 public class StatisticsDBTest {
 
