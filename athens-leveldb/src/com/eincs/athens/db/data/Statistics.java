@@ -43,13 +43,13 @@ public class Statistics implements Serializable {
 		countList.add(0);
 		countList.add(0);
 		countList.add(0);
-		this.timestamp = System.currentTimeMillis();
+		this.timestamp = System.currentTimeMillis() + 10000;
 	}
 
 	public static Statistics creatStatisticsByCount(long timestamp, int count) {
 		Statistics result = new Statistics();
 		result.countList.set(5, count);
-		result.timestamp = timestamp;
+		result.timestamp = timestamp + 10000;
 		return result;
 	}
 
@@ -119,7 +119,7 @@ public class Statistics implements Serializable {
 			countList.add(0);
 		}
 		countList.remove(0);
-		this.timestamp = timestamp;
+		this.timestamp = timestamp +10000;
 		countList.add(count);
 		return;
 	}
