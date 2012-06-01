@@ -69,11 +69,8 @@ public class StatisticsKey implements Serializable {
 	}
 
 	private byte[] address;
-
 	private byte[] userId;
-
-	private String method;
-	
+	private String method;	
 	private String path;
 
 	public byte[] getAddress() {
@@ -114,5 +111,4 @@ public class StatisticsKey implements Serializable {
 		oos.writeObject(this);
 		return baos.toByteArray();
 	}
-
 }
