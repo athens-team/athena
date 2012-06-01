@@ -59,6 +59,12 @@ public class Analyzers {
 		}
 	}
 
+	public void clearAnalyzers() {
+		synchronized (this) {
+			analyzerHolders.clear();
+		}
+	}
+	
 	/**
 	 * travel all analyzers and invoke analyze method
 	 * @param request request information of analyze
@@ -104,10 +110,11 @@ public class Analyzers {
 		List<Class<? extends Analyzer>> analyzerClasses = analyzersConf
 				.getAnalyzerClasses();
 		
+		clearAnalyzers();
 		for(Class<? extends Analyzer> analyzerClazz : analyzerClasses) {
 			addAnalyzer(
 					injector.getInstance(analyzerClazz));
 		}
-		
+		logger.info("configure analyzers [{}]", analyzerHolders.size());
 	}
 }

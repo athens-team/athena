@@ -29,6 +29,7 @@ import com.eincs.athens.db.data.BlockKey;
 import com.eincs.athens.message.AthensReport;
 import com.eincs.pantheon.AddressProviders;
 import com.eincs.pantheon.message.PanteonRequest;
+import com.google.inject.Inject;
 
 /**
  * @author Jung-Haeng Lee
@@ -44,6 +45,7 @@ public class AthensBlockFilter {
 	private final BlockDB blockDB;
 	private final CountingBloomFilter bloomFilter;
 	
+	@Inject
 	public AthensBlockFilter(BlockDB blockDB) {
 		this.blockDB = blockDB;
 		this.bloomFilter = new CountingBloomFilter(BLOOM_FILTER_VECTOR_SIZE,

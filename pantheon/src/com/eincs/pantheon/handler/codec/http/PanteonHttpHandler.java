@@ -54,9 +54,9 @@ public class PanteonHttpHandler extends SimpleChannelHandler {
 	private static final HttpDataFactory factory = new PanteonHttpDataFactory();
 	static {
 		DiskFileUpload.deleteOnExitTemporaryFile = false;
-		DiskFileUpload.baseDirectory = "./temp";
+		DiskFileUpload.baseDirectory = "temp";
 		DiskAttribute.deleteOnExitTemporaryFile = false;
-		DiskAttribute.baseDirectory = "./temp";
+		DiskAttribute.baseDirectory = "temp";
 	}
 
 	private AthensHttpState currentState;

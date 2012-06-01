@@ -103,12 +103,14 @@ public class PanteonHttpProcessor extends SimpleChannelHandler {
 			httpResponse.setResultBuffer(response.getContents());
 			
 			/* set cookies */
-			CookieEncoder encoder = new CookieEncoder(true);
-			for(Cookie cookie : response.getCookies()) {
-				encoder.addCookie(cookie);
+			if (response.getCookies().size() > 0) {
+				CookieEncoder encoder = new CookieEncoder(true);
+				for (Cookie cookie : response.getCookies()) {
+					encoder.addCookie(cookie);
+				}
+				httpResponse.addHeader(HttpHeaders.Names.SET_COOKIE,
+						encoder.encode());
 			}
-			httpResponse.addHeader(HttpHeaders.Names.SET_COOKIE,
-					encoder.encode());
 			
 			/* set headers */
 			for (Entry<String, String> entry : response.getHeaders().entrySet()) {

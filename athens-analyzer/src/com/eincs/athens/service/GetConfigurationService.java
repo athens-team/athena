@@ -17,6 +17,8 @@ package com.eincs.athens.service;
 
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.util.CharsetUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.eincs.athens.conf.AnalyzersConf;
 import com.eincs.pantheon.handler.service.simple.Bind;
@@ -32,6 +34,9 @@ import com.google.inject.Inject;
 @Bind(path = "/getConfig", method = { "GET" })
 public class GetConfigurationService implements SimpleService {
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(GetConfigurationService.class);
+	
 	private final AnalyzersConf analyzersConf;
 	
 	@Inject

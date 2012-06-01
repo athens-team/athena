@@ -18,6 +18,8 @@ package com.eincs.athens.service;
 import org.apache.commons.codec.binary.Base64;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.util.CharsetUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.eincs.athens.DataUtils;
 import com.eincs.athens.db.data.BlockKey;
@@ -27,6 +29,7 @@ import com.eincs.pantheon.handler.service.simple.SimpleService;
 import com.eincs.pantheon.message.PanteonContentType;
 import com.eincs.pantheon.message.PanteonRequest;
 import com.eincs.pantheon.message.PanteonResponse;
+import com.google.inject.Inject;
 
 /**
  * @author Jung-Haeng Lee
@@ -34,8 +37,12 @@ import com.eincs.pantheon.message.PanteonResponse;
 @Bind(path = "/releaseBlock", method = { "POST" })
 public class ReleaseBlockService implements SimpleService {
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(ReleaseBlockService.class);
+	
 	private final AthensBlockFilter blockFilter;
 	
+	@Inject
 	private ReleaseBlockService(AthensBlockFilter blockFilter) {
 		this.blockFilter = blockFilter;
 	}
