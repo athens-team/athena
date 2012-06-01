@@ -50,8 +50,12 @@ public class AthensDBFactory {
 	}
 	
 	private DB openInternal(String databaseDir) throws IOException {
-		if(!reuse) {
-			FileUtils.deleteDirectoryContents(new File(databaseDir));
+		if (!reuse) {
+			try {
+				FileUtils.deleteDirectoryContents(new File(databaseDir));
+			} catch (Exception e) {
+
+			}
 		}
 		Options options = new Options();
 		options.createIfMissing(true);
