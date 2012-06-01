@@ -37,6 +37,10 @@ import org.slf4j.LoggerFactory;
 import com.eincs.athens.core.Analyzers;
 import com.eincs.athens.message.AthensReport;
 import com.eincs.athens.message.AthensRequest;
+import com.eincs.athens.service.GetConfigurationService;
+import com.eincs.athens.service.ReleaseBlockService;
+import com.eincs.athens.service.UploadConfigurationService;
+import com.eincs.pantheon.handler.service.simple.SimpleServices;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -54,6 +58,11 @@ public class AnalyzerMain {
 		Module module = Modules.combine(analyzerModule);
 		Injector injector = Guice.createInjector(module);
 
+		configureAnalytics(injector);
+		configureAnalyzer(injector);
+	}
+
+	private static void configureAnalyzer(Injector injector) {
 		// register analzyer
 		Analyzers.getInstance().configure(injector);
 
@@ -77,7 +86,30 @@ public class AnalyzerMain {
 		// Bind and start to accept incoming connections.
 		bootstrap.bind(new InetSocketAddress(8081));
 	}
+	
+	private static void configureAnalytics(Injector injector) {
+		
+		SimpleServices services = new SimpleServices();
+		services.putByAnnotation(injector
+				.getInstance(ReleaseBlockService.class));
+		services.putByAnnotation(injector
+				.getInstance(UploadConfigurationService.class));
+		services.putByAnnotation(injector
+				.getInstance(GetConfigurationService.class));
 
+		// Configure the server.
+		ServerBootstrap bootstrap = new ServerBootstrap(
+                new NioServerSocketChannelFactory(
+                        Executors.newCachedThreadPool(), 
+                        Executors.newCachedThreadPool()));
+
+        // Set up the event pipeline factory.
+		bootstrap.setPipelineFactory(new AnalyticsPipelineFactory(services));
+
+        // Bind and start to accept incoming connections.
+        bootstrap.bind(new InetSocketAddress(8082));
+	}
+	
 	public static class AnalyzeTransferRequestHandler extends
 			SimpleChannelUpstreamHandler {
 

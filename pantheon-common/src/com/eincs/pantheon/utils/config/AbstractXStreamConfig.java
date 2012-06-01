@@ -59,14 +59,20 @@ public abstract class AbstractXStreamConfig {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
 	public void load() {
 		try {
 			xStream.fromXML(new FileInputStream(fileName), this);
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-
+	}
+	
+	public void load(String value) {
+		xStream.fromXML(value, this);
 	}
 
+	public String getXML() {
+		return xStream.toXML(this);
+	}
 }
