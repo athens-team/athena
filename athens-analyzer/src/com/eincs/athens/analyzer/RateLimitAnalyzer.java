@@ -18,6 +18,7 @@ package com.eincs.athens.analyzer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eincs.athens.conf.AnalyzersConf;
 import com.eincs.athens.core.Analyzer;
 import com.eincs.athens.db.StatisticsDB;
 import com.eincs.athens.db.data.Statistics;
@@ -25,6 +26,7 @@ import com.eincs.athens.db.data.StatisticsKey;
 import com.eincs.athens.message.AnalyzeResult;
 import com.eincs.athens.message.AnalyzeResultType;
 import com.eincs.athens.message.AthensRequest;
+import com.google.inject.Inject;
 
 /**
  * @author Jung-Haeng Lee
@@ -34,9 +36,13 @@ public class RateLimitAnalyzer implements Analyzer {
 	private static final Logger logger = LoggerFactory
 			.getLogger(RateLimitAnalyzer.class);
 	
+	private final AnalyzersConf analyzerConf;
 	private final StatisticsDB statisticDB;
 	
-	public RateLimitAnalyzer(StatisticsDB statisticDB) {
+	@Inject
+	public RateLimitAnalyzer(AnalyzersConf analyzerConf,
+			StatisticsDB statisticDB) {
+		this.analyzerConf = analyzerConf;
 		this.statisticDB = statisticDB;
 	}
 	

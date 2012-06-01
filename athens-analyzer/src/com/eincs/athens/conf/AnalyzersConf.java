@@ -35,6 +35,7 @@ public class AnalyzersConf extends AbstractXStreamConfig {
 	
 	public AnalyzersConf() {
 		super(CONF_NAME);
+		load();
 	}
 
 	@XStreamAlias("analyzers")

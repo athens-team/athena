@@ -36,11 +36,12 @@ import org.slf4j.LoggerFactory;
 
 import com.eincs.athens.analyzer.RateLimitAnalyzer;
 import com.eincs.athens.core.Analyzers;
-import com.eincs.athens.db.leveldb.AthensDBFactory;
-import com.eincs.athens.db.leveldb.AthensDBFactory.AthensDB;
-import com.eincs.athens.db.leveldb.LevelDBStatisticsDB;
 import com.eincs.athens.message.AthensReport;
 import com.eincs.athens.message.AthensRequest;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+import com.google.inject.util.Modules;
 
 /**
  * @author Jung-Haeng Lee
@@ -50,13 +51,13 @@ public class AnalyzerMain {
 	public static void main(String[] args) throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException, IOException {
 
-		AthensDBFactory factory = new AthensDBFactory();
-		AthensDB athensDB = factory.open("./database/statistics/statistics.db");
-		LevelDBStatisticsDB statisticsDB = new LevelDBStatisticsDB(athensDB);
+		AnalyzerModule analyzerModule = new AnalyzerModule();
+		Module module = Modules.combine(analyzerModule);
+		Injector injector = Guice.createInjector(module);
 
 		// register analzyer
-		Analyzers.getInstance()
-				.addAnalyzer(new RateLimitAnalyzer(statisticsDB));
+		Analyzers.getInstance().addAnalyzer(
+				injector.getInstance(RateLimitAnalyzer.class));
 
 		// Configure the server.
 		ServerBootstrap bootstrap = new ServerBootstrap(
