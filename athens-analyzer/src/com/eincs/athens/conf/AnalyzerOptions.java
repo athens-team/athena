@@ -28,6 +28,9 @@ public class AnalyzerOptions extends MapWrapper<String, Object> {
 		super(options);
 	}
 	
+	public AnalyzerOptions() {
+	}
+
 	public Integer getInt(String key) {
 		return (Integer) get(key);
 	}

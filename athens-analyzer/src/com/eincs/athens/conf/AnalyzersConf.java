@@ -22,6 +22,7 @@ import org.testng.collections.Maps;
 
 import com.beust.jcommander.internal.Lists;
 import com.eincs.athens.analyzer.RateLimitAnalyzer;
+import com.eincs.athens.core.Analyzer;
 import com.eincs.pantheon.utils.config.AbstractXStreamConfig;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -39,26 +40,45 @@ public class AnalyzersConf extends AbstractXStreamConfig {
 	}
 
 	@XStreamAlias("analyzers")
-	private List<Analyzer> analyzerInfos;
+	private List<AnalyzerInfo> analyzerInfos;
 
-	public List<Analyzer> getAnalyzerInfos() {
+	public List<AnalyzerInfo> getAnalyzerInfos() {
 		return analyzerInfos;
 	}
 
-	public void setAnalyzerInfos(List<Analyzer> analyzerInfos) {
+	public void setAnalyzerInfos(List<AnalyzerInfo> analyzerInfos) {
 		this.analyzerInfos = analyzerInfos;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<Class<? extends Analyzer>> getAnalyzerClasses() {
+		List<Class<? extends Analyzer>> result = Lists.newArrayList();
+		for(AnalyzerInfo analyzerInfo : analyzerInfos) {
+			Class<?> clazz = analyzerInfo.getClassName();
+			result.add((Class<? extends Analyzer>) clazz);
+		}
+		return result;
+	}
+	
+	public AnalyzerOptions getOptions(Class<? extends Analyzer> clazz) {
+		for (AnalyzerInfo analyzerInfo : getAnalyzerInfos()) {
+			if(analyzerInfo.getClassName().equals(clazz)) {
+				return analyzerInfo.getOptionsObject();
+			}
+		}
+		return new AnalyzerOptions();
+	}
+	
 	public static void main(String[] args) {
-		List<Analyzer> analyzerInfos = Lists.newArrayList();
-		Analyzer info;
+		List<AnalyzerInfo> analyzerInfos = Lists.newArrayList();
+		AnalyzerInfo info;
 		Map<String, Object> options;
 		
 		options = Maps.newHashMap();
 		options.put("Stream", 1);
 		options.put("Value2", "asdf");
 		
-		info = new Analyzer();
+		info = new AnalyzerInfo();
 		info.setClassName(RateLimitAnalyzer.class);
 		info.setOptions(options);
 		analyzerInfos.add(info);
@@ -67,7 +87,7 @@ public class AnalyzersConf extends AbstractXStreamConfig {
 		options.put("Stream", 1);
 		options.put("Value2", "asdf");
 		
-		info = new Analyzer();
+		info = new AnalyzerInfo();
 		info.setClassName(AnalyzersConf.class);
 		info.setOptions(options);
 		analyzerInfos.add(info);
@@ -80,4 +100,5 @@ public class AnalyzersConf extends AbstractXStreamConfig {
 //		conf.load();
 //		System.out.println(conf);
 	}
+
 }

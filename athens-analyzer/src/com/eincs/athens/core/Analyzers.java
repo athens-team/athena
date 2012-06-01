@@ -20,11 +20,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eincs.athens.conf.AnalyzersConf;
 import com.eincs.athens.message.AnalyzeResult;
 import com.eincs.athens.message.AnalyzeResultType;
 import com.eincs.athens.message.AthensReport;
 import com.eincs.athens.message.AthensRequest;
 import com.google.common.collect.Lists;
+import com.google.inject.Injector;
 
 /**
  * @author Jung-Haeng Lee
@@ -42,9 +44,19 @@ public class Analyzers {
 
 	private List<AnalyzerHodler> analyzerHolders = Lists.newArrayList();
 
+	public void addAllAnalyzer(List<Analyzer> analyzers) {
+		synchronized (this) {
+			for(Analyzer analyzer : analyzers) {
+				addAnalyzer(analyzer);
+			}
+		}
+	}
+	
 	public void addAnalyzer(Analyzer analzyer) {
-		AnalyzerHodler holder = new AnalyzerHodler(analzyer);
-		analyzerHolders.add(holder);
+		synchronized (this) {
+			AnalyzerHodler holder = new AnalyzerHodler(analzyer);
+			analyzerHolders.add(holder);
+		}
 	}
 
 	/**
@@ -55,14 +67,16 @@ public class Analyzers {
 	public AthensReport invokeAnalyzers(AthensRequest request) {
 		// invoke analyzers
 		AnalyzeResult result = AnalyzeResult.create(AnalyzeResultType.PANALTY);
-		for(AnalyzerHodler holder : analyzerHolders) {
-			try {
-				AnalyzeResult newResult = holder.analyzer.analyze(request);
-				result.merge(newResult);
-			} catch (Exception e) {
-				logger.error(e.getMessage(), e);
+		synchronized (this) {
+			for(AnalyzerHodler holder : analyzerHolders) {
+				try {
+					AnalyzeResult newResult = holder.analyzer.analyze(request);
+					result.merge(newResult);
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
+				}
+				
 			}
-			
 		}
 		
 		// create report with result and request
@@ -83,5 +97,17 @@ public class Analyzers {
 		AnalyzerHodler(Analyzer analyzer) {
 			this.analyzer = analyzer;
 		}
+	}
+
+	public void configure(Injector injector) {
+		AnalyzersConf analyzersConf = injector.getInstance(AnalyzersConf.class);
+		List<Class<? extends Analyzer>> analyzerClasses = analyzersConf
+				.getAnalyzerClasses();
+		
+		for(Class<? extends Analyzer> analyzerClazz : analyzerClasses) {
+			addAnalyzer(
+					injector.getInstance(analyzerClazz));
+		}
+		
 	}
 }

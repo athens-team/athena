@@ -56,8 +56,7 @@ public class AnalyzerMain {
 		Injector injector = Guice.createInjector(module);
 
 		// register analzyer
-		Analyzers.getInstance().addAnalyzer(
-				injector.getInstance(RateLimitAnalyzer.class));
+		Analyzers.getInstance().configure(injector);
 
 		// Configure the server.
 		ServerBootstrap bootstrap = new ServerBootstrap(

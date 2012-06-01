@@ -23,7 +23,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @author Jung-Haeng Lee
  */
 @XStreamAlias("analyzer")
-public class Analyzer {
+public class AnalyzerInfo {
 
 	private Class<?> className;
 	
