@@ -18,10 +18,11 @@ package com.eincs.athens.db.data;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
+import com.eincs.athens.message.AnalyzeResult;
 
 /**
  * @author Jung-Haeng Lee
@@ -29,6 +30,15 @@ import java.io.Serializable;
 public class Block implements Serializable {
 
 	private static final long serialVersionUID = -992933701670008684L;
+	
+	public static Block create(AnalyzeResult result) {
+		long current = System.currentTimeMillis();
+		Block block = new Block();
+		block.setBlock(true);
+		block.setCreatedTime(current);
+		block.setExpiry(current+result.getPanalty());
+		return block;
+	}
 	
 	private boolean block;
 	

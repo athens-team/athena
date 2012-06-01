@@ -21,40 +21,44 @@ import java.io.IOException;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.DBFactory;
 import org.iq80.leveldb.Options;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.iq80.leveldb.util.FileUtils;
 
 /**
  * @author Jung-Haeng Lee
  */
 public class AthensDBFactory {
 
-	private AthensDBFactory instance;
-	private DBFactory factory;
-
+	private final DBFactory factory;
+	private final boolean reuse;
+	
 	public AthensDBFactory() throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
+		this(false);
+	}
+
+	public AthensDBFactory(boolean reuse) throws InstantiationException,
+			IllegalAccessException, ClassNotFoundException {
 		ClassLoader classLoader = AthensDBFactory.class.getClassLoader();
-		factory = (DBFactory) classLoader.loadClass(
+		this.factory = (DBFactory) classLoader.loadClass(
 				System.getProperty("leveldb.factory",
 						"org.iq80.leveldb.impl.Iq80DBFactory")).newInstance();
+		this.reuse = reuse;
 	}
 
 	public synchronized AthensDB open(String databaseDir) throws IOException {
-		
 		return AthensDB.open(this, databaseDir);
 	}
 	
 	private DB openInternal(String databaseDir) throws IOException {
+		if(!reuse) {
+			FileUtils.deleteDirectoryContents(new File(databaseDir));
+		}
 		Options options = new Options();
 		options.createIfMissing(true);
 		return factory.open(new File(databaseDir), options);
 	}
 
 	public static class AthensDB extends DBWrapper {
-
-		private static final Logger logger = LoggerFactory
-				.getLogger(AthensDB.class);
 
 		private static AthensDB open(AthensDBFactory dbFactory,
 				String dbDirectory) throws IOException {

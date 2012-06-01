@@ -34,7 +34,6 @@ import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.eincs.athens.analyzer.RateLimitAnalyzer;
 import com.eincs.athens.core.Analyzers;
 import com.eincs.athens.message.AthensReport;
 import com.eincs.athens.message.AthensRequest;

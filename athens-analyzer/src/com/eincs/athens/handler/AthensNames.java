@@ -13,23 +13,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.core;
-
-import com.eincs.pantheon.message.PanteonRequest;
+package com.eincs.athens.handler;
 
 /**
  * @author Jung-Haeng Lee
  */
-public class BlockFilter {
+public interface AthensNames {
 
-	private static final BlockFilter instance = new BlockFilter();
-	
-	public static BlockFilter getInstance() {
-		return instance;
-	}
-	
-	public boolean isBlocked(PanteonRequest request) {
-		return false;
-	}
-	
+	public static final String TAG_USER_NAME = "com.eincs.athens.names.tag_user_name";
 }

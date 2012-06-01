@@ -21,7 +21,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.InetSocketAddress;
+
+import org.apache.hadoop.util.bloom.Key;
+
+import com.eincs.athens.message.AnalyzeTargetKey;
+import com.google.common.primitives.Bytes;
 
 /**
  * @author Jung-Haeng Lee
@@ -30,18 +34,30 @@ public class BlockKey implements Serializable {
 
 	private static final long serialVersionUID = -3383825083055710667L;
 
-	public static BlockKey createKeyByAddress(InetSocketAddress address,
+	public static BlockKey createKey(AnalyzeTargetKey targetKey) {
+		BlockKey key = new BlockKey();
+		key.setAddress(targetKey.getAddress());
+		key.setUserId(targetKey.getUserId());
+		key.setPath(targetKey.getPath());
+		key.setMethod(targetKey.getMethod());
+		return key;
+	}
+	
+	public static BlockKey createKeyByAddress(byte[] address, String method,
 			String path) {
 		BlockKey result = new BlockKey();
 		result.setAddress(address);
 		result.setPath(path);
+		result.setMethod(method);
 		return result;
 	}
 
-	public static BlockKey createKeyByUserId(String userId, String path) {
+	public static BlockKey createKeyByUserId(byte[] userId, String method,
+			String path) {
 		BlockKey result = new BlockKey();
 		result.setUserId(userId);
 		result.setPath(path);
+		result.setMethod(method);
 		return result;
 	}
 
@@ -55,26 +71,36 @@ public class BlockKey implements Serializable {
 		}
 	}
 
-	private InetSocketAddress address;
+	private byte[] address;
 
-	private String userId;
+	private byte[] userId;
 
+	private String method;
+	
 	private String path;
 
-	public InetSocketAddress getAddress() {
+	public byte[] getAddress() {
 		return address;
 	}
 
-	public void setAddress(InetSocketAddress address) {
+	public void setAddress(byte[] address) {
 		this.address = address;
 	}
 
-	public String getUserId() {
+	public byte[] getUserId() {
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(byte[] userId) {
 		this.userId = userId;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
 	}
 
 	public String getPath() {
@@ -94,13 +120,29 @@ public class BlockKey implements Serializable {
 
 	public BlockKey fromBytes(byte[] bytes) throws IOException, ClassNotFoundException {
 		BlockKey key  = null;
-
-		if(null != bytes) {
+		if(bytes != null) {
 			ByteArrayInputStream bis = new ByteArrayInputStream (bytes);
 			ObjectInputStream ois = new ObjectInputStream (bis);
 			key = (BlockKey) ois.readObject();
 		}
+		return key;
+	}
+	
+	public Key getBloomFilterKey() {
+		byte[] useridBytes = userId;;
+		byte[] addressBytes = address;
 		
+		if(addressBytes==null) {
+			addressBytes = new byte[0];
+		}
+		
+		if(useridBytes==null) {
+			useridBytes = new byte[0];
+		}
+		
+		byte[] value = Bytes.concat(addressBytes, useridBytes,
+				method.getBytes(), path.getBytes());
+		Key key = new Key(value);
 		return key;
 	}
 }

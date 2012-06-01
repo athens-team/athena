@@ -115,7 +115,7 @@ public class TransferClient {
 	private void invokeReportHandler(AthensReport report) {
 		synchronized (this) {
 			for (AnalyzeReportHandler handler : mReportHandlers) {
-				handler.handlerReport(report);
+				handler.handleReport(report);
 			}
 		}
 	}
@@ -152,6 +152,6 @@ public class TransferClient {
 	 * @author Jung-Haeng Lee
 	 */
 	public interface AnalyzeReportHandler {
-		public void handlerReport(AthensReport report);
+		public void handleReport(AthensReport report);
 	}
 }

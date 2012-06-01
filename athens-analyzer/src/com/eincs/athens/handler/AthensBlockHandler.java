@@ -26,11 +26,20 @@ import com.eincs.pantheon.message.PanteonRequest;
  */
 public class AthensBlockHandler extends SimpleChannelHandler {
 
+	private final AthensBlockFilter blockFilter;
+	
+	public AthensBlockHandler(AthensBlockFilter blockFilter) {
+		this.blockFilter = blockFilter;
+	}
+
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
-		if(e.getMessage() instanceof PanteonRequest) {
+		if (e.getMessage() instanceof PanteonRequest) {
 			PanteonRequest request = (PanteonRequest) e.getMessage();
+			if(blockFilter.isBlocked(request)) {
+				return;
+			}
 		}
 		super.messageReceived(ctx, e);
 	}
