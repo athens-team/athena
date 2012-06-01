@@ -15,6 +15,12 @@
  */
 package com.eincs.athens.db.data;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
@@ -53,5 +59,23 @@ public class Block implements Serializable {
 	public void setCreatedTime(long createdTime) {
 		this.createdTime = createdTime;
 	}
+
+	public byte[] toBytes() throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(baos);
+		oos.writeObject(this);
+		return baos.toByteArray();
+	}
 	
+	public static Block fromBytes(byte[] bytes) throws IOException, ClassNotFoundException {
+		Block block = null;
+		
+		if(null != bytes) {
+			ByteArrayInputStream bis = new ByteArrayInputStream (bytes);
+			ObjectInputStream ois = new ObjectInputStream (bis);
+			block = (Block) ois.readObject();
+		}
+		    
+		return block;
+	}
 }

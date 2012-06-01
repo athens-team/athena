@@ -92,4 +92,15 @@ public class BlockKey implements Serializable {
 		return baos.toByteArray();
 	}
 
+	public BlockKey fromBytes(byte[] bytes) throws IOException, ClassNotFoundException {
+		BlockKey key  = null;
+
+		if(null != bytes) {
+			ByteArrayInputStream bis = new ByteArrayInputStream (bytes);
+			ObjectInputStream ois = new ObjectInputStream (bis);
+			key = (BlockKey) ois.readObject();
+		}
+		
+		return key;
+	}
 }

@@ -40,7 +40,8 @@ public class AthensDBFactory {
 						"org.iq80.leveldb.impl.Iq80DBFactory")).newInstance();
 	}
 
-	public AthensDB open(String databaseDir) throws IOException {
+	public synchronized AthensDB open(String databaseDir) throws IOException {
+		
 		return AthensDB.open(this, databaseDir);
 	}
 	
@@ -65,12 +66,8 @@ public class AthensDBFactory {
 			super(dbFactory.openInternal(dbDirectory));
 		}
 
-		public void closeQuietly() {
-			try {
-				close();
-			} catch (Exception e) {
-				logger.error(e.getMessage(), e);
-			}
+		public synchronized void closeQuietly() {
+			close();
 		}
 	}
 }

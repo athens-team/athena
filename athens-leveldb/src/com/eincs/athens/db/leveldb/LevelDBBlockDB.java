@@ -36,33 +36,47 @@ public class LevelDBBlockDB implements BlockDB {
 	}
 
 	@Override
-	public Block getBlock(BlockKey key) throws DBException {
+	public Block getBlock(BlockKey key) {
 		// TODO Auto-generated method stub
 		try {
 			byte[] result = athensDB.get(key.toBytes());
-//			return Block.fromBytes(result);
-			return null;
+			
+			return Block.fromBytes(result);
 		} catch (IOException e) {
 			throw new DBException(e.getMessage(), e);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		return null;
 	}
 
 	@Override
 	public void setBlock(BlockKey key, Block block) {
 		// TODO Auto-generated method stub
-
+		try {
+			athensDB.put(key.toBytes(), block.toBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			throw new DBException(e.getMessage(), e);
+		}
 	}
 
 	@Override
 	public void removeBlock(BlockKey key) {
 		// TODO Auto-generated method stub
-
+		try {
+			athensDB.delete(key.toBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			throw new DBException(e.getMessage(), e);
+		}
 	}
 
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException();
 	}
-
 }
