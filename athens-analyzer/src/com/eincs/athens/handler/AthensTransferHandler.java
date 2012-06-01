@@ -17,14 +17,13 @@ package com.eincs.athens.handler;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
 import com.eincs.athens.core.TransferClients;
-import com.eincs.athens.message.AthensRequest;
 import com.eincs.athens.message.AnalyzeTargetKey;
+import com.eincs.athens.message.AthensRequest;
 import com.eincs.pantheon.message.PanteonRequest;
 
 /**

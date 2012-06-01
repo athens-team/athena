@@ -21,7 +21,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.converters.extended.ISO8601DateConverter;
+import com.thoughtworks.xstream.converters.extended.JavaClassConverter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
@@ -29,13 +31,21 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  */
 public abstract class AbstractXStreamConfig {
 
+	@XStreamOmitField
 	private final String fileName;
+	
+	@XStreamOmitField
 	private final XStream xStream;
 
 	public AbstractXStreamConfig(String fileName) {
 		this.fileName = fileName;
 		this.xStream = new XStream(new DomDriver("UTF-8"));
 		this.xStream.registerConverter(new ISO8601DateConverter());
+		this.xStream.registerConverter(new JavaClassConverter(getClass()
+				.getClassLoader()));
+		// should be add w/ AbstractXStreamConfig.class becuase of bug of
+		// xstream
+		this.xStream.processAnnotations(getClass());
 	}
 
 	public String getFileName() {
