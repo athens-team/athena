@@ -79,7 +79,7 @@ public class AnalyzerMain {
 						new ObjectEncoder(),
 						new ObjectDecoder(ClassResolvers
 								.cacheDisabled(getClass().getClassLoader())),
-						new AnalyzeTransferRequestHandler());
+						new TransferRequestHandler());
 			}
 		});
 
@@ -108,39 +108,5 @@ public class AnalyzerMain {
 
         // Bind and start to accept incoming connections.
         bootstrap.bind(new InetSocketAddress(8082));
-	}
-	
-	public static class AnalyzeTransferRequestHandler extends
-			SimpleChannelUpstreamHandler {
-
-		private static final Logger logger = LoggerFactory
-				.getLogger(AnalyzeTransferRequestHandler.class);
-
-		@Override
-		public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
-				throws Exception {
-
-			if (e.getMessage() instanceof AthensRequest) {
-				AthensRequest request = (AthensRequest) e.getMessage();
-
-				logger.info("analyze {}", request.toString());
-				AthensReport report = Analyzers.getInstance().invokeAnalyzers(
-						request);
-
-				// Notify report only if needed
-				// type=RELEASE or panalty > 0 must be notify
-				if (report.needNotify()) {
-					Channels.write(ctx.getChannel(), report);
-				}
-				return;
-			}
-			super.messageReceived(ctx, e);
-		}
-
-		@Override
-		public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-			e.getChannel().close();
-			logger.error(e.getCause().getMessage(), e.getCause());
-		}
 	}
 }

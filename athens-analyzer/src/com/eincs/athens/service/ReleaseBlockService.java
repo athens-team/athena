@@ -22,8 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.eincs.athens.DataUtils;
+import com.eincs.athens.TransferChannelHandler;
+import com.eincs.athens.core.TransferSessions;
 import com.eincs.athens.db.data.BlockKey;
 import com.eincs.athens.handler.AthensBlockFilter;
+import com.eincs.athens.message.AnalyzeTargetKey;
+import com.eincs.athens.message.AthensReport;
 import com.eincs.pantheon.handler.service.simple.Bind;
 import com.eincs.pantheon.handler.service.simple.SimpleService;
 import com.eincs.pantheon.message.PanteonContentType;
@@ -64,6 +68,8 @@ public class ReleaseBlockService implements SimpleService {
 			byte[] ipAddrBytes = Base64.decodeBase64(ipAddr);
 			BlockKey blockKey = BlockKey.createKeyByAddress(ipAddrBytes,
 					method, path);
+			AthensReport report = new AthensReport();
+			report.setRequestSeq(0);
 		}
 
 		if (userId != null) {

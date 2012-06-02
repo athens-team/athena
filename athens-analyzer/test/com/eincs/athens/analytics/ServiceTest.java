@@ -34,13 +34,14 @@ import com.google.common.collect.Lists;
  */
 public class ServiceTest {
 
-	public static void main(String[] args) throws ClientProtocolException, IOException {
-		
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost("http://localhost:8082/uploadConfig");
+	public static void main(String[] args) throws ClientProtocolException,
+			IOException {
 
-		List<NameValuePair> parameters = Lists.newArrayList();
-		;
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost httpPost = new HttpPost(
+				"https://rothlee.net/analytics/uploadConfig");
+
+		List<NameValuePair> parameters = Lists.newArrayList();;
 		parameters
 				.add(new BasicNameValuePair(
 						"content",
@@ -52,7 +53,7 @@ public class ServiceTest {
 								+ "  <string>Stream</string>\n"
 								+ " <int>1</int>\n" + "</entry>\n"
 								+ "        <entry>\n"
-								+ "         <string>Va2</string>\n"
+								+ "         <string>Vsssa2</string>\n"
 								+ "        <string>asdf</string>\n"
 								+ "     </entry>\n" + "   </options>\n"
 								+ "  </analyzer>\n" + " </analyzers>\n"
