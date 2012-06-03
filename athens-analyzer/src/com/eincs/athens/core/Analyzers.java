@@ -19,6 +19,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,6 +99,9 @@ public class Analyzers {
 			try {
 				String ipAddr = InetAddress.getByAddress(
 						request.getTargetKey().getAddress()).toString();
+				if(StringUtils.startsWith(ipAddr, "/")) {
+					ipAddr = ipAddr.substring(1);
+				}
 				MysqlHandler.insert(ipAddr, request.getTargetKey().getMethod(),
 						request.getTargetKey().getPath(),
 						RateLimitAnalyzer.class.getSimpleName(),
