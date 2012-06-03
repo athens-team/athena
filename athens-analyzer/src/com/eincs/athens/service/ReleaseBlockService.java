@@ -15,17 +15,20 @@
  */
 package com.eincs.athens.service;
 
-import org.apache.commons.codec.binary.Base64;
+import java.net.InetSocketAddress;
+
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.eincs.athens.DataUtils;
-import com.eincs.athens.TransferChannelHandler;
+import com.eincs.athens.core.MysqlHandler;
 import com.eincs.athens.core.TransferSessions;
-import com.eincs.athens.db.data.BlockKey;
-import com.eincs.athens.handler.AthensBlockFilter;
+import com.eincs.athens.db.StatisticsDB;
+import com.eincs.athens.db.data.StatisticsKey;
+import com.eincs.athens.message.AnalyzeResult;
+import com.eincs.athens.message.AnalyzeResultType;
 import com.eincs.athens.message.AnalyzeTargetKey;
 import com.eincs.athens.message.AthensReport;
 import com.eincs.pantheon.handler.service.simple.Bind;
@@ -44,11 +47,11 @@ public class ReleaseBlockService implements SimpleService {
 	private static final Logger logger = LoggerFactory
 			.getLogger(ReleaseBlockService.class);
 	
-	private final AthensBlockFilter blockFilter;
+	private final StatisticsDB statisticsDB;
 	
 	@Inject
-	private ReleaseBlockService(AthensBlockFilter blockFilter) {
-		this.blockFilter = blockFilter;
+	private ReleaseBlockService(StatisticsDB statisticsDB) {
+		this.statisticsDB = statisticsDB;
 	}
 	
 	@Override
@@ -65,17 +68,40 @@ public class ReleaseBlockService implements SimpleService {
 				String.class);
 		
 		if (ipAddr != null) {
-			byte[] ipAddrBytes = Base64.decodeBase64(ipAddr);
-			BlockKey blockKey = BlockKey.createKeyByAddress(ipAddrBytes,
-					method, path);
+			byte[] ipAddrBytes = new InetSocketAddress(ipAddr, 0)
+					.getAddress().getAddress();
+			
+			AnalyzeTargetKey targetKey = AnalyzeTargetKey
+					.createKeyByAddress(ipAddrBytes, path, method);
 			AthensReport report = new AthensReport();
 			report.setRequestSeq(0);
+			report.setTargetKey(targetKey);
+			report.setResult(AnalyzeResult.create(AnalyzeResultType.RELEASE));
+			
+			StatisticsKey statKey = StatisticsKey.createKeyByAddress(
+					ipAddrBytes, method, path);
+			statisticsDB.removeStatistics(statKey);
+			
+			MysqlHandler.remove(ipAddr, method, path);
+			TransferSessions.broadcast(report);
 		}
 
 		if (userId != null) {
-			byte[] userIdBytes = Base64.decodeBase64(userId);
-			BlockKey blockKey = BlockKey.createKeyByAddress(userIdBytes,
-					method, path);
+			byte[] userIdBytes = userId.getBytes();
+			
+			AnalyzeTargetKey targetKey = AnalyzeTargetKey
+					.createKeyByAddress(userIdBytes, path, method);
+			AthensReport report = new AthensReport();
+			report.setRequestSeq(0);
+			report.setTargetKey(targetKey);
+			report.setResult(AnalyzeResult.create(AnalyzeResultType.RELEASE));
+
+			StatisticsKey statKey = StatisticsKey.createKeyByUserId(
+					userIdBytes, method, path);
+			statisticsDB.removeStatistics(statKey);
+			
+			MysqlHandler.remove(userId, method, path);
+			TransferSessions.broadcast(report);
 		}
 		
 		final String responseString = DataUtils.toResponseString(true);

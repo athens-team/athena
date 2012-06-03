@@ -79,7 +79,8 @@ public class AnalyzerMain {
 						new ObjectEncoder(),
 						new ObjectDecoder(ClassResolvers
 								.cacheDisabled(getClass().getClassLoader())),
-						new TransferRequestHandler());
+						new TransferRequestHandler(),
+						new TransferChannelHandler());
 			}
 		});
 

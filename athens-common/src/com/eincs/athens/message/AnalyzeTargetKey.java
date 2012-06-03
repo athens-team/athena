@@ -28,6 +28,24 @@ public class AnalyzeTargetKey implements Serializable {
 
 	private static final long serialVersionUID = -3604231145525755533L;
 
+	public static AnalyzeTargetKey createKeyByAddress(byte[] address,
+			String path, String method) {
+		AnalyzeTargetKey result = new AnalyzeTargetKey();
+		result.setAddress(address);
+		result.setPath(path);
+		result.setMethod(method);
+		return result;
+	}
+
+	public static AnalyzeTargetKey createKeyByUser(byte[] userId, String path,
+			String method) {
+		AnalyzeTargetKey result = new AnalyzeTargetKey();
+		result.setUserId(userId);
+		result.setPath(path);
+		result.setMethod(method);
+		return result;
+	}
+
 	public static AnalyzeTargetKey createKeyByAddress(PanteonRequest request) {
 		AnalyzeTargetKey result = new AnalyzeTargetKey();
 		result.setAddress(AddressProviders.getRemoteOrOriginAddress(request)
@@ -101,4 +119,5 @@ public class AnalyzeTargetKey implements Serializable {
 		sb.append("]");
 		return sb.toString();
 	}
+
 }

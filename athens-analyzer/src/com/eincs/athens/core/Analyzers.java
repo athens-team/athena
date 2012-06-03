@@ -15,11 +15,14 @@
  */
 package com.eincs.athens.core;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eincs.athens.analyzer.RateLimitAnalyzer;
 import com.eincs.athens.conf.AnalyzersConf;
 import com.eincs.athens.message.AnalyzeResult;
 import com.eincs.athens.message.AnalyzeResultType;
@@ -84,13 +87,26 @@ public class Analyzers {
 				
 			}
 		}
-		
 		// create report with result and request
 		AthensReport report = new AthensReport();
 		report.setRequestSeq(request.getRequestSeq());
 		report.setTargetKey(request.getTargetKey());
 		report.setResult(result);
 		report.setTags(request.getTags());
+		
+		if (report.needNotify()) {
+			try {
+				String ipAddr = InetAddress.getByAddress(
+						request.getTargetKey().getAddress()).toString();
+				MysqlHandler.insert(ipAddr, request.getTargetKey().getMethod(),
+						request.getTargetKey().getPath(),
+						RateLimitAnalyzer.class.getSimpleName(),
+						System.currentTimeMillis() + result.getPanalty());
+			} catch (UnknownHostException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
+		
 		return report;
 	}
 	

@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.eincs.athens.db.BlockDB;
 import com.eincs.athens.db.data.Block;
 import com.eincs.athens.db.data.BlockKey;
+import com.eincs.athens.message.AnalyzeResultType;
 import com.eincs.athens.message.AthensReport;
 import com.eincs.pantheon.AddressProviders;
 import com.eincs.pantheon.message.PanteonRequest;
@@ -101,15 +102,23 @@ public class AthensBlockFilter {
 	public void apply(AthensReport report) throws IOException {
 		BlockKey blockKey = BlockKey.createKey(report.getTargetKey());
 		Block newBlock = Block.create(report.getResult());
-		Key key = blockKey.getBloomFilterKey();
+		Key bloomKey = blockKey.getBloomFilterKey();
 		
 		synchronized (this) {
 			Block oldBlock = blockDB.getBlock(blockKey);
-			if(oldBlock==null) {
-				blockDB.setBlock(blockKey, newBlock);
-				bloomFilter.add(key);
-			} else {
-				blockDB.setBlock(blockKey, newBlock);
+			if (report.getResult().getType() == AnalyzeResultType.PANALTY) {
+				if (oldBlock == null) {
+					blockDB.setBlock(blockKey, newBlock);
+					bloomFilter.add(bloomKey);
+
+				} else {
+					blockDB.setBlock(blockKey, newBlock);
+				}
+			} else if(report.getResult().getType() == AnalyzeResultType.RELEASE) {
+				if (oldBlock != null) {
+					blockDB.removeBlock(blockKey);
+					bloomFilter.delete(bloomKey);
+				}
 			}
 		}
 	}

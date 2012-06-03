@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.eincs.athens.analytics;
+package com.eincs.athens.admin;
 
 import java.io.IOException;
 import java.util.List;
