@@ -4,7 +4,13 @@
 *.DS_Store
 *.swp
 *.out
+*.class
 
 bin/
 temp/
 database/
+
+# Package Files #
+*.jar
+*.war
+*.ear
