@@ -6,7 +6,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pantheon-common"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pantheon"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/athens-leveldb"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/athens-common"/>
 	<classpathentry kind="lib" path="/athens-common/libs/asm-1.5.3.jar"/>
 	<classpathentry kind="lib" path="/athens-common/libs/cglib-2.1_3.jar"/>
@@ -51,5 +50,6 @@
 	<classpathentry kind="lib" path="/athens-common/libs/javax.inject-1.jar"/>
 	<classpathentry kind="lib" path="/athens-common/libs/aopalliance-alpha1.jar"/>
 	<classpathentry kind="lib" path="/athens-common/libs/hadoop-core-1.0.3.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/athens-database"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
