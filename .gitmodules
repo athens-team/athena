@@ -1,0 +1,3 @@
+[submodule "libs/pantheon"]
+	path = libs/pantheon
+	url = git://github.com/eincs/pantheon.git
